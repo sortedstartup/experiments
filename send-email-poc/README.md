@@ -1,22 +1,32 @@
-# Requirements
-1. Application should be able to send email
-2. We have multiple applications
-3. We know below Providers, explore and implement send email functionality
-> 1. Sendgrid 
-> 2. Amazon SES
+# Email Sender App using SendGrid (Go)
+A simple API in Go that sends emails using [SendGrid](https://sendgrid.com/) via a POST request.
 
-# Deliverables
-1. Develop a application where we can play with functionality which send a email
-2. Also document details like setup in application and in proivder. Basically if a new application want to integrate email functionality then this documentation should help
-3. Also have a a design diagram - Example, how this email flow works. Meaning UI send a request to backend, then BE talk with a email provider(SMTP) etc.. 
-4. A demo video/screen recording - this recording we save it in different place, not in this repository
+## Features
+- Send email via SendGrid
+- Accepts recipient, subject, and body
+- .env-based config
+- Clean and extensible
 
-Note: As this is public repository, don't push SMTP details or any sensitive information to public. Example: SMTP details should be external configurable 
+## Setup Instructions
 
+### Test Sending Email
+```bash
+curl -X POST http://localhost:8080/send-email \
+  -H "Content-Type: application/json" \
+  -d '{
+    "to": "you@example.com",
+    "subject": "Welcome to Sorted Stream",
+    "body": "Hello and welcome! This is an email sent via Go using SendGrid."
+  }'
+```
 
-# Example use case for email
-1. Welcome email
-> 1. Subject: Welcome to Sorted stream
-> 2. Body: Greeting and some introduction about stream and signature
-> 3. Sender email: For this experiment you can use any email
-> 4. Receiver email: You can use your email
+### How to Get a SendGrid API Key
+1. Sign up at [SendGrid](https://sendgrid.com/)
+2. Go to Settings > API Keys
+3. Click Create API Key, give it a name, and choose Full Access
+4. Copy the key and paste it into .env
+
+### .env.example
+SENDGRID_API_KEY=your_sendgrid_api_key
+EMAIL_SENDER=your_verified_sender@example.com
+
