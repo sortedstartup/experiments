@@ -1,49 +1,70 @@
 package main
 
 import (
-	"encoding/json"
+	"bufio"
 	"fmt"
 	"log"
-	"net/http"
 	"os"
+	"strings"
+	"time"
 
 	"github.com/joho/godotenv"
 )
 
-type EmailRequest struct {
-	To      string `json:"to"`
-	Subject string `json:"subject"`
-	Body    string `json:"body"`
-}
-
-func sendEmailHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "POST" {
-		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
-		return
-	}
-
-	var req EmailRequest
-	err := json.NewDecoder(r.Body).Decode(&req)
-	if err != nil {
-		http.Error(w, "Invalid request: "+err.Error(), http.StatusBadRequest)
-		return
-	}
-
-	err = sendWithSendGrid(req.To, req.Subject, req.Body)
-	if err != nil {
-		http.Error(w, "SendGrid error: "+err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("Email sent successfully"))
-}
-
 func main() {
-	// Load .env
 	_ = godotenv.Load()
-	fmt.Println("API Key loaded:", os.Getenv("SENDGRID_API_KEY") != "")
-	http.HandleFunc("/send-email", sendEmailHandler)
-	log.Println("Server started at http://localhost:8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+
+	ticker := time.NewTicker(24 * time.Hour)
+	defer ticker.Stop()
+
+	checkAndNotify() // initial run
+
+	for range ticker.C {
+		checkAndNotify()
+	}
+}
+
+func checkAndNotify() {
+	file, err := os.Open("domains.txt")
+	if err != nil {
+		log.Fatal("Error opening domains.txt:", err)
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	var expiring []string
+
+	for scanner.Scan() {
+		domain := strings.TrimSpace(scanner.Text())
+		if domain == "" {
+			continue
+		}
+
+		expiry, err := CheckDomainExpiry(domain)
+		if err != nil {
+			log.Println("WHOIS error for domain", domain, ":", err)
+			continue
+		}
+
+		daysLeft := int(time.Until(expiry).Hours() / 24)
+		log.Printf("Checked domain: %s | Expiry: %s | Days Left: %d\n", domain, expiry.Format("2006-01-02"), daysLeft)
+
+		if daysLeft <= 30 {
+			expiring = append(expiring, fmt.Sprintf("%s is expiring in %d days (%s)", domain, daysLeft, expiry.Format("2006-01-02")))
+		}
+	}
+
+	if len(expiring) > 0 {
+		log.Println("Expiring domains found. Sending alert email...")
+
+		body := "The following domains are expiring soon:\n\n" + strings.Join(expiring, "\n")
+		err := sendWithSendGrid(os.Getenv("ALERT_RECIPIENT"), "Domain Expiry Alert", body)
+		if err != nil {
+			log.Println("Error sending email:", err)
+		} else {
+			log.Println("Email sent successfully.")
+		}
+	} else {
+		log.Println("No expiring domains found.")
+	}
 }
