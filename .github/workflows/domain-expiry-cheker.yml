@@ -1,0 +1,33 @@
+name: Domain Expiry Checker
+
+on:
+  schedule:
+    - cron: "30 2 * * *"  # 8:00 AM IST every day
+  workflow_dispatch:       # Optional manual trigger
+  push:
+    branches:
+      - feature/send-email
+
+jobs:
+  check-expiry:
+    runs-on: ubuntu-latest
+
+    env:
+      SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
+      EMAIL_SENDER: "swapnil9srivastava@gmail.com"          
+      ALERT_RECIPIENT: "swapnilden9@gmail.com"         
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 1.22
+
+      - name: Install dependencies
+        run: go mod tidy
+
+      - name: Run Domain Expiry Checker
+        run: go run .
