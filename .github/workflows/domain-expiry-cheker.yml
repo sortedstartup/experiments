@@ -8,15 +8,14 @@ on:
     branches:
       - feature/send-email
 
-
 jobs:
   check-expiry:
     runs-on: ubuntu-latest
 
     env:
       SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
-      EMAIL_SENDER: "swapnil9srivastava@gmail.com"          
-      ALERT_RECIPIENT: "swapnilden9@gmail.com"         
+      EMAIL_SENDER: "swapnil9srivastava@gmail.com"
+      ALERT_RECIPIENT: "swapnilden9@gmail.com"
 
     steps:
       - name: Checkout repository
@@ -28,7 +27,11 @@ jobs:
           go-version: 1.22
 
       - name: Install dependencies
-        run: go mod tidy
+        run: |
+          cd send-email-poc
+          go mod tidy
 
       - name: Run Domain Expiry Checker
-        run: go run .
+        run: |
+          cd send-email-poc
+          go run .
