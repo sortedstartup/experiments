@@ -27,11 +27,9 @@ jobs:
           go-version: 1.22
 
       - name: Install dependencies
-        run: |
-          cd send-email-poc
-          go mod tidy
+        working-directory: send-email-poc
+        run: go mod tidy
 
       - name: Run Domain Expiry Checker
-        run: |
-          cd send-email-poc
-          go run .
+        working-directory: send-email-poc
+        run: go run .
