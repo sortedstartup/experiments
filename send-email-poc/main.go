@@ -14,20 +14,16 @@ import (
 func main() {
 	_ = godotenv.Load()
 
-	ticker := time.NewTicker(10 * time.Second) // once per 10 second
-	defer ticker.Stop()
-
-	checkAndNotify() // initial run
-
-	for range ticker.C {
-		checkAndNotify()
+	err := checkAndNotify()
+	if err != nil {
+		log.Fatalf("Error during check: %v", err)
 	}
 }
 
-func checkAndNotify() {
+func checkAndNotify() error {
 	file, err := os.Open("domains.txt")
 	if err != nil {
-		log.Fatal("Error opening domains.txt:", err)
+		return fmt.Errorf("error opening domains.txt: %w", err)
 	}
 	defer file.Close()
 
@@ -60,11 +56,12 @@ func checkAndNotify() {
 		body := "The following domains are expiring soon:\n\n" + strings.Join(expiring, "\n")
 		err := sendWithSendGrid(os.Getenv("ALERT_RECIPIENT"), "Domain Expiry Alert", body)
 		if err != nil {
-			log.Println("Error sending email:", err)
-		} else {
-			log.Println("Email sent successfully.")
+			return fmt.Errorf("error sending email: %w", err)
 		}
+		log.Println("Email sent successfully.")
 	} else {
 		log.Println("No expiring domains found.")
 	}
+
+	return nil
 }
