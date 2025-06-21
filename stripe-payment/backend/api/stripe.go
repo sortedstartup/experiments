@@ -11,6 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/stripe/stripe-go/v76"
 	"github.com/stripe/stripe-go/v76/checkout/session"
+	"github.com/stripe/stripe-go/v76/product"
 	"github.com/stripe/stripe-go/v76/webhook"
 )
 
@@ -55,11 +56,21 @@ func CreateCheckoutSession(c *gin.Context) {
 func CreateSubscriptionSession(c *gin.Context) {
 	InitStripe()
 
+	productID := os.Getenv("STRIPE_PRODUCT_ID")
+	productData, err := product.Get(productID, nil)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Unable to fetch product"})
+		return
+	}
+
+	fmt.Println("Product Name:", productData.Name)
+	fmt.Println("Product Description:", productData.Description)
+
 	params := &stripe.CheckoutSessionParams{
 		PaymentMethodTypes: stripe.StringSlice([]string{"card"}),
 		LineItems: []*stripe.CheckoutSessionLineItemParams{
 			{
-				Price:    stripe.String(os.Getenv("STRIPE_SUBSCRIPTION_PRICE_ID")), // set your subscription price id here in env
+				Price:    stripe.String(os.Getenv("STRIPE_SUBSCRIPTION_PRICE_ID")),
 				Quantity: stripe.Int64(1),
 			},
 		},
@@ -74,7 +85,13 @@ func CreateSubscriptionSession(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"sessionId": s.ID})
+	c.JSON(http.StatusOK, gin.H{
+		"sessionId": s.ID,
+		"product": gin.H{
+			"name":        productData.Name,
+			"description": productData.Description,
+		},
+	})
 }
 
 // Webhook handler to listen for Stripe events
@@ -97,7 +114,7 @@ func HandleStripeWebhook(c *gin.Context) {
 	log.Println("Payload body:", string(payload))
 
 	event, err := webhook.ConstructEventWithOptions(payload, sigHeader, endpointSecret, webhook.ConstructEventOptions{
-	IgnoreAPIVersionMismatch: true,
+		IgnoreAPIVersionMismatch: true,
 	})
 	if err != nil {
 		log.Printf("Signature verification failed: %v", err)
@@ -135,7 +152,6 @@ func HandleStripeWebhook(c *gin.Context) {
 
 	case "invoice.payment_failed":
 		fmt.Println("Payment failed for a subscription.")
-
 
 	default:
 		fmt.Printf("Unhandled event type: %s\n", event.Type)

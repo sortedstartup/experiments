@@ -1,9 +1,16 @@
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { loadStripe } from '@stripe/stripe-js';
 
 const stripePromise = loadStripe('pk_test_51RbKPJImVq3vV0Ha7QXeRHSb8Yk5bz8suPnrvA3enB0bE9e2NKfofngxB07MQ1DswX5wfH5MPBmkJEk0lZEmJaqu008CSUhtQ8'); 
 
 export default function Home() {
+  const navigate = useNavigate();
+
+  const goToPaidPage = () => {
+    navigate('/paid');
+  };
+
   const createSession = async (type) => {
     console.log("Create session called for type:", type);
   try {
@@ -37,6 +44,11 @@ export default function Home() {
       <button type="button" onClick={() => createSession('subscription')} className="bg-green-600 text-white px-6 py-2 rounded ml-4">
         Subscribe Monthly
       </button>
+      <div>
+        <button onClick={goToPaidPage} className="mt-4 bg-purple-600 text-white px-6 py-2 rounded">
+          Access Paid Page
+        </button>
+      </div>
     </div>
   );
 }

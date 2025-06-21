@@ -10,5 +10,6 @@ func RegisterStripeRoutes(r *gin.Engine) {
 		paymentGroup.POST("/checkout-session", CreateCheckoutSession)
 		paymentGroup.POST("/subscription-session", CreateSubscriptionSession)
 		paymentGroup.POST("/webhook", HandleStripeWebhook)
+		paymentGroup.GET("/is-paid", CheckUserAccess)
 	}
 }

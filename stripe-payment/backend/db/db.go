@@ -11,6 +11,12 @@ import (
 
 var DB *sql.DB
 
+type User struct {
+	Email     string
+	IsSub     bool
+	SessionID string
+}
+
 // InitDB sets up the connection and creates tables
 func InitDB(dbPath string) error {
 	var err error
@@ -58,4 +64,17 @@ func SaveUserAfterPayment(email string, isSub bool, sessionID string) error {
 		return fmt.Errorf("db insert error: %w", err)
 	}
 	return nil
+}
+
+func GetUserByEmail(email string) (*User, error) {
+	row := DB.QueryRow("SELECT email, is_sub, session_id FROM users WHERE email = ?", email)
+	var u User
+	err := row.Scan(&u.Email, &u.IsSub, &u.SessionID)
+	if err == sql.ErrNoRows {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+	return &u, nil
 }
