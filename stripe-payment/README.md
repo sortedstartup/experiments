@@ -38,7 +38,7 @@ This project supports both one-time payments and recurring subscriptions using S
    go mod tidy
    ```
 
-3. **Create .env file in the root with the following variables:**
+3. **Create .env file in the backend folder with the following variables:**
     ```env
     STRIPE_SECRET_KEY=sk_test_...
     STRIPE_WEBHOOK_SECRET=whsec_...
@@ -59,7 +59,8 @@ This project supports both one-time payments and recurring subscriptions using S
     ```bash
     cd frontend
     ```
-2. Create a .env file:
+    
+2. **Create a .env file in frontend folder:**
     ```bash
     VITE_BACKEND_URL=http://localhost:8080
     ```
