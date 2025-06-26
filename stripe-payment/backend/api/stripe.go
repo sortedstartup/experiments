@@ -11,6 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/stripe/stripe-go/v76"
 	"github.com/stripe/stripe-go/v76/checkout/session"
+	"github.com/stripe/stripe-go/v76/price"
 	"github.com/stripe/stripe-go/v76/product"
 	"github.com/stripe/stripe-go/v76/webhook"
 )
@@ -22,19 +23,29 @@ func InitStripe() {
 // checkout session for one-time payment
 func CreateCheckoutSession(c *gin.Context) {
 	InitStripe()
-	log.Println("Stripe Key:", stripe.Key)
-	log.Println("Received request to /checkout-session")
+
+	// Step 1: Get the price object
+	priceID := os.Getenv("STRIPE_ONE_TIME_PRICE_ID")
+	priceObj, err := price.Get(priceID, nil)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch price"})
+		return
+	}
+
+	// Step 2: Get product details
+	productID := priceObj.Product.ID
+	productObj, err := product.Get(productID, nil)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch product"})
+		return
+	}
+
+	// Step 3: Create the session
 	params := &stripe.CheckoutSessionParams{
 		PaymentMethodTypes: stripe.StringSlice([]string{"card"}),
 		LineItems: []*stripe.CheckoutSessionLineItemParams{
 			{
-				PriceData: &stripe.CheckoutSessionLineItemPriceDataParams{
-					Currency: stripe.String("usd"),
-					ProductData: &stripe.CheckoutSessionLineItemPriceDataProductDataParams{
-						Name: stripe.String("App One-Time Purchase"),
-					},
-					UnitAmount: stripe.Int64(1000), // $10.00
-				},
+				Price:    stripe.String(priceID),
 				Quantity: stripe.Int64(1),
 			},
 		},
@@ -49,7 +60,11 @@ func CreateCheckoutSession(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"sessionId": s.ID})
+	// Return session ID and product name
+	c.JSON(http.StatusOK, gin.H{
+		"sessionId":   s.ID,
+		"productName": productObj.Name,
+	})
 }
 
 // checkout session for subscription
