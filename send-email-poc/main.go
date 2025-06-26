@@ -54,7 +54,7 @@ func checkAndNotify() error {
 		log.Println("Expiring domains found. Sending alert email...")
 
 		body := "The following domains are expiring soon:\n\n" + strings.Join(expiring, "\n")
-		err := sendWithSendGrid(os.Getenv("ALERT_RECIPIENT"), "Domain Expiry Alert", body)
+		err := sendEmail(os.Getenv("ALERT_RECIPIENT"), "Domain Expiry Alert", body)
 		if err != nil {
 			return fmt.Errorf("error sending email: %w", err)
 		}
