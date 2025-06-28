@@ -1,7 +1,11 @@
 package dao
 
 import (
+	"context"
 	"database/sql"
+	"time"
+
+	"go.opentelemetry.io/otel"
 )
 
 // This package will contain database access logic.
@@ -9,7 +13,7 @@ import (
 
 // DAO is the interface for database operations.
 type DAO interface {
-	SaveMessage(chatID, message string) error
+	SaveMessage(ctx context.Context, chatID, message string) error
 	GetMessages(chatID string) ([]string, error)
 }
 
@@ -20,10 +24,14 @@ func NewDAO(db *sql.DB) DAO {
 
 type sqliteDAO struct {
 	db *sql.DB
+	// ctx context.Context
 }
 
 // Implement the DAO interface methods for sqliteDAO here.
-func (d *sqliteDAO) SaveMessage(chatID, message string) error {
+func (d *sqliteDAO) SaveMessage(ctx context.Context, chatID, message string) error {
+	ctx, span := otel.Tracer("go_manual").Start(ctx, "db")
+	defer span.End()
+	time.Sleep(500 * time.Millisecond)
 	_, err := d.db.Exec("INSERT INTO messages (chat_id, message) VALUES (?, ?)", chatID, message)
 	return err
 }
