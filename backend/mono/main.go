@@ -8,6 +8,7 @@ import (
 	"net"
 	"net/http"
 	"os"
+	"time"
 
 	"sortedstartup/otel/dao"
 	"sortedstartup/otel/mono/utils"
@@ -20,9 +21,11 @@ import (
 	"go.opentelemetry.io/otel/exporters/otlp/otlplog/otlploghttp"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp"
+	"go.opentelemetry.io/otel/exporters/stdout/stdoutmetric"
 	"go.opentelemetry.io/otel/log/global"
 	"go.opentelemetry.io/otel/propagation"
 	otellog "go.opentelemetry.io/otel/sdk/log"
+	"go.opentelemetry.io/otel/sdk/metric"
 	"go.opentelemetry.io/otel/sdk/resource"
 	semconv "go.opentelemetry.io/otel/semconv/v1.34.0"
 	"google.golang.org/grpc"
@@ -61,6 +64,20 @@ func main() {
 		log.Fatal(err)
 	}
 	defer tp.Shutdown(context.Background())
+
+	meterProvider, err := newMeterProvider(res)
+	if err != nil {
+		panic(err)
+	}
+
+	// Handle shutdown properly so nothing leaks.
+	defer func() {
+		if err := meterProvider.Shutdown(context.Background()); err != nil {
+			log.Println(err)
+		}
+	}()
+
+	otel.SetMeterProvider(meterProvider)
 
 	err = godotenv.Load()
 	if err != nil {
@@ -147,6 +164,21 @@ func newLoggerProvider(ctx context.Context, res *resource.Resource) (*otellog.Lo
 		otellog.WithProcessor(processor),
 	)
 	return provider, nil
+}
+
+func newMeterProvider(res *resource.Resource) (*metric.MeterProvider, error) {
+	metricExporter, err := stdoutmetric.New()
+	if err != nil {
+		return nil, err
+	}
+
+	meterProvider := metric.NewMeterProvider(
+		metric.WithResource(res),
+		metric.WithReader(metric.NewPeriodicReader(metricExporter,
+			// Default is 1m. Set to 3s for demonstrative purposes.
+			metric.WithInterval(3*time.Second))),
+	)
+	return meterProvider, nil
 }
 
 func initTracer() (*sdktrace.TracerProvider, error) {

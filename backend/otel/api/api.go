@@ -10,8 +10,12 @@ import (
 
 	"go.opentelemetry.io/contrib/bridges/otelslog"
 	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/metric"
 	otellog "go.opentelemetry.io/otel/sdk/log"
 )
+
+var meter = otel.Meter("sortedstartup/otel/otel/api")
+var apiCounter metric.Int64Counter
 
 // Server implements the gRPC service defined in your proto.
 type Server struct {
@@ -29,12 +33,24 @@ func NewServer(db *sql.DB, loggerProvider *otellog.LoggerProvider) *Server {
 	return &Server{DAO: myDao, Log: log, Service: service}
 }
 
+func init() {
+	var err error
+	apiCounter, err = meter.Int64Counter(
+		"api.counter",
+		metric.WithDescription("Number of API calls."),
+		metric.WithUnit("{call}"),
+	)
+	if err != nil {
+		panic(err)
+	}
+}
+
 type TestRequest = proto.TestRequest
 type TestResponse = proto.TestResponse
 
 func (s *Server) Test(ctx context.Context, req *TestRequest) (*TestResponse, error) {
 	s.Log.Info("In api")
-
+	apiCounter.Add(ctx, 1)
 	ctx, span := otel.Tracer("go_manual").Start(ctx, "api layer")
 	defer span.End()
 	time.Sleep(500 * time.Millisecond)

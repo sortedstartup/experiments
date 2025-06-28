@@ -18,10 +18,12 @@ function App() {
       })
 
     // gRPC-web client setup
-    const client = new sortedtestClient('http://localhost:8000'); // Change to your gRPC-web proxy address
+    const client = new sortedtestClient('http://localhost:8080'); // Change to your gRPC-web proxy address
     const req = new testRequest({ message: 'Hello from frontend', chat_id: 'frontend' });
     client.test(req, null)
       .then(res => {
+        console.log(res);
+        
         console.log('gRPC Test API response:', res.toObject ? res.toObject() : res)
       })
       .catch(err => {
