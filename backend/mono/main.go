@@ -1,14 +1,18 @@
 package main
 
 import (
-	"embed"
+	"database/sql"
+	// "embed"
 	"log"
 	"net"
 	"net/http"
+	"os"
+	"fmt"
 
-	"sortedstartup/otel/mono/utils"
+	"sortedstartup/otel/dao"
 	"sortedstartup/otel/otel/api"
 	"sortedstartup/otel/otel/proto"
+	"sortedstartup/otel/mono/utils"
 
 	"github.com/improbable-eng/grpc-web/go/grpcweb"
 	"github.com/joho/godotenv"
@@ -21,8 +25,8 @@ const (
 	httpPort = ":8080" // Only gRPC-Web and static UI, no extra upload server
 )
 
-//go:embed public
-var staticUIFS embed.FS
+
+// var staticUIFS embed.FS
 
 func main() {
 	err := godotenv.Load()
@@ -30,13 +34,27 @@ func main() {
 		log.Println("Warning: .env file not found, using system env")
 	}
 
+	dbPath := os.Getenv("SQLITE_DB_PATH")
+	fmt.Println("Using DB path:", dbPath)
+	if dbPath == "" {
+		dbPath = "./app.db"
+	}
+	if err := dao.MigrateSQLite(dbPath); err != nil {
+		log.Fatalf("DB migration failed: %v", err)
+	}
+	db, err := sql.Open("sqlite3", dbPath)
+	if err != nil {
+		log.Fatalf("Failed to open DB: %v", err)
+	}
+	defer db.Close()
+
 	listener, err := net.Listen("tcp", grpcPort)
 	if err != nil {
 		log.Fatalf("Failed to listen: %v", err)
 	}
 
 	grpcServer := grpc.NewServer()
-	apiServer := api.NewServer()                          // fix: no arguments
+	apiServer := api.NewServer(db)
 	proto.RegisterSortedtestServer(grpcServer, apiServer) // interface fix handled in api.go
 	reflection.Register(grpcServer)
 

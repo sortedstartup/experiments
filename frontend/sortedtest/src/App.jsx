@@ -1,10 +1,33 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import { sortedtestClient, testRequest } from '../proto/otel'
 
 function App() {
   const [count, setCount] = useState(0)
+
+  useEffect(() => {
+    fetch('/api')
+      .then(res => res.json())
+      .then(data => {
+        console.log('API response:', data)
+      })
+      .catch(err => {
+        console.error('API error:', err)
+      })
+
+    // gRPC-web client setup
+    const client = new sortedtestClient('http://localhost:8000'); // Change to your gRPC-web proxy address
+    const req = new testRequest({ message: 'Hello from frontend', chat_id: 'frontend' });
+    client.test(req, null)
+      .then(res => {
+        console.log('gRPC Test API response:', res.toObject ? res.toObject() : res)
+      })
+      .catch(err => {
+        console.error('gRPC Test API error:', err)
+      })
+  }, [])
 
   return (
     <>
