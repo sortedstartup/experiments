@@ -154,7 +154,7 @@ func newResource() (*resource.Resource, error) {
 }
 
 func newLoggerProvider(ctx context.Context, res *resource.Resource) (*otellog.LoggerProvider, error) {
-	exporter, err := otlploghttp.New(ctx)
+	exporter, err := otlploghttp.New(ctx) //exporter
 	if err != nil {
 		return nil, err
 	}
@@ -167,7 +167,7 @@ func newLoggerProvider(ctx context.Context, res *resource.Resource) (*otellog.Lo
 }
 
 func newMeterProvider(res *resource.Resource) (*metric.MeterProvider, error) {
-	metricExporter, err := stdoutmetric.New()
+	metricExporter, err := stdoutmetric.New() //exporter
 	if err != nil {
 		return nil, err
 	}
@@ -184,7 +184,7 @@ func newMeterProvider(res *resource.Resource) (*metric.MeterProvider, error) {
 func initTracer() (*sdktrace.TracerProvider, error) {
 	// Create stdout exporter to be able to retrieve
 	// the collected spans.
-	exporter, err := otlptrace.New(context.Background(), otlptracehttp.NewClient())
+	exporter, err := otlptrace.New(context.Background(), otlptracehttp.NewClient()) //tracing exporter
 	if err != nil {
 		return nil, err
 	}
