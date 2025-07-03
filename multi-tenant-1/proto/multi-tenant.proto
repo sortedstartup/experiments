@@ -1,0 +1,18 @@
+syntax="proto3";
+
+package sortedtest;
+
+option go_package = "sortedstartup/load-test/test/proto";
+
+
+service sortedtest {
+    rpc CreateTenant(CreateTenantRequest) returns (CreateTenantResponse);
+}
+
+message CreateTenantRequest {
+    string name = 1;
+}
+
+message CreateTenantResponse {
+    string message = 1;
+}
