@@ -3,9 +3,6 @@ package dao
 import (
 	"context"
 	"database/sql"
-	"time"
-
-	"go.opentelemetry.io/otel"
 )
 
 // This package will contain database access logic.
@@ -13,8 +10,9 @@ import (
 
 // DAO is the interface for database operations.
 type DAO interface {
-	SaveMessage(ctx context.Context, chatID, message string) error
-	GetMessages(chatID string) ([]string, error)
+	CreateTenant(ctx context.Context, id string, name string) error
+	CreateProject(ctx context.Context, id string, name string) error
+	CreateTask(ctx context.Context, id string, projectId string, name string) error
 }
 
 // NewDAO returns a new DAO implementation.
@@ -27,28 +25,17 @@ type sqliteDAO struct {
 	// ctx context.Context
 }
 
-// Implement the DAO interface methods for sqliteDAO here.
-func (d *sqliteDAO) SaveMessage(ctx context.Context, chatID, message string) error {
-	ctx, span := otel.Tracer("go_manual").Start(ctx, "db")
-	defer span.End()
-	time.Sleep(500 * time.Millisecond)
-	_, err := d.db.Exec("INSERT INTO messages (chat_id, message) VALUES (?, ?)", chatID, message)
+func (d *sqliteDAO) CreateTenant(ctx context.Context, id string, name string) error {
+	_, err := d.db.Exec("INSERT INTO tenants (id, name) VALUES (?, ?)", id, name)
 	return err
 }
 
-func (d *sqliteDAO) GetMessages(chatID string) ([]string, error) {
-	rows, err := d.db.Query("SELECT message FROM messages WHERE chat_id = ?", chatID)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var messages []string
-	for rows.Next() {
-		var msg string
-		if err := rows.Scan(&msg); err != nil {
-			return nil, err
-		}
-		messages = append(messages, msg)
-	}
-	return messages, nil
+func (d *sqliteDAO) CreateProject(ctx context.Context, id string, name string) error {
+	_, err := d.db.ExecContext(ctx, "INSERT INTO project (id, name) VALUES (?, ?)", id, name)
+	return err
+}
+
+func (d *sqliteDAO) CreateTask(ctx context.Context, id string, projectId string, name string) error {
+	_, err := d.db.ExecContext(ctx, "INSERT INTO task (id, project_id, name) VALUES (?, ?, ?)", id, projectId, name)
+	return err
 }
