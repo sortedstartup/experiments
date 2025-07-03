@@ -2,7 +2,7 @@ syntax="proto3";
 
 package sortedtest;
 
-option go_package = "sortedstartup/load-test/test/proto";
+option go_package = "sortedstartup/multi-tenant/test/proto";
 
 
 service sortedtest {
