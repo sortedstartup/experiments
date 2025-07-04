@@ -37,14 +37,21 @@ func main() {
 	if dbPath == "" {
 		dbPath = "./app.db"
 	}
+	// Remove db creation and pass only for migration
 	if err := dao.MigrateSQLite(dbPath); err != nil {
 		log.Fatalf("DB migration failed: %v", err)
 	}
-	db, err := sql.Open("sqlite3", dbPath)
+	// db, err := sql.Open("sqlite3", dbPath)
+	// if err != nil {
+	// 	log.Fatalf("Failed to open DB: %v", err)
+	// }
+	// defer db.Close()
+
+	superDB, err := sql.Open("sqlite3", dbPath)
 	if err != nil {
-		log.Fatalf("Failed to open DB: %v", err)
+		log.Fatalf("Failed to open super DB: %v", err)
 	}
-	defer db.Close()
+	defer superDB.Close()
 
 	listener, err := net.Listen("tcp", grpcPort)
 	if err != nil {
@@ -52,8 +59,8 @@ func main() {
 	}
 
 	grpcServer := grpc.NewServer()
-	apiServer := api.NewServer(db)
-	proto.RegisterSortedtestServer(grpcServer, apiServer) // interface fix handled in api.go
+	apiServer := api.NewServer(superDB)
+	proto.RegisterSortedtestServer(grpcServer, apiServer)
 	reflection.Register(grpcServer)
 
 	wrappedGrpc := grpcweb.WrapServer(grpcServer)

@@ -11,7 +11,7 @@ function App() {
   const [createMsg, setCreateMsg] = useState('')
   const [projectName, setProjectName] = useState('')
   const [projectMsg, setProjectMsg] = useState('')
-  const [tenantId, setTenantId] = useState('3c39dcce-cefe-4a8a-af8b-58e558d54406') // new state for tenant id
+  const [tenantId, setTenantId] = useState('14a12649-4bf6-48c2-b916-ecea32a0c6c7') // new state for tenant id
   const [taskName, setTaskName] = useState('')
   const [taskMsg, setTaskMsg] = useState('')
 
@@ -43,9 +43,9 @@ function App() {
 
   const handleCreateTask = async () => {
     setTaskMsg('')
-    const req = new CreateTaskRequest({ project_id: '1f051502-c352-45df-b9d6-2e3a8bf6bd2a', name: taskName })
+    const req = new CreateTaskRequest({ project_id: 'ede2c5a8-a8cc-4eca-8804-c45a1be28db4', name: taskName })
     try {
-      const resp = await client.CreateTask(req, { 'x-tenant-id': '3c39dcce-cefe-4a8a-af8b-58e558d54406' })
+      const resp = await client.CreateTask(req, { 'x-tenant-id': '14a12649-4bf6-48c2-b916-ecea32a0c6c7' })
       setTaskMsg(resp.message)
     } catch (err) {
       setTaskMsg('Error: ' + (err.message || err.toString()))

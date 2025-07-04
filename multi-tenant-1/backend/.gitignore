@@ -1,0 +1,2 @@
+# Ignore all .db files in the mono folder
+mono/*.db

@@ -5,44 +5,41 @@ import (
 	"database/sql"
 	"fmt"
 
-	"github.com/google/uuid"
-	_ "github.com/mattn/go-sqlite3"
-	"google.golang.org/grpc/metadata"
-
 	"sortedstartup/multi-tenant/dao"
 	"sortedstartup/multi-tenant/test/proto"
+
+	"github.com/google/uuid"
+	"google.golang.org/grpc/metadata"
 )
 
 type Server struct {
 	proto.UnimplementedSortedtestServer
-	DAO dao.DAO
+	SuperDAO  dao.SuperDAO
+	TenantDAO dao.TenantDAO
 }
 
-func NewServer(db *sql.DB) *Server {
-	myDao := dao.NewDAO(db)
-	return &Server{DAO: myDao}
+func NewServer(superDB *sql.DB) *Server {
+	superDao := dao.NewSuperDAO(superDB)
+	tenantDao := dao.NewTenantDAO()
+	return &Server{SuperDAO: superDao, TenantDAO: tenantDao}
 }
 
 func (s *Server) CreateTenant(ctx context.Context, req *proto.CreateTenantRequest) (*proto.CreateTenantResponse, error) {
 	id := uuid.New().String()
-	err := s.DAO.CreateTenant(ctx, id, req.Name)
+	err := s.SuperDAO.CreateTenant(ctx, id, req.Name)
 	if err != nil {
 		return &proto.CreateTenantResponse{Message: "Failed to create tenant: " + err.Error()}, err
 	}
 
-	tenantDBPath := id + ".db"
-	db, err := sql.Open("sqlite3", tenantDBPath)
+	// Create and initialize the tenant DB tables
+	db, err := dao.GetOrCreateTenantDB(id)
 	if err != nil {
 		return &proto.CreateTenantResponse{Message: "Tenant created, but failed to create DB: " + err.Error()}, err
 	}
-	defer db.Close()
-
-	// yaha kisi trah se sari tables like (project,task....) tables initialize krni pdegi
 	_, err = db.Exec(`CREATE TABLE IF NOT EXISTS project (id TEXT PRIMARY KEY, name TEXT)`)
 	if err != nil {
 		return &proto.CreateTenantResponse{Message: "db created, failed project table " + err.Error()}, err
 	}
-
 	_, err = db.Exec(`CREATE TABLE IF NOT EXISTS task (id TEXT PRIMARY KEY,project_id TEXT, name TEXT)`)
 	if err != nil {
 		return &proto.CreateTenantResponse{Message: "db created, failed task table " + err.Error()}, err
@@ -71,17 +68,10 @@ func (s *Server) CreateProject(ctx context.Context, req *proto.CreateProjectRequ
 	if err != nil {
 		return &proto.CreateProjectResponse{Message: err.Error()}, nil
 	}
-	db, err := sql.Open("sqlite3", tenantID+".db")
-	if err != nil {
-		return &proto.CreateProjectResponse{Message: "db open fail " + err.Error()}, err
-	}
-	defer db.Close()
-
 	projectID := uuid.New().String()
 	fmt.Println(projectID)
 	fmt.Println(req.Name)
-	daoInstance := dao.NewDAO(db)
-	err = daoInstance.CreateProject(ctx, projectID, req.Name)
+	err = s.TenantDAO.CreateProject(ctx, tenantID, projectID, req.Name)
 	if err != nil {
 		return &proto.CreateProjectResponse{Message: "Failed project create : " + err.Error()}, err
 	}
@@ -94,18 +84,11 @@ func (s *Server) CreateTask(ctx context.Context, req *proto.CreateTaskRequest) (
 	if err != nil {
 		return &proto.CreateTaskResponse{Message: err.Error()}, nil
 	}
-	db, err := sql.Open("sqlite3", tenantID+".db")
-	if err != nil {
-		return &proto.CreateTaskResponse{Message: "db open fail " + err.Error()}, err
-	}
-	defer db.Close()
-
 	taskID := uuid.New().String()
 	fmt.Println(taskID)
 	fmt.Println(req.Name)
 	fmt.Println(req.ProjectId)
-	daoInstance := dao.NewDAO(db)
-	err = daoInstance.CreateTask(ctx, taskID, req.ProjectId, req.Name)
+	err = s.TenantDAO.CreateTask(ctx, tenantID, taskID, req.ProjectId, req.Name)
 	if err != nil {
 		return &proto.CreateTaskResponse{Message: "task fail " + err.Error()}, err
 	}
