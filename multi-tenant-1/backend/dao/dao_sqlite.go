@@ -3,7 +3,10 @@ package dao
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"sync"
+
+	"go.opentelemetry.io/otel"
 )
 
 // This package will contain database access logic.
@@ -23,6 +26,8 @@ func NewSuperDAO(db *sql.DB) SuperDAO {
 }
 
 func (d *superDAO) CreateTenant(ctx context.Context, id, name string) error {
+	_, span := otel.Tracer("go_manual").Start(ctx, "db")
+	defer span.End()
 	_, err := d.db.Exec("INSERT INTO tenants (id, name) VALUES (?, ?)", id, name)
 	return err
 }
@@ -38,22 +43,39 @@ func NewTenantDAO() TenantDAO {
 	return &tenantDAO{}
 }
 
-func (d *tenantDAO) CreateProject(ctx context.Context, tenantID, id, name string) error {
-	db, err := GetOrCreateTenantDB(tenantID)
+func InitTenantDBs(superDB *sql.DB, _ string) error {
+	rows, err := superDB.Query("SELECT id FROM tenants")
 	if err != nil {
 		return err
 	}
-	_, err = db.ExecContext(ctx, "INSERT INTO project (id, name) VALUES (?, ?)", id, name)
-	return err
+	defer rows.Close()
+	for rows.Next() {
+		var tid string
+		if err := rows.Scan(&tid); err != nil {
+			return err
+		}
+		db, err := sql.Open("sqlite3", tid+".db")
+		if err != nil {
+			return err
+		}
+		tenantDBsMu.Lock()
+		tenantDBs[tid] = db
+		tenantDBsMu.Unlock()
+	}
+	return nil
 }
 
-func (d *tenantDAO) CreateTask(ctx context.Context, tenantID, id, projectId, name string) error {
-	db, err := GetOrCreateTenantDB(tenantID)
+func RegisterTenantDB(ctx context.Context, tenantID, _ string) error {
+	_, span := otel.Tracer("go_manual").Start(ctx, "register db")
+	defer span.End()
+	db, err := sql.Open("sqlite3", tenantID+".db")
 	if err != nil {
 		return err
 	}
-	_, err = db.ExecContext(ctx, "INSERT INTO task (id, project_id, name) VALUES (?, ?, ?)", id, projectId, name)
-	return err
+	// tenantDBsMu.Lock()
+	// defer tenantDBsMu.Unlock()
+	tenantDBs[tenantID] = db
+	return nil
 }
 
 var (
@@ -61,16 +83,24 @@ var (
 	tenantDBsMu sync.Mutex
 )
 
-func GetOrCreateTenantDB(tenantID string) (*sql.DB, error) {
-	tenantDBsMu.Lock()
-	defer tenantDBsMu.Unlock()
-	if db, ok := tenantDBs[tenantID]; ok {
-		return db, nil
+func (d *tenantDAO) CreateProject(ctx context.Context, tenantID, id, name string) error {
+	_, span := otel.Tracer("go_manual").Start(ctx, "create project dao")
+	defer span.End()
+	db, ok := tenantDBs[tenantID]
+	if !ok {
+		return fmt.Errorf("tenant DB not found  %s", tenantID)
 	}
-	db, err := sql.Open("sqlite3", tenantID+".db")
-	if err != nil {
-		return nil, err
+	_, err := db.ExecContext(ctx, "INSERT INTO project (id, name) VALUES (?, ?)", id, name)
+	return err
+}
+
+func (d *tenantDAO) CreateTask(ctx context.Context, tenantID, id, projectId, name string) error {
+	_, span := otel.Tracer("go_manual").Start(ctx, "create task dao")
+	defer span.End()
+	db, ok := tenantDBs[tenantID]
+	if !ok {
+		return fmt.Errorf("tenant DB not found  %s", tenantID)
 	}
-	tenantDBs[tenantID] = db
-	return db, nil
+	_, err := db.ExecContext(ctx, "INSERT INTO task (id, project_id, name) VALUES (?, ?, ?)", id, projectId, name)
+	return err
 }

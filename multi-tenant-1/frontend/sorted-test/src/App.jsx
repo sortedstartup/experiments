@@ -34,7 +34,7 @@ function App() {
     setProjectMsg('')
     const req = new CreateProjectRequest({ name: projectName })
     try {
-      const resp = await client.CreateProject(req, { 'x-tenant-id': tenantId })
+      const resp = await client.CreateProject(req, { 'tenant-id': tenantId })
       setProjectMsg(resp.message)
     } catch (err) {
       setProjectMsg('Error: ' + (err.message || err.toString()))
@@ -43,9 +43,9 @@ function App() {
 
   const handleCreateTask = async () => {
     setTaskMsg('')
-    const req = new CreateTaskRequest({ project_id: 'ede2c5a8-a8cc-4eca-8804-c45a1be28db4', name: taskName })
+    const req = new CreateTaskRequest({ project_id: '4dd96bd1-bcb1-421e-ac9e-23afffd7097b', name: taskName })
     try {
-      const resp = await client.CreateTask(req, { 'x-tenant-id': '14a12649-4bf6-48c2-b916-ecea32a0c6c7' })
+      const resp = await client.CreateTask(req, { 'tenant-id': 'bb094ecb-6ff5-48ac-bdee-e88a6fb594eb' })
       setTaskMsg(resp.message)
     } catch (err) {
       setTaskMsg('Error: ' + (err.message || err.toString()))
