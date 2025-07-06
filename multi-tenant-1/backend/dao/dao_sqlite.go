@@ -83,6 +83,10 @@ func RegisterTenantDB(ctx context.Context, tenantID, _ string) error {
 var (
 	tenantDBs   = make(map[string]*sql.DB)
 	tenantDBsMu sync.Mutex
+
+	// Export tenantDBs and tenantDBsMu for direct access from api package
+	TenantDBs   = tenantDBs
+	TenantDBsMu = &tenantDBsMu
 )
 
 func (d *tenantDAO) CreateProject(ctx context.Context, tenantID, id, name string) error {
@@ -158,4 +162,12 @@ func (d *tenantDAO) GetTasks(ctx context.Context, tenantID, projectId string) ([
 		tasks = append(tasks, t)
 	}
 	return tasks, nil
+}
+
+// Add this helper to access tenantDBs safely from outside the package
+func TenantDBExists(tenantID string) (*sql.DB, bool) {
+	tenantDBsMu.Lock()
+	defer tenantDBsMu.Unlock()
+	db, ok := tenantDBs[tenantID]
+	return db, ok
 }

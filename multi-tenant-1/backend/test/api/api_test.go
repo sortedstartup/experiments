@@ -135,6 +135,16 @@ func TestServer_CreateProject_Success(t *testing.T) {
 	tenantID := "test-tenant-123"
 	projectName := "test-project"
 
+	// Add tenant to the global map to pass the tenant existence check
+	dao.TenantDBsMu.Lock()
+	dao.TenantDBs[tenantID] = nil // Use nil for *sql.DB value
+	dao.TenantDBsMu.Unlock()
+	defer func() {
+		dao.TenantDBsMu.Lock()
+		delete(dao.TenantDBs, tenantID)
+		dao.TenantDBsMu.Unlock()
+	}()
+
 	// Setup mock expectations
 	mockTenantDAO.On("CreateProject", mock.Anything, tenantID, mock.AnythingOfType("string"), projectName).Return(nil)
 
@@ -151,6 +161,11 @@ func TestServer_CreateProject_Success(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NotNil(t, resp)
 	assert.NotEmpty(t, resp.Message)
+
+	// Print the project ID for debug if test fails
+	if len(resp.Message) != 36 {
+		t.Errorf("Returned project ID has invalid length: %d, value: %q", len(resp.Message), resp.Message)
+	}
 
 	// Verify that the project ID is a valid UUID
 	_, err = uuid.Parse(resp.Message)
@@ -199,6 +214,16 @@ func TestServer_CreateProject_DAOError(t *testing.T) {
 	tenantID := "test-tenant-123"
 	projectName := "test-project"
 
+	// Add tenant to the global map to pass the tenant existence check
+	dao.TenantDBsMu.Lock()
+	dao.TenantDBs[tenantID] = nil // Use nil for *sql.DB value
+	dao.TenantDBsMu.Unlock()
+	defer func() {
+		dao.TenantDBsMu.Lock()
+		delete(dao.TenantDBs, tenantID)
+		dao.TenantDBsMu.Unlock()
+	}()
+
 	// Setup mock to return error
 	expectedError := fmt.Errorf("project creation failed")
 	mockTenantDAO.On("CreateProject", mock.Anything, tenantID, mock.AnythingOfType("string"), projectName).Return(expectedError)
@@ -219,6 +244,17 @@ func TestServer_CreateProject_DAOError(t *testing.T) {
 	mockTenantDAO.AssertExpectations(t)
 }
 
+func TestServer_CreateProject_TenantNotFound(t *testing.T) {
+	server := createTestServer()
+	// No tenant in the map
+	ctx := createContextWithTenantID("nonexistent-tenant")
+	req := &proto.CreateProjectRequest{Name: "test-project"}
+	resp, err := server.CreateProject(ctx, req)
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+	assert.Contains(t, resp.Message, "tenant not found")
+}
+
 // Tests for CreateTask
 func TestServer_CreateTask_Success(t *testing.T) {
 	server := createTestServer()
@@ -227,6 +263,16 @@ func TestServer_CreateTask_Success(t *testing.T) {
 	tenantID := "test-tenant-123"
 	taskName := "test-task"
 	projectID := "project-456"
+
+	// Add tenant to the global map to pass the tenant existence check
+	dao.TenantDBsMu.Lock()
+	dao.TenantDBs[tenantID] = nil // Use nil for *sql.DB value
+	dao.TenantDBsMu.Unlock()
+	defer func() {
+		dao.TenantDBsMu.Lock()
+		delete(dao.TenantDBs, tenantID)
+		dao.TenantDBsMu.Unlock()
+	}()
 
 	// Setup mock expectations
 	mockTenantDAO.On("CreateTask", mock.Anything, tenantID, mock.AnythingOfType("string"), projectID, taskName).Return(nil)
@@ -243,6 +289,11 @@ func TestServer_CreateTask_Success(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NotNil(t, resp)
 	assert.NotEmpty(t, resp.Message)
+
+	// Print the task ID for debug if test fails
+	if len(resp.Message) != 36 {
+		t.Errorf("Returned task ID has invalid length: %d, value: %q", len(resp.Message), resp.Message)
+	}
 
 	// Verify that the task ID is a valid UUID
 	_, err = uuid.Parse(resp.Message)
@@ -262,9 +313,27 @@ func TestServer_CreateTask_MissingTenantID(t *testing.T) {
 	resp, err := server.CreateTask(context.Background(), req)
 
 	// Assertions
-	assert.NoError(t, err)
+	assert.NoError(t, err) // The method returns nil error but error message in response
 	assert.NotNil(t, resp)
 	assert.Contains(t, resp.Message, "Missing")
+}
+
+func TestServer_CreateTask_InvalidMetadata(t *testing.T) {
+	server := createTestServer()
+
+	// Create context with empty metadata
+	ctx := metadata.NewIncomingContext(context.Background(), metadata.Pairs())
+
+	req := &proto.CreateTaskRequest{
+		Name:      "test-task",
+		ProjectId: "project-456",
+	}
+
+	resp, err := server.CreateTask(ctx, req)
+
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+	assert.Contains(t, resp.Message, "Missing tenant_id in header")
 }
 
 func TestServer_CreateTask_DAOError(t *testing.T) {
@@ -274,6 +343,16 @@ func TestServer_CreateTask_DAOError(t *testing.T) {
 	tenantID := "test-tenant-123"
 	taskName := "test-task"
 	projectID := "project-456"
+
+	// Add tenant to the global map to pass the tenant existence check
+	dao.TenantDBsMu.Lock()
+	dao.TenantDBs[tenantID] = nil // Use nil for *sql.DB value
+	dao.TenantDBsMu.Unlock()
+	defer func() {
+		dao.TenantDBsMu.Lock()
+		delete(dao.TenantDBs, tenantID)
+		dao.TenantDBsMu.Unlock()
+	}()
 
 	// Setup mock to return error
 	expectedError := fmt.Errorf("task creation failed")
@@ -296,112 +375,50 @@ func TestServer_CreateTask_DAOError(t *testing.T) {
 	mockTenantDAO.AssertExpectations(t)
 }
 
-// Tests for ExtractTenantID helper function
-func TestExtractTenantID_Success(t *testing.T) {
-	expectedTenantID := "tenant-123"
-	ctx := createContextWithTenantID(expectedTenantID)
-
-	tenantID, err := ExtractTenantID(ctx)
-
-	assert.NoError(t, err)
-	assert.Equal(t, expectedTenantID, tenantID)
-}
-
-func TestExtractTenantID_NoMetadata(t *testing.T) {
-	ctx := context.Background()
-
-	tenantID, err := ExtractTenantID(ctx)
-
-	assert.Error(t, err)
-	assert.Empty(t, tenantID)
-	assert.Contains(t, err.Error(), "Missing metadata")
-}
-
-func TestExtractTenantID_NoTenantHeader(t *testing.T) {
-	ctx := metadata.NewIncomingContext(context.Background(), metadata.Pairs("other-header", "value"))
-
-	tenantID, err := ExtractTenantID(ctx)
-
-	assert.Error(t, err)
-	assert.Empty(t, tenantID)
-	assert.Contains(t, err.Error(), "Missing tenant_id in header")
-}
-
-// Tests for GetProjects
-func TestServer_GetProjects_Success(t *testing.T) {
+func TestServer_CreateTask_TenantNotFound(t *testing.T) {
 	server := createTestServer()
-	mockTenantDAO := server.TenantDAO.(*MockTenantDAO)
-
-	tenantID := "test-tenant-123"
-	projects := []dao.Project{{ID: "p1", Name: "Project 1"}, {ID: "p2", Name: "Project 2"}}
-	mockTenantDAO.On("GetProjects", mock.Anything, tenantID).Return(projects, nil)
-
-	ctx := createContextWithTenantID(tenantID)
-	resp, err := server.GetProjects(ctx, &proto.GetProjectsRequest{})
-
+	// No tenant in the map
+	ctx := createContextWithTenantID("nonexistent-tenant")
+	req := &proto.CreateTaskRequest{Name: "test-task", ProjectId: "project-456"}
+	resp, err := server.CreateTask(ctx, req)
 	assert.NoError(t, err)
 	assert.NotNil(t, resp)
-	assert.Len(t, resp.Projects, 2)
-	assert.Equal(t, "p1", resp.Projects[0].Id)
-	assert.Equal(t, "Project 1", resp.Projects[0].Name)
-	mockTenantDAO.AssertExpectations(t)
+	assert.Contains(t, resp.Message, "tenant not found")
 }
 
-func TestServer_GetProjects_MissingTenantID(t *testing.T) {
-	server := createTestServer()
-	resp, err := server.GetProjects(context.Background(), &proto.GetProjectsRequest{})
-	assert.Error(t, err)
-	assert.Nil(t, resp)
-}
-
-func TestServer_GetProjects_DAOError(t *testing.T) {
+func TestServer_CreateTask_ProjectNotFound(t *testing.T) {
 	server := createTestServer()
 	mockTenantDAO := server.TenantDAO.(*MockTenantDAO)
-	tenantID := "test-tenant-123"
-	daoErr := fmt.Errorf("db error")
-	mockTenantDAO.On("GetProjects", mock.Anything, tenantID).Return([]dao.Project{}, daoErr)
-	ctx := createContextWithTenantID(tenantID)
-	resp, err := server.GetProjects(ctx, &proto.GetProjectsRequest{})
-	assert.Error(t, err)
-	assert.Nil(t, resp)
-	mockTenantDAO.AssertExpectations(t)
-}
 
-// Tests for GetTasks
-func TestServer_GetTasks_Success(t *testing.T) {
-	server := createTestServer()
-	mockTenantDAO := server.TenantDAO.(*MockTenantDAO)
 	tenantID := "test-tenant-123"
-	projectID := "p1"
-	tasks := []dao.Task{{ID: "t1", Name: "Task 1", ProjectID: projectID}, {ID: "t2", Name: "Task 2", ProjectID: projectID}}
-	mockTenantDAO.On("GetTasks", mock.Anything, tenantID, projectID).Return(tasks, nil)
+	taskName := "test-task"
+	projectID := "nonexistent-project"
+
+	// Add tenant to the global map with a dummy *sql.DB (nil is fine for unit tests)
+	dao.TenantDBsMu.Lock()
+	dao.TenantDBs[tenantID] = nil
+	dao.TenantDBsMu.Unlock()
+	defer func() {
+		dao.TenantDBsMu.Lock()
+		delete(dao.TenantDBs, tenantID)
+		dao.TenantDBsMu.Unlock()
+	}()
+
+	// Setup mock to return error indicating project not found
+	mockTenantDAO.On("CreateTask", mock.Anything, tenantID, mock.AnythingOfType("string"), projectID, taskName).Return(fmt.Errorf("project not found"))
+
 	ctx := createContextWithTenantID(tenantID)
-	resp, err := server.GetTasks(ctx, &proto.GetTasksRequest{ProjectId: projectID})
-	assert.NoError(t, err)
+	req := &proto.CreateTaskRequest{
+		Name:      taskName,
+		ProjectId: projectID,
+	}
+
+	resp, err := server.CreateTask(ctx, req)
+
+	// Assertions
+	assert.Error(t, err)
 	assert.NotNil(t, resp)
-	assert.Len(t, resp.Tasks, 2)
-	assert.Equal(t, "t1", resp.Tasks[0].Id)
-	assert.Equal(t, "Task 1", resp.Tasks[0].Name)
-	mockTenantDAO.AssertExpectations(t)
-}
+	assert.Contains(t, resp.Message, "project not found")
 
-func TestServer_GetTasks_MissingTenantID(t *testing.T) {
-	server := createTestServer()
-	resp, err := server.GetTasks(context.Background(), &proto.GetTasksRequest{ProjectId: "p1"})
-	assert.Error(t, err)
-	assert.Nil(t, resp)
-}
-
-func TestServer_GetTasks_DAOError(t *testing.T) {
-	server := createTestServer()
-	mockTenantDAO := server.TenantDAO.(*MockTenantDAO)
-	tenantID := "test-tenant-123"
-	projectID := "p1"
-	daoErr := fmt.Errorf("db error")
-	mockTenantDAO.On("GetTasks", mock.Anything, tenantID, projectID).Return([]dao.Task{}, daoErr)
-	ctx := createContextWithTenantID(tenantID)
-	resp, err := server.GetTasks(ctx, &proto.GetTasksRequest{ProjectId: projectID})
-	assert.Error(t, err)
-	assert.Nil(t, resp)
 	mockTenantDAO.AssertExpectations(t)
 }

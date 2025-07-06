@@ -68,12 +68,12 @@ func (s *Server) CreateTenant(ctx context.Context, req *proto.CreateTenantReques
 func ExtractTenantID(ctx context.Context) (string, error) {
 	md, ok := metadata.FromIncomingContext(ctx)
 	if !ok {
-		return "", fmt.Errorf("Missing metadata")
+		return "", fmt.Errorf("missing metadata")
 	}
 	if vals := md.Get("tenant-id"); len(vals) > 0 {
 		return vals[0], nil
 	}
-	return "", fmt.Errorf("Missing tenant_id in header")
+	return "", fmt.Errorf("missing tenant_id in header")
 }
 
 func (s *Server) CreateProject(ctx context.Context, req *proto.CreateProjectRequest) (*proto.CreateProjectResponse, error) {
@@ -86,9 +86,15 @@ func (s *Server) CreateProject(ctx context.Context, req *proto.CreateProjectRequ
 	if err != nil {
 		return &proto.CreateProjectResponse{Message: err.Error()}, nil
 	}
+	if tenantID == "" {
+		return &proto.CreateProjectResponse{Message: "Missing tenant ID in header"}, nil
+	}
+	_, ok := dao.TenantDBs[tenantID]
+	if !ok {
+		return &proto.CreateProjectResponse{Message: fmt.Sprintf("tenant not found: %s", tenantID)}, nil
+	}
 	projectID := uuid.New().String()
-	fmt.Println(projectID)
-	fmt.Println(req.Name)
+
 	err = s.TenantDAO.CreateProject(ctx, tenantID, projectID, req.Name)
 	if err != nil {
 		return &proto.CreateProjectResponse{Message: "Failed to create project: " + err.Error()}, err
@@ -107,10 +113,15 @@ func (s *Server) CreateTask(ctx context.Context, req *proto.CreateTaskRequest) (
 	if err != nil {
 		return &proto.CreateTaskResponse{Message: err.Error()}, nil
 	}
+	if tenantID == "" {
+		return &proto.CreateTaskResponse{Message: "Missing tenant ID in header"}, nil
+	}
+	_, ok := dao.TenantDBs[tenantID]
+	if !ok {
+		return &proto.CreateTaskResponse{Message: fmt.Sprintf("tenant not found: %s", tenantID)}, nil
+	}
 	taskID := uuid.New().String()
-	fmt.Println(taskID)
-	fmt.Println(req.Name)
-	fmt.Println(req.ProjectId)
+
 	err = s.TenantDAO.CreateTask(ctx, tenantID, taskID, req.ProjectId, req.Name)
 	if err != nil {
 		return &proto.CreateTaskResponse{Message: "Failed to create task: " + err.Error()}, err
@@ -122,7 +133,15 @@ func (s *Server) CreateTask(ctx context.Context, req *proto.CreateTaskRequest) (
 func (s *Server) GetProjects(ctx context.Context, req *proto.GetProjectsRequest) (*proto.GetProjectsResponse, error) {
 	tenantID, err := ExtractTenantID(ctx)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("missing or invalid tenant ID: %w", err)
+	}
+	if tenantID == "" {
+		return nil, fmt.Errorf("missing tenant ID in header")
+	}
+
+	_, ok := dao.TenantDBs[tenantID]
+	if !ok {
+		return nil, fmt.Errorf("tenant not found: %s", tenantID)
 	}
 	projects, err := s.TenantDAO.GetProjects(ctx, tenantID)
 	if err != nil {
@@ -138,7 +157,14 @@ func (s *Server) GetProjects(ctx context.Context, req *proto.GetProjectsRequest)
 func (s *Server) GetTasks(ctx context.Context, req *proto.GetTasksRequest) (*proto.GetTasksResponse, error) {
 	tenantID, err := ExtractTenantID(ctx)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("missing or invalid tenant ID: %w", err)
+	}
+	if tenantID == "" {
+		return nil, fmt.Errorf("missing tenant ID in header")
+	}
+	_, ok := dao.TenantDBs[tenantID]
+	if !ok {
+		return nil, fmt.Errorf("tenant not found: %s", tenantID)
 	}
 	tasks, err := s.TenantDAO.GetTasks(ctx, tenantID, req.ProjectId)
 	if err != nil {
