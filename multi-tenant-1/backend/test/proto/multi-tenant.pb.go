@@ -293,6 +293,286 @@ func (x *CreateTaskResponse) GetMessage() string {
 	return ""
 }
 
+type GetProjectsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetProjectsRequest) Reset() {
+	*x = GetProjectsRequest{}
+	mi := &file_multi_tenant_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetProjectsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetProjectsRequest) ProtoMessage() {}
+
+func (x *GetProjectsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_multi_tenant_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetProjectsRequest.ProtoReflect.Descriptor instead.
+func (*GetProjectsRequest) Descriptor() ([]byte, []int) {
+	return file_multi_tenant_proto_rawDescGZIP(), []int{6}
+}
+
+type GetProjectsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Projects      []*Project             `protobuf:"bytes,1,rep,name=projects,proto3" json:"projects,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetProjectsResponse) Reset() {
+	*x = GetProjectsResponse{}
+	mi := &file_multi_tenant_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetProjectsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetProjectsResponse) ProtoMessage() {}
+
+func (x *GetProjectsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_multi_tenant_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetProjectsResponse.ProtoReflect.Descriptor instead.
+func (*GetProjectsResponse) Descriptor() ([]byte, []int) {
+	return file_multi_tenant_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *GetProjectsResponse) GetProjects() []*Project {
+	if x != nil {
+		return x.Projects
+	}
+	return nil
+}
+
+type Project struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Project) Reset() {
+	*x = Project{}
+	mi := &file_multi_tenant_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Project) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Project) ProtoMessage() {}
+
+func (x *Project) ProtoReflect() protoreflect.Message {
+	mi := &file_multi_tenant_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Project.ProtoReflect.Descriptor instead.
+func (*Project) Descriptor() ([]byte, []int) {
+	return file_multi_tenant_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *Project) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *Project) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+type GetTasksRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ProjectId     string                 `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetTasksRequest) Reset() {
+	*x = GetTasksRequest{}
+	mi := &file_multi_tenant_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetTasksRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetTasksRequest) ProtoMessage() {}
+
+func (x *GetTasksRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_multi_tenant_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetTasksRequest.ProtoReflect.Descriptor instead.
+func (*GetTasksRequest) Descriptor() ([]byte, []int) {
+	return file_multi_tenant_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *GetTasksRequest) GetProjectId() string {
+	if x != nil {
+		return x.ProjectId
+	}
+	return ""
+}
+
+type GetTasksResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Tasks         []*Task                `protobuf:"bytes,1,rep,name=tasks,proto3" json:"tasks,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetTasksResponse) Reset() {
+	*x = GetTasksResponse{}
+	mi := &file_multi_tenant_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetTasksResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetTasksResponse) ProtoMessage() {}
+
+func (x *GetTasksResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_multi_tenant_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetTasksResponse.ProtoReflect.Descriptor instead.
+func (*GetTasksResponse) Descriptor() ([]byte, []int) {
+	return file_multi_tenant_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *GetTasksResponse) GetTasks() []*Task {
+	if x != nil {
+		return x.Tasks
+	}
+	return nil
+}
+
+type Task struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	ProjectId     string                 `protobuf:"bytes,3,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Task) Reset() {
+	*x = Task{}
+	mi := &file_multi_tenant_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Task) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Task) ProtoMessage() {}
+
+func (x *Task) ProtoReflect() protoreflect.Message {
+	mi := &file_multi_tenant_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Task.ProtoReflect.Descriptor instead.
+func (*Task) Descriptor() ([]byte, []int) {
+	return file_multi_tenant_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *Task) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *Task) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *Task) GetProjectId() string {
+	if x != nil {
+		return x.ProjectId
+	}
+	return ""
+}
+
 var File_multi_tenant_proto protoreflect.FileDescriptor
 
 const file_multi_tenant_proto_rawDesc = "" +
@@ -312,13 +592,31 @@ const file_multi_tenant_proto_rawDesc = "" +
 	"project_id\x18\x01 \x01(\tR\tprojectId\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\".\n" +
 	"\x12CreateTaskResponse\x12\x18\n" +
-	"\amessage\x18\x01 \x01(\tR\amessage2\x82\x02\n" +
+	"\amessage\x18\x01 \x01(\tR\amessage\"\x14\n" +
+	"\x12GetProjectsRequest\"F\n" +
+	"\x13GetProjectsResponse\x12/\n" +
+	"\bprojects\x18\x01 \x03(\v2\x13.sortedtest.ProjectR\bprojects\"-\n" +
+	"\aProject\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\"0\n" +
+	"\x0fGetTasksRequest\x12\x1d\n" +
+	"\n" +
+	"project_id\x18\x01 \x01(\tR\tprojectId\":\n" +
+	"\x10GetTasksResponse\x12&\n" +
+	"\x05tasks\x18\x01 \x03(\v2\x10.sortedtest.TaskR\x05tasks\"I\n" +
+	"\x04Task\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12\x1d\n" +
+	"\n" +
+	"project_id\x18\x03 \x01(\tR\tprojectId2\x99\x03\n" +
 	"\n" +
 	"sortedtest\x12Q\n" +
 	"\fCreateTenant\x12\x1f.sortedtest.CreateTenantRequest\x1a .sortedtest.CreateTenantResponse\x12T\n" +
 	"\rCreateProject\x12 .sortedtest.CreateProjectRequest\x1a!.sortedtest.CreateProjectResponse\x12K\n" +
 	"\n" +
-	"CreateTask\x12\x1d.sortedtest.CreateTaskRequest\x1a\x1e.sortedtest.CreateTaskResponseB'Z%sortedstartup/multi-tenant/test/protob\x06proto3"
+	"CreateTask\x12\x1d.sortedtest.CreateTaskRequest\x1a\x1e.sortedtest.CreateTaskResponse\x12N\n" +
+	"\vGetProjects\x12\x1e.sortedtest.GetProjectsRequest\x1a\x1f.sortedtest.GetProjectsResponse\x12E\n" +
+	"\bGetTasks\x12\x1b.sortedtest.GetTasksRequest\x1a\x1c.sortedtest.GetTasksResponseB'Z%sortedstartup/multi-tenant/test/protob\x06proto3"
 
 var (
 	file_multi_tenant_proto_rawDescOnce sync.Once
@@ -332,7 +630,7 @@ func file_multi_tenant_proto_rawDescGZIP() []byte {
 	return file_multi_tenant_proto_rawDescData
 }
 
-var file_multi_tenant_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_multi_tenant_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
 var file_multi_tenant_proto_goTypes = []any{
 	(*CreateTenantRequest)(nil),   // 0: sortedtest.CreateTenantRequest
 	(*CreateTenantResponse)(nil),  // 1: sortedtest.CreateTenantResponse
@@ -340,19 +638,31 @@ var file_multi_tenant_proto_goTypes = []any{
 	(*CreateProjectResponse)(nil), // 3: sortedtest.CreateProjectResponse
 	(*CreateTaskRequest)(nil),     // 4: sortedtest.CreateTaskRequest
 	(*CreateTaskResponse)(nil),    // 5: sortedtest.CreateTaskResponse
+	(*GetProjectsRequest)(nil),    // 6: sortedtest.GetProjectsRequest
+	(*GetProjectsResponse)(nil),   // 7: sortedtest.GetProjectsResponse
+	(*Project)(nil),               // 8: sortedtest.Project
+	(*GetTasksRequest)(nil),       // 9: sortedtest.GetTasksRequest
+	(*GetTasksResponse)(nil),      // 10: sortedtest.GetTasksResponse
+	(*Task)(nil),                  // 11: sortedtest.Task
 }
 var file_multi_tenant_proto_depIdxs = []int32{
-	0, // 0: sortedtest.sortedtest.CreateTenant:input_type -> sortedtest.CreateTenantRequest
-	2, // 1: sortedtest.sortedtest.CreateProject:input_type -> sortedtest.CreateProjectRequest
-	4, // 2: sortedtest.sortedtest.CreateTask:input_type -> sortedtest.CreateTaskRequest
-	1, // 3: sortedtest.sortedtest.CreateTenant:output_type -> sortedtest.CreateTenantResponse
-	3, // 4: sortedtest.sortedtest.CreateProject:output_type -> sortedtest.CreateProjectResponse
-	5, // 5: sortedtest.sortedtest.CreateTask:output_type -> sortedtest.CreateTaskResponse
-	3, // [3:6] is the sub-list for method output_type
-	0, // [0:3] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	8,  // 0: sortedtest.GetProjectsResponse.projects:type_name -> sortedtest.Project
+	11, // 1: sortedtest.GetTasksResponse.tasks:type_name -> sortedtest.Task
+	0,  // 2: sortedtest.sortedtest.CreateTenant:input_type -> sortedtest.CreateTenantRequest
+	2,  // 3: sortedtest.sortedtest.CreateProject:input_type -> sortedtest.CreateProjectRequest
+	4,  // 4: sortedtest.sortedtest.CreateTask:input_type -> sortedtest.CreateTaskRequest
+	6,  // 5: sortedtest.sortedtest.GetProjects:input_type -> sortedtest.GetProjectsRequest
+	9,  // 6: sortedtest.sortedtest.GetTasks:input_type -> sortedtest.GetTasksRequest
+	1,  // 7: sortedtest.sortedtest.CreateTenant:output_type -> sortedtest.CreateTenantResponse
+	3,  // 8: sortedtest.sortedtest.CreateProject:output_type -> sortedtest.CreateProjectResponse
+	5,  // 9: sortedtest.sortedtest.CreateTask:output_type -> sortedtest.CreateTaskResponse
+	7,  // 10: sortedtest.sortedtest.GetProjects:output_type -> sortedtest.GetProjectsResponse
+	10, // 11: sortedtest.sortedtest.GetTasks:output_type -> sortedtest.GetTasksResponse
+	7,  // [7:12] is the sub-list for method output_type
+	2,  // [2:7] is the sub-list for method input_type
+	2,  // [2:2] is the sub-list for extension type_name
+	2,  // [2:2] is the sub-list for extension extendee
+	0,  // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_multi_tenant_proto_init() }
@@ -366,7 +676,7 @@ func file_multi_tenant_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_multi_tenant_proto_rawDesc), len(file_multi_tenant_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   6,
+			NumMessages:   12,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

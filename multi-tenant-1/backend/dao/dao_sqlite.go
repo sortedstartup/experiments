@@ -35,6 +35,8 @@ func (d *superDAO) CreateTenant(ctx context.Context, id, name string) error {
 type TenantDAO interface {
 	CreateProject(ctx context.Context, tenantID, id, name string) error
 	CreateTask(ctx context.Context, tenantID, id, projectId, name string) error
+	GetProjects(ctx context.Context, tenantID string) ([]Project, error)
+	GetTasks(ctx context.Context, tenantID, projectId string) ([]Task, error)
 }
 
 type tenantDAO struct{}
@@ -103,4 +105,57 @@ func (d *tenantDAO) CreateTask(ctx context.Context, tenantID, id, projectId, nam
 	}
 	_, err := db.ExecContext(ctx, "INSERT INTO task (id, project_id, name) VALUES (?, ?, ?)", id, projectId, name)
 	return err
+}
+
+type Project struct {
+	ID   string
+	Name string
+}
+
+type Task struct {
+	ID        string
+	Name      string
+	ProjectID string
+}
+
+func (d *tenantDAO) GetProjects(ctx context.Context, tenantID string) ([]Project, error) {
+	db, ok := tenantDBs[tenantID]
+	if !ok {
+		return nil, fmt.Errorf("tenant DB not found  %s", tenantID)
+	}
+	rows, err := db.QueryContext(ctx, "SELECT id, name FROM project")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var projects []Project
+	for rows.Next() {
+		var p Project
+		if err := rows.Scan(&p.ID, &p.Name); err != nil {
+			return nil, err
+		}
+		projects = append(projects, p)
+	}
+	return projects, nil
+}
+
+func (d *tenantDAO) GetTasks(ctx context.Context, tenantID, projectId string) ([]Task, error) {
+	db, ok := tenantDBs[tenantID]
+	if !ok {
+		return nil, fmt.Errorf("tenant DB not found  %s", tenantID)
+	}
+	rows, err := db.QueryContext(ctx, "SELECT id, name, project_id FROM task WHERE project_id = ?", projectId)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var tasks []Task
+	for rows.Next() {
+		var t Task
+		if err := rows.Scan(&t.ID, &t.Name, &t.ProjectID); err != nil {
+			return nil, err
+		}
+		tasks = append(tasks, t)
+	}
+	return tasks, nil
 }

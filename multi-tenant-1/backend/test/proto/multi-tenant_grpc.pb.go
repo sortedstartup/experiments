@@ -22,6 +22,8 @@ const (
 	Sortedtest_CreateTenant_FullMethodName  = "/sortedtest.sortedtest/CreateTenant"
 	Sortedtest_CreateProject_FullMethodName = "/sortedtest.sortedtest/CreateProject"
 	Sortedtest_CreateTask_FullMethodName    = "/sortedtest.sortedtest/CreateTask"
+	Sortedtest_GetProjects_FullMethodName   = "/sortedtest.sortedtest/GetProjects"
+	Sortedtest_GetTasks_FullMethodName      = "/sortedtest.sortedtest/GetTasks"
 )
 
 // SortedtestClient is the client API for Sortedtest service.
@@ -31,6 +33,8 @@ type SortedtestClient interface {
 	CreateTenant(ctx context.Context, in *CreateTenantRequest, opts ...grpc.CallOption) (*CreateTenantResponse, error)
 	CreateProject(ctx context.Context, in *CreateProjectRequest, opts ...grpc.CallOption) (*CreateProjectResponse, error)
 	CreateTask(ctx context.Context, in *CreateTaskRequest, opts ...grpc.CallOption) (*CreateTaskResponse, error)
+	GetProjects(ctx context.Context, in *GetProjectsRequest, opts ...grpc.CallOption) (*GetProjectsResponse, error)
+	GetTasks(ctx context.Context, in *GetTasksRequest, opts ...grpc.CallOption) (*GetTasksResponse, error)
 }
 
 type sortedtestClient struct {
@@ -71,6 +75,26 @@ func (c *sortedtestClient) CreateTask(ctx context.Context, in *CreateTaskRequest
 	return out, nil
 }
 
+func (c *sortedtestClient) GetProjects(ctx context.Context, in *GetProjectsRequest, opts ...grpc.CallOption) (*GetProjectsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetProjectsResponse)
+	err := c.cc.Invoke(ctx, Sortedtest_GetProjects_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *sortedtestClient) GetTasks(ctx context.Context, in *GetTasksRequest, opts ...grpc.CallOption) (*GetTasksResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetTasksResponse)
+	err := c.cc.Invoke(ctx, Sortedtest_GetTasks_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // SortedtestServer is the server API for Sortedtest service.
 // All implementations must embed UnimplementedSortedtestServer
 // for forward compatibility.
@@ -78,6 +102,8 @@ type SortedtestServer interface {
 	CreateTenant(context.Context, *CreateTenantRequest) (*CreateTenantResponse, error)
 	CreateProject(context.Context, *CreateProjectRequest) (*CreateProjectResponse, error)
 	CreateTask(context.Context, *CreateTaskRequest) (*CreateTaskResponse, error)
+	GetProjects(context.Context, *GetProjectsRequest) (*GetProjectsResponse, error)
+	GetTasks(context.Context, *GetTasksRequest) (*GetTasksResponse, error)
 	mustEmbedUnimplementedSortedtestServer()
 }
 
@@ -96,6 +122,12 @@ func (UnimplementedSortedtestServer) CreateProject(context.Context, *CreateProje
 }
 func (UnimplementedSortedtestServer) CreateTask(context.Context, *CreateTaskRequest) (*CreateTaskResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateTask not implemented")
+}
+func (UnimplementedSortedtestServer) GetProjects(context.Context, *GetProjectsRequest) (*GetProjectsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetProjects not implemented")
+}
+func (UnimplementedSortedtestServer) GetTasks(context.Context, *GetTasksRequest) (*GetTasksResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTasks not implemented")
 }
 func (UnimplementedSortedtestServer) mustEmbedUnimplementedSortedtestServer() {}
 func (UnimplementedSortedtestServer) testEmbeddedByValue()                    {}
@@ -172,6 +204,42 @@ func _Sortedtest_CreateTask_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Sortedtest_GetProjects_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetProjectsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SortedtestServer).GetProjects(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Sortedtest_GetProjects_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SortedtestServer).GetProjects(ctx, req.(*GetProjectsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Sortedtest_GetTasks_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetTasksRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SortedtestServer).GetTasks(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Sortedtest_GetTasks_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SortedtestServer).GetTasks(ctx, req.(*GetTasksRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Sortedtest_ServiceDesc is the grpc.ServiceDesc for Sortedtest service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -190,6 +258,14 @@ var Sortedtest_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateTask",
 			Handler:    _Sortedtest_CreateTask_Handler,
+		},
+		{
+			MethodName: "GetProjects",
+			Handler:    _Sortedtest_GetProjects_Handler,
+		},
+		{
+			MethodName: "GetTasks",
+			Handler:    _Sortedtest_GetTasks_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

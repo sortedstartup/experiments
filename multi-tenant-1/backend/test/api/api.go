@@ -118,3 +118,35 @@ func (s *Server) CreateTask(ctx context.Context, req *proto.CreateTaskRequest) (
 
 	return &proto.CreateTaskResponse{Message: taskID}, nil
 }
+
+func (s *Server) GetProjects(ctx context.Context, req *proto.GetProjectsRequest) (*proto.GetProjectsResponse, error) {
+	tenantID, err := ExtractTenantID(ctx)
+	if err != nil {
+		return nil, err
+	}
+	projects, err := s.TenantDAO.GetProjects(ctx, tenantID)
+	if err != nil {
+		return nil, err
+	}
+	var protoProjects []*proto.Project
+	for _, p := range projects {
+		protoProjects = append(protoProjects, &proto.Project{Id: p.ID, Name: p.Name})
+	}
+	return &proto.GetProjectsResponse{Projects: protoProjects}, nil
+}
+
+func (s *Server) GetTasks(ctx context.Context, req *proto.GetTasksRequest) (*proto.GetTasksResponse, error) {
+	tenantID, err := ExtractTenantID(ctx)
+	if err != nil {
+		return nil, err
+	}
+	tasks, err := s.TenantDAO.GetTasks(ctx, tenantID, req.ProjectId)
+	if err != nil {
+		return nil, err
+	}
+	var protoTasks []*proto.Task
+	for _, t := range tasks {
+		protoTasks = append(protoTasks, &proto.Task{Id: t.ID, Name: t.Name, ProjectId: t.ProjectID})
+	}
+	return &proto.GetTasksResponse{Tasks: protoTasks}, nil
+}

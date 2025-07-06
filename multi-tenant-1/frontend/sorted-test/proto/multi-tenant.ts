@@ -431,6 +431,450 @@ export class CreateTaskResponse extends pb_1.Message {
         return CreateTaskResponse.deserialize(bytes);
     }
 }
+export class GetProjectsRequest extends pb_1.Message {
+    #one_of_decls: number[][] = [];
+    constructor(data?: any[] | {}) {
+        super();
+        pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+        if (!Array.isArray(data) && typeof data == "object") { }
+    }
+    static fromObject(data: {}): GetProjectsRequest {
+        const message = new GetProjectsRequest({});
+        return message;
+    }
+    toObject() {
+        const data: {} = {};
+        return data;
+    }
+    serialize(): Uint8Array;
+    serialize(w: pb_1.BinaryWriter): void;
+    serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+        const writer = w || new pb_1.BinaryWriter();
+        if (!w)
+            return writer.getResultBuffer();
+    }
+    static deserialize(bytes: Uint8Array | pb_1.BinaryReader): GetProjectsRequest {
+        const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new GetProjectsRequest();
+        while (reader.nextField()) {
+            if (reader.isEndGroup())
+                break;
+            switch (reader.getFieldNumber()) {
+                default: reader.skipField();
+            }
+        }
+        return message;
+    }
+    serializeBinary(): Uint8Array {
+        return this.serialize();
+    }
+    static deserializeBinary(bytes: Uint8Array): GetProjectsRequest {
+        return GetProjectsRequest.deserialize(bytes);
+    }
+}
+export class GetProjectsResponse extends pb_1.Message {
+    #one_of_decls: number[][] = [];
+    constructor(data?: any[] | {
+        projects?: Project[];
+    }) {
+        super();
+        pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [1], this.#one_of_decls);
+        if (!Array.isArray(data) && typeof data == "object") {
+            if ("projects" in data && data.projects != undefined) {
+                this.projects = data.projects;
+            }
+        }
+    }
+    get projects() {
+        return pb_1.Message.getRepeatedWrapperField(this, Project, 1) as Project[];
+    }
+    set projects(value: Project[]) {
+        pb_1.Message.setRepeatedWrapperField(this, 1, value);
+    }
+    static fromObject(data: {
+        projects?: ReturnType<typeof Project.prototype.toObject>[];
+    }): GetProjectsResponse {
+        const message = new GetProjectsResponse({});
+        if (data.projects != null) {
+            message.projects = data.projects.map(item => Project.fromObject(item));
+        }
+        return message;
+    }
+    toObject() {
+        const data: {
+            projects?: ReturnType<typeof Project.prototype.toObject>[];
+        } = {};
+        if (this.projects != null) {
+            data.projects = this.projects.map((item: Project) => item.toObject());
+        }
+        return data;
+    }
+    serialize(): Uint8Array;
+    serialize(w: pb_1.BinaryWriter): void;
+    serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+        const writer = w || new pb_1.BinaryWriter();
+        if (this.projects.length)
+            writer.writeRepeatedMessage(1, this.projects, (item: Project) => item.serialize(writer));
+        if (!w)
+            return writer.getResultBuffer();
+    }
+    static deserialize(bytes: Uint8Array | pb_1.BinaryReader): GetProjectsResponse {
+        const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new GetProjectsResponse();
+        while (reader.nextField()) {
+            if (reader.isEndGroup())
+                break;
+            switch (reader.getFieldNumber()) {
+                case 1:
+                    reader.readMessage(message.projects, () => pb_1.Message.addToRepeatedWrapperField(message, 1, Project.deserialize(reader), Project));
+                    break;
+                default: reader.skipField();
+            }
+        }
+        return message;
+    }
+    serializeBinary(): Uint8Array {
+        return this.serialize();
+    }
+    static deserializeBinary(bytes: Uint8Array): GetProjectsResponse {
+        return GetProjectsResponse.deserialize(bytes);
+    }
+}
+export class Project extends pb_1.Message {
+    #one_of_decls: number[][] = [];
+    constructor(data?: any[] | {
+        id?: string;
+        name?: string;
+    }) {
+        super();
+        pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+        if (!Array.isArray(data) && typeof data == "object") {
+            if ("id" in data && data.id != undefined) {
+                this.id = data.id;
+            }
+            if ("name" in data && data.name != undefined) {
+                this.name = data.name;
+            }
+        }
+    }
+    get id() {
+        return pb_1.Message.getFieldWithDefault(this, 1, "") as string;
+    }
+    set id(value: string) {
+        pb_1.Message.setField(this, 1, value);
+    }
+    get name() {
+        return pb_1.Message.getFieldWithDefault(this, 2, "") as string;
+    }
+    set name(value: string) {
+        pb_1.Message.setField(this, 2, value);
+    }
+    static fromObject(data: {
+        id?: string;
+        name?: string;
+    }): Project {
+        const message = new Project({});
+        if (data.id != null) {
+            message.id = data.id;
+        }
+        if (data.name != null) {
+            message.name = data.name;
+        }
+        return message;
+    }
+    toObject() {
+        const data: {
+            id?: string;
+            name?: string;
+        } = {};
+        if (this.id != null) {
+            data.id = this.id;
+        }
+        if (this.name != null) {
+            data.name = this.name;
+        }
+        return data;
+    }
+    serialize(): Uint8Array;
+    serialize(w: pb_1.BinaryWriter): void;
+    serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+        const writer = w || new pb_1.BinaryWriter();
+        if (this.id.length)
+            writer.writeString(1, this.id);
+        if (this.name.length)
+            writer.writeString(2, this.name);
+        if (!w)
+            return writer.getResultBuffer();
+    }
+    static deserialize(bytes: Uint8Array | pb_1.BinaryReader): Project {
+        const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new Project();
+        while (reader.nextField()) {
+            if (reader.isEndGroup())
+                break;
+            switch (reader.getFieldNumber()) {
+                case 1:
+                    message.id = reader.readString();
+                    break;
+                case 2:
+                    message.name = reader.readString();
+                    break;
+                default: reader.skipField();
+            }
+        }
+        return message;
+    }
+    serializeBinary(): Uint8Array {
+        return this.serialize();
+    }
+    static deserializeBinary(bytes: Uint8Array): Project {
+        return Project.deserialize(bytes);
+    }
+}
+export class GetTasksRequest extends pb_1.Message {
+    #one_of_decls: number[][] = [];
+    constructor(data?: any[] | {
+        project_id?: string;
+    }) {
+        super();
+        pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+        if (!Array.isArray(data) && typeof data == "object") {
+            if ("project_id" in data && data.project_id != undefined) {
+                this.project_id = data.project_id;
+            }
+        }
+    }
+    get project_id() {
+        return pb_1.Message.getFieldWithDefault(this, 1, "") as string;
+    }
+    set project_id(value: string) {
+        pb_1.Message.setField(this, 1, value);
+    }
+    static fromObject(data: {
+        project_id?: string;
+    }): GetTasksRequest {
+        const message = new GetTasksRequest({});
+        if (data.project_id != null) {
+            message.project_id = data.project_id;
+        }
+        return message;
+    }
+    toObject() {
+        const data: {
+            project_id?: string;
+        } = {};
+        if (this.project_id != null) {
+            data.project_id = this.project_id;
+        }
+        return data;
+    }
+    serialize(): Uint8Array;
+    serialize(w: pb_1.BinaryWriter): void;
+    serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+        const writer = w || new pb_1.BinaryWriter();
+        if (this.project_id.length)
+            writer.writeString(1, this.project_id);
+        if (!w)
+            return writer.getResultBuffer();
+    }
+    static deserialize(bytes: Uint8Array | pb_1.BinaryReader): GetTasksRequest {
+        const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new GetTasksRequest();
+        while (reader.nextField()) {
+            if (reader.isEndGroup())
+                break;
+            switch (reader.getFieldNumber()) {
+                case 1:
+                    message.project_id = reader.readString();
+                    break;
+                default: reader.skipField();
+            }
+        }
+        return message;
+    }
+    serializeBinary(): Uint8Array {
+        return this.serialize();
+    }
+    static deserializeBinary(bytes: Uint8Array): GetTasksRequest {
+        return GetTasksRequest.deserialize(bytes);
+    }
+}
+export class GetTasksResponse extends pb_1.Message {
+    #one_of_decls: number[][] = [];
+    constructor(data?: any[] | {
+        tasks?: Task[];
+    }) {
+        super();
+        pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [1], this.#one_of_decls);
+        if (!Array.isArray(data) && typeof data == "object") {
+            if ("tasks" in data && data.tasks != undefined) {
+                this.tasks = data.tasks;
+            }
+        }
+    }
+    get tasks() {
+        return pb_1.Message.getRepeatedWrapperField(this, Task, 1) as Task[];
+    }
+    set tasks(value: Task[]) {
+        pb_1.Message.setRepeatedWrapperField(this, 1, value);
+    }
+    static fromObject(data: {
+        tasks?: ReturnType<typeof Task.prototype.toObject>[];
+    }): GetTasksResponse {
+        const message = new GetTasksResponse({});
+        if (data.tasks != null) {
+            message.tasks = data.tasks.map(item => Task.fromObject(item));
+        }
+        return message;
+    }
+    toObject() {
+        const data: {
+            tasks?: ReturnType<typeof Task.prototype.toObject>[];
+        } = {};
+        if (this.tasks != null) {
+            data.tasks = this.tasks.map((item: Task) => item.toObject());
+        }
+        return data;
+    }
+    serialize(): Uint8Array;
+    serialize(w: pb_1.BinaryWriter): void;
+    serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+        const writer = w || new pb_1.BinaryWriter();
+        if (this.tasks.length)
+            writer.writeRepeatedMessage(1, this.tasks, (item: Task) => item.serialize(writer));
+        if (!w)
+            return writer.getResultBuffer();
+    }
+    static deserialize(bytes: Uint8Array | pb_1.BinaryReader): GetTasksResponse {
+        const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new GetTasksResponse();
+        while (reader.nextField()) {
+            if (reader.isEndGroup())
+                break;
+            switch (reader.getFieldNumber()) {
+                case 1:
+                    reader.readMessage(message.tasks, () => pb_1.Message.addToRepeatedWrapperField(message, 1, Task.deserialize(reader), Task));
+                    break;
+                default: reader.skipField();
+            }
+        }
+        return message;
+    }
+    serializeBinary(): Uint8Array {
+        return this.serialize();
+    }
+    static deserializeBinary(bytes: Uint8Array): GetTasksResponse {
+        return GetTasksResponse.deserialize(bytes);
+    }
+}
+export class Task extends pb_1.Message {
+    #one_of_decls: number[][] = [];
+    constructor(data?: any[] | {
+        id?: string;
+        name?: string;
+        project_id?: string;
+    }) {
+        super();
+        pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+        if (!Array.isArray(data) && typeof data == "object") {
+            if ("id" in data && data.id != undefined) {
+                this.id = data.id;
+            }
+            if ("name" in data && data.name != undefined) {
+                this.name = data.name;
+            }
+            if ("project_id" in data && data.project_id != undefined) {
+                this.project_id = data.project_id;
+            }
+        }
+    }
+    get id() {
+        return pb_1.Message.getFieldWithDefault(this, 1, "") as string;
+    }
+    set id(value: string) {
+        pb_1.Message.setField(this, 1, value);
+    }
+    get name() {
+        return pb_1.Message.getFieldWithDefault(this, 2, "") as string;
+    }
+    set name(value: string) {
+        pb_1.Message.setField(this, 2, value);
+    }
+    get project_id() {
+        return pb_1.Message.getFieldWithDefault(this, 3, "") as string;
+    }
+    set project_id(value: string) {
+        pb_1.Message.setField(this, 3, value);
+    }
+    static fromObject(data: {
+        id?: string;
+        name?: string;
+        project_id?: string;
+    }): Task {
+        const message = new Task({});
+        if (data.id != null) {
+            message.id = data.id;
+        }
+        if (data.name != null) {
+            message.name = data.name;
+        }
+        if (data.project_id != null) {
+            message.project_id = data.project_id;
+        }
+        return message;
+    }
+    toObject() {
+        const data: {
+            id?: string;
+            name?: string;
+            project_id?: string;
+        } = {};
+        if (this.id != null) {
+            data.id = this.id;
+        }
+        if (this.name != null) {
+            data.name = this.name;
+        }
+        if (this.project_id != null) {
+            data.project_id = this.project_id;
+        }
+        return data;
+    }
+    serialize(): Uint8Array;
+    serialize(w: pb_1.BinaryWriter): void;
+    serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+        const writer = w || new pb_1.BinaryWriter();
+        if (this.id.length)
+            writer.writeString(1, this.id);
+        if (this.name.length)
+            writer.writeString(2, this.name);
+        if (this.project_id.length)
+            writer.writeString(3, this.project_id);
+        if (!w)
+            return writer.getResultBuffer();
+    }
+    static deserialize(bytes: Uint8Array | pb_1.BinaryReader): Task {
+        const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new Task();
+        while (reader.nextField()) {
+            if (reader.isEndGroup())
+                break;
+            switch (reader.getFieldNumber()) {
+                case 1:
+                    message.id = reader.readString();
+                    break;
+                case 2:
+                    message.name = reader.readString();
+                    break;
+                case 3:
+                    message.project_id = reader.readString();
+                    break;
+                default: reader.skipField();
+            }
+        }
+        return message;
+    }
+    serializeBinary(): Uint8Array {
+        return this.serialize();
+    }
+    static deserializeBinary(bytes: Uint8Array): Task {
+        return Task.deserialize(bytes);
+    }
+}
 export abstract class UnimplementedsortedtestService {
     static definition = {
         CreateTenant: {
@@ -459,12 +903,32 @@ export abstract class UnimplementedsortedtestService {
             requestDeserialize: (bytes: Buffer) => CreateTaskRequest.deserialize(new Uint8Array(bytes)),
             responseSerialize: (message: CreateTaskResponse) => Buffer.from(message.serialize()),
             responseDeserialize: (bytes: Buffer) => CreateTaskResponse.deserialize(new Uint8Array(bytes))
+        },
+        GetProjects: {
+            path: "/sortedtest.sortedtest/GetProjects",
+            requestStream: false,
+            responseStream: false,
+            requestSerialize: (message: GetProjectsRequest) => Buffer.from(message.serialize()),
+            requestDeserialize: (bytes: Buffer) => GetProjectsRequest.deserialize(new Uint8Array(bytes)),
+            responseSerialize: (message: GetProjectsResponse) => Buffer.from(message.serialize()),
+            responseDeserialize: (bytes: Buffer) => GetProjectsResponse.deserialize(new Uint8Array(bytes))
+        },
+        GetTasks: {
+            path: "/sortedtest.sortedtest/GetTasks",
+            requestStream: false,
+            responseStream: false,
+            requestSerialize: (message: GetTasksRequest) => Buffer.from(message.serialize()),
+            requestDeserialize: (bytes: Buffer) => GetTasksRequest.deserialize(new Uint8Array(bytes)),
+            responseSerialize: (message: GetTasksResponse) => Buffer.from(message.serialize()),
+            responseDeserialize: (bytes: Buffer) => GetTasksResponse.deserialize(new Uint8Array(bytes))
         }
     };
     [method: string]: grpc_1.UntypedHandleCall;
     abstract CreateTenant(call: grpc_1.ServerUnaryCall<CreateTenantRequest, CreateTenantResponse>, callback: grpc_1.sendUnaryData<CreateTenantResponse>): void;
     abstract CreateProject(call: grpc_1.ServerUnaryCall<CreateProjectRequest, CreateProjectResponse>, callback: grpc_1.sendUnaryData<CreateProjectResponse>): void;
     abstract CreateTask(call: grpc_1.ServerUnaryCall<CreateTaskRequest, CreateTaskResponse>, callback: grpc_1.sendUnaryData<CreateTaskResponse>): void;
+    abstract GetProjects(call: grpc_1.ServerUnaryCall<GetProjectsRequest, GetProjectsResponse>, callback: grpc_1.sendUnaryData<GetProjectsResponse>): void;
+    abstract GetTasks(call: grpc_1.ServerUnaryCall<GetTasksRequest, GetTasksResponse>, callback: grpc_1.sendUnaryData<GetTasksResponse>): void;
 }
 export class sortedtestClient {
     private _address: string;
@@ -487,5 +951,13 @@ export class sortedtestClient {
     private static CreateTask = new grpc_web_1.MethodDescriptor<CreateTaskRequest, CreateTaskResponse>("/sortedtest.sortedtest/CreateTask", grpc_web_1.MethodType.UNARY, CreateTaskRequest, CreateTaskResponse, (message: CreateTaskRequest) => message.serialize(), CreateTaskResponse.deserialize);
     CreateTask(message: CreateTaskRequest, metadata: grpc_web_1.Metadata | null) {
         return this._client.thenableCall<CreateTaskRequest, CreateTaskResponse>(this._address + "/sortedtest.sortedtest/CreateTask", message, metadata || {}, sortedtestClient.CreateTask);
+    }
+    private static GetProjects = new grpc_web_1.MethodDescriptor<GetProjectsRequest, GetProjectsResponse>("/sortedtest.sortedtest/GetProjects", grpc_web_1.MethodType.UNARY, GetProjectsRequest, GetProjectsResponse, (message: GetProjectsRequest) => message.serialize(), GetProjectsResponse.deserialize);
+    GetProjects(message: GetProjectsRequest, metadata: grpc_web_1.Metadata | null) {
+        return this._client.thenableCall<GetProjectsRequest, GetProjectsResponse>(this._address + "/sortedtest.sortedtest/GetProjects", message, metadata || {}, sortedtestClient.GetProjects);
+    }
+    private static GetTasks = new grpc_web_1.MethodDescriptor<GetTasksRequest, GetTasksResponse>("/sortedtest.sortedtest/GetTasks", grpc_web_1.MethodType.UNARY, GetTasksRequest, GetTasksResponse, (message: GetTasksRequest) => message.serialize(), GetTasksResponse.deserialize);
+    GetTasks(message: GetTasksRequest, metadata: grpc_web_1.Metadata | null) {
+        return this._client.thenableCall<GetTasksRequest, GetTasksResponse>(this._address + "/sortedtest.sortedtest/GetTasks", message, metadata || {}, sortedtestClient.GetTasks);
     }
 }

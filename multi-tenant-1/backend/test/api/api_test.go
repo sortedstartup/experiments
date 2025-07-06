@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"testing"
 
+	"sortedstartup/multi-tenant/dao"
 	"sortedstartup/multi-tenant/test/proto"
 
 	"github.com/google/uuid"
@@ -38,6 +39,16 @@ func (m *MockTenantDAO) CreateProject(ctx context.Context, tenantID, projectID, 
 func (m *MockTenantDAO) CreateTask(ctx context.Context, tenantID, taskID, projectID, name string) error {
 	args := m.Called(ctx, tenantID, taskID, projectID, name)
 	return args.Error(0)
+}
+
+func (m *MockTenantDAO) GetProjects(ctx context.Context, tenantID string) ([]dao.Project, error) {
+	args := m.Called(ctx, tenantID)
+	return args.Get(0).([]dao.Project), args.Error(1)
+}
+
+func (m *MockTenantDAO) GetTasks(ctx context.Context, tenantID, projectID string) ([]dao.Task, error) {
+	args := m.Called(ctx, tenantID, projectID)
+	return args.Get(0).([]dao.Task), args.Error(1)
 }
 
 // Test helper function to create a test server
@@ -314,4 +325,83 @@ func TestExtractTenantID_NoTenantHeader(t *testing.T) {
 	assert.Error(t, err)
 	assert.Empty(t, tenantID)
 	assert.Contains(t, err.Error(), "Missing tenant_id in header")
+}
+
+// Tests for GetProjects
+func TestServer_GetProjects_Success(t *testing.T) {
+	server := createTestServer()
+	mockTenantDAO := server.TenantDAO.(*MockTenantDAO)
+
+	tenantID := "test-tenant-123"
+	projects := []dao.Project{{ID: "p1", Name: "Project 1"}, {ID: "p2", Name: "Project 2"}}
+	mockTenantDAO.On("GetProjects", mock.Anything, tenantID).Return(projects, nil)
+
+	ctx := createContextWithTenantID(tenantID)
+	resp, err := server.GetProjects(ctx, &proto.GetProjectsRequest{})
+
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+	assert.Len(t, resp.Projects, 2)
+	assert.Equal(t, "p1", resp.Projects[0].Id)
+	assert.Equal(t, "Project 1", resp.Projects[0].Name)
+	mockTenantDAO.AssertExpectations(t)
+}
+
+func TestServer_GetProjects_MissingTenantID(t *testing.T) {
+	server := createTestServer()
+	resp, err := server.GetProjects(context.Background(), &proto.GetProjectsRequest{})
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestServer_GetProjects_DAOError(t *testing.T) {
+	server := createTestServer()
+	mockTenantDAO := server.TenantDAO.(*MockTenantDAO)
+	tenantID := "test-tenant-123"
+	daoErr := fmt.Errorf("db error")
+	mockTenantDAO.On("GetProjects", mock.Anything, tenantID).Return([]dao.Project{}, daoErr)
+	ctx := createContextWithTenantID(tenantID)
+	resp, err := server.GetProjects(ctx, &proto.GetProjectsRequest{})
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	mockTenantDAO.AssertExpectations(t)
+}
+
+// Tests for GetTasks
+func TestServer_GetTasks_Success(t *testing.T) {
+	server := createTestServer()
+	mockTenantDAO := server.TenantDAO.(*MockTenantDAO)
+	tenantID := "test-tenant-123"
+	projectID := "p1"
+	tasks := []dao.Task{{ID: "t1", Name: "Task 1", ProjectID: projectID}, {ID: "t2", Name: "Task 2", ProjectID: projectID}}
+	mockTenantDAO.On("GetTasks", mock.Anything, tenantID, projectID).Return(tasks, nil)
+	ctx := createContextWithTenantID(tenantID)
+	resp, err := server.GetTasks(ctx, &proto.GetTasksRequest{ProjectId: projectID})
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+	assert.Len(t, resp.Tasks, 2)
+	assert.Equal(t, "t1", resp.Tasks[0].Id)
+	assert.Equal(t, "Task 1", resp.Tasks[0].Name)
+	mockTenantDAO.AssertExpectations(t)
+}
+
+func TestServer_GetTasks_MissingTenantID(t *testing.T) {
+	server := createTestServer()
+	resp, err := server.GetTasks(context.Background(), &proto.GetTasksRequest{ProjectId: "p1"})
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+}
+
+func TestServer_GetTasks_DAOError(t *testing.T) {
+	server := createTestServer()
+	mockTenantDAO := server.TenantDAO.(*MockTenantDAO)
+	tenantID := "test-tenant-123"
+	projectID := "p1"
+	daoErr := fmt.Errorf("db error")
+	mockTenantDAO.On("GetTasks", mock.Anything, tenantID, projectID).Return([]dao.Task{}, daoErr)
+	ctx := createContextWithTenantID(tenantID)
+	resp, err := server.GetTasks(ctx, &proto.GetTasksRequest{ProjectId: projectID})
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	mockTenantDAO.AssertExpectations(t)
 }
