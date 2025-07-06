@@ -2,7 +2,7 @@ import grpc from "k6/net/grpc";
 import { check } from "k6";
 
 export const options = {
-  vus: 1,
+  vus: 100,
   duration: "10s",
 };
 
@@ -17,9 +17,12 @@ export default () => {
   const tenantRes = client.invoke("sortedtest.sortedtest/CreateTenant", {
     name: tenantName,
   });
-  check(tenantRes, {
+  const tenantCheck = check(tenantRes, {
     "CreateTenant status is OK": (r) => r && r.status === grpc.StatusOK,
   });
+  if (!tenantCheck) {
+    console.error("CreateTenant failed:", JSON.stringify(tenantRes));
+  }
 
   const params = {
     metadata: { "tenant-id": tenantRes.message && tenantRes.message.message },
@@ -33,10 +36,13 @@ export default () => {
       { name: `Project-${i}` },
       params
     );
-    check(projectRes, {
+    const projectCheck = check(projectRes, {
       [`CreateProject #${i} status is OK`]: (r) =>
         r && r.status === grpc.StatusOK,
     });
+    if (!projectCheck) {
+      console.error(`CreateProject #${i} failed:`, JSON.stringify(projectRes));
+    }
     if (projectRes && projectRes.message && projectRes.message.message) {
       lastProjectId = projectRes.message.message;
     }
@@ -51,9 +57,12 @@ export default () => {
       },
       params
     );
-    check(taskRes, {
+    const taskCheck = check(taskRes, {
       [`CreateTask #${j} status is OK`]: (r) => r && r.status === grpc.StatusOK,
     });
+    if (!taskCheck) {
+      console.error(`CreateTask #${j} failed:`, JSON.stringify(taskRes));
+    }
   }
 
   const getProjectsRes = client.invoke(
@@ -61,18 +70,24 @@ export default () => {
     {},
     params
   );
-  check(getProjectsRes, {
+  const getProjectsCheck = check(getProjectsRes, {
     "GetProjects status is OK": (r) => r && r.status === grpc.StatusOK,
   });
+  if (!getProjectsCheck) {
+    console.error("GetProjects failed:", JSON.stringify(getProjectsRes));
+  }
 
   const getTasksRes = client.invoke(
     "sortedtest.sortedtest/GetTasks",
     { project_id: lastProjectId },
     params
   );
-  check(getTasksRes, {
+  const getTasksCheck = check(getTasksRes, {
     "GetTasks status is OK": (r) => r && r.status === grpc.StatusOK,
   });
+  if (!getTasksCheck) {
+    console.error("GetTasks failed:", JSON.stringify(getTasksRes));
+  }
 
   client.close();
 };
