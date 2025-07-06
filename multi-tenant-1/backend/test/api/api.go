@@ -91,7 +91,7 @@ func (s *Server) CreateProject(ctx context.Context, req *proto.CreateProjectRequ
 	fmt.Println(req.Name)
 	err = s.TenantDAO.CreateProject(ctx, tenantID, projectID, req.Name)
 	if err != nil {
-		return &proto.CreateProjectResponse{Message: "Failed project create : " + err.Error()}, err
+		return &proto.CreateProjectResponse{Message: "Failed to create project: " + err.Error()}, err
 	}
 
 	return &proto.CreateProjectResponse{Message: projectID}, nil
@@ -113,7 +113,7 @@ func (s *Server) CreateTask(ctx context.Context, req *proto.CreateTaskRequest) (
 	fmt.Println(req.ProjectId)
 	err = s.TenantDAO.CreateTask(ctx, tenantID, taskID, req.ProjectId, req.Name)
 	if err != nil {
-		return &proto.CreateTaskResponse{Message: "task fail " + err.Error()}, err
+		return &proto.CreateTaskResponse{Message: "Failed to create task: " + err.Error()}, err
 	}
 
 	return &proto.CreateTaskResponse{Message: taskID}, nil
