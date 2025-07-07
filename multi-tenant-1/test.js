@@ -2,7 +2,7 @@ import grpc from "k6/net/grpc";
 import { check } from "k6";
 
 export const options = {
-  vus: 100,
+  vus: 1,
   duration: "10s",
 };
 

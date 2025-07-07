@@ -67,15 +67,16 @@ func InitTenantDBs(superDB *sql.DB, _ string) error {
 	return nil
 }
 
-func RegisterTenantDB(ctx context.Context, tenantID, _ string) error {
+func RegisterTenantDB(ctx context.Context, tenantID, dbPath string) error {
 	_, span := otel.Tracer("go_manual").Start(ctx, "register db")
 	defer span.End()
-	db, err := sql.Open("sqlite3", tenantID+".db")
+	db, err := sql.Open("sqlite3", dbPath)
 	if err != nil {
 		return err
 	}
-	// tenantDBsMu.Lock()
-	// defer tenantDBsMu.Unlock()
+	// Set WAL mode and synchronous=NORMAL for better concurrency
+	_, _ = db.Exec("PRAGMA journal_mode=WAL;")
+	_, _ = db.Exec("PRAGMA synchronous=NORMAL;")
 	tenantDBs[tenantID] = db
 	return nil
 }

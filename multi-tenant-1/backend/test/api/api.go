@@ -44,11 +44,14 @@ func (s *Server) CreateTenant(ctx context.Context, req *proto.CreateTenantReques
 
 	// Create the tenant DB file and register it
 	dbPath := fmt.Sprintf("../mono/%s.db", id)
-	db, err := sql.Open("sqlite3", dbPath)
+	db, err := sql.Open("sqlite3", dbPath+"?_busy_timeout=5000")
 	if err != nil {
 		return &proto.CreateTenantResponse{Message: "Failed to create tenant DB: " + err.Error()}, err
 	}
 	defer db.Close()
+	// Set WAL mode and synchronous=NORMAL for better concurrency
+	_, _ = db.Exec("PRAGMA journal_mode=WAL;")
+	_, _ = db.Exec("PRAGMA synchronous=NORMAL;")
 	_, err = db.Exec(`CREATE TABLE IF NOT EXISTS project (id TEXT PRIMARY KEY, name TEXT)`)
 	if err != nil {
 		return &proto.CreateTenantResponse{Message: "db created, failed project table " + err.Error()}, err
@@ -58,7 +61,7 @@ func (s *Server) CreateTenant(ctx context.Context, req *proto.CreateTenantReques
 		return &proto.CreateTenantResponse{Message: "db created, failed task table " + err.Error()}, err
 	}
 	s.Log.Info("about to register in create tenant api")
-	if err := dao.RegisterTenantDB(ctx, id, dbPath); err != nil {
+	if err := dao.RegisterTenantDB(ctx, id, dbPath+"?_busy_timeout=5000"); err != nil {
 		return &proto.CreateTenantResponse{Message: "Failed to register tenant DB: " + err.Error()}, err
 	}
 
