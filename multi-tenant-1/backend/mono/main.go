@@ -3,12 +3,10 @@ package main
 import (
 	"context"
 	"database/sql"
-	"fmt"
 	"log"
 	"net"
 	"net/http"
 	"os"
-	"time"
 
 	"sortedstartup/multi-tenant/dao"
 	"sortedstartup/multi-tenant/mono/utils"
@@ -17,15 +15,14 @@ import (
 
 	"github.com/improbable-eng/grpc-web/go/grpcweb"
 	"github.com/joho/godotenv"
+	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/exporters/otlp/otlplog/otlploghttp"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp"
-	"go.opentelemetry.io/otel/exporters/stdout/stdoutmetric"
 	"go.opentelemetry.io/otel/log/global"
 	"go.opentelemetry.io/otel/propagation"
 	otellog "go.opentelemetry.io/otel/sdk/log"
-	"go.opentelemetry.io/otel/sdk/metric"
 	"go.opentelemetry.io/otel/sdk/resource"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
 	semconv "go.opentelemetry.io/otel/semconv/v1.34.0"
@@ -36,54 +33,48 @@ import (
 
 const (
 	grpcPort = ":8000"
-	httpPort = ":8080" // Only gRPC-Web and static UI, no extra upload server
+	httpPort = ":8080"
 )
-
-// var staticUIFS embed.FS
 
 func main() {
 	ctx := context.Background()
 
+	// Initialize OpenTelemetry resource
 	res, err := newResource()
 	if err != nil {
 		log.Fatalf("Failed to create OTel resource: %v", err)
 	}
+
+	// Logger provider
 	loggerProvider, err := newLoggerProvider(ctx, res)
 	if err != nil {
 		log.Fatalf("Failed to create OTel logger provider: %v", err)
 	}
-	defer func() {
-		if err := loggerProvider.Shutdown(ctx); err != nil {
-			fmt.Println("OTel logger shutdown error:", err)
-		}
-	}()
+	defer loggerProvider.Shutdown(ctx)
 	global.SetLoggerProvider(loggerProvider)
 
+	// Tracer provider
 	tp, err := initTracer()
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer tp.Shutdown(context.Background())
+	defer tp.Shutdown(ctx)
 
-	err1 := godotenv.Load()
-	if err1 != nil {
+	// Load environment variables
+	if err := godotenv.Load(); err != nil {
 		log.Println("Warning: .env file not found, using system env")
 	}
 
+	// Setup DB
 	dbPath := os.Getenv("SQLITE_DB_PATH")
-	fmt.Println("Using DB path:", dbPath)
 	if dbPath == "" {
 		dbPath = "./app.db"
 	}
-	// Remove db creation and pass only for migration
+	log.Println("Using DB path:", dbPath)
+
 	if err := dao.MigrateSQLite(dbPath); err != nil {
 		log.Fatalf("DB migration failed: %v", err)
 	}
-	// db, err := sql.Open("sqlite3", dbPath)
-	// if err != nil {
-	// 	log.Fatalf("Failed to open DB: %v", err)
-	// }
-	// defer db.Close()
 
 	superDB, err := sql.Open("sqlite3", dbPath)
 	if err != nil {
@@ -91,11 +82,11 @@ func main() {
 	}
 	defer superDB.Close()
 
-	// Initialize tenant DB map from mono/ folder using superDB
 	if err := dao.InitTenantDBs(superDB, "../mono"); err != nil {
 		log.Fatalf("Failed to initialize tenant DBs: %v", err)
 	}
 
+	// Set up gRPC server
 	listener, err := net.Listen("tcp", grpcPort)
 	if err != nil {
 		log.Fatalf("Failed to listen: %v", err)
@@ -106,29 +97,25 @@ func main() {
 	proto.RegisterSortedtestServer(grpcServer, apiServer)
 	reflection.Register(grpcServer)
 
+	// Wrap with gRPC-Web
 	wrappedGrpc := grpcweb.WrapServer(grpcServer)
 
-	// Comment out staticUIFS if public folder does not exist
-	// publicFS, err := fs.Sub(staticUIFS, "public")
-	// if err != nil {
-	// 	log.Fatalf("Failed to load static UI: %v", err)
-	// }
-	// staticUI := http.FileServer(http.FS(publicFS))
-
-	httpMux := http.NewServeMux()
-	httpMux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	otelHandler := otelhttp.NewHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if wrappedGrpc.IsGrpcWebRequest(r) || wrappedGrpc.IsAcceptableGrpcCorsRequest(r) {
-			utils.EnableCORS(wrappedGrpc).ServeHTTP(w, r)
+			wrappedGrpc.ServeHTTP(w, r)
 			return
 		}
-		// staticUI.ServeHTTP(w, r)
-	})
+		http.NotFound(w, r)
+	}), "grpc-web-gateway")
+
+	finalHandler := utils.EnableCORS(otelHandler)
 
 	httpServer := &http.Server{
-		Addr:    ":8080",
-		Handler: utils.EnableCORS(httpMux),
+		Addr:    httpPort,
+		Handler: finalHandler,
 	}
 
+	// Run servers
 	go func() {
 		log.Println("Starting gRPC server on", grpcPort)
 		if err := grpcServer.Serve(listener); err != nil {
@@ -136,11 +123,13 @@ func main() {
 		}
 	}()
 
-	log.Println("Starting gRPC-Web/Frontend server on :8080")
+	log.Println("Starting HTTP server on", httpPort)
 	if err := httpServer.ListenAndServe(); err != nil {
 		log.Fatalf("HTTP server error: %v", err)
 	}
 }
+
+// --- OTel Setup ---
 
 func newResource() (*resource.Resource, error) {
 	return resource.Merge(resource.Default(),
@@ -152,48 +141,30 @@ func newResource() (*resource.Resource, error) {
 }
 
 func newLoggerProvider(ctx context.Context, res *resource.Resource) (*otellog.LoggerProvider, error) {
-	exporter, err := otlploghttp.New(ctx) //exporter
+	exporter, err := otlploghttp.New(ctx)
 	if err != nil {
 		return nil, err
 	}
-	processor := otellog.NewBatchProcessor(exporter)
-	provider := otellog.NewLoggerProvider(
+	return otellog.NewLoggerProvider(
 		otellog.WithResource(res),
-		otellog.WithProcessor(processor),
-	)
-	return provider, nil
-}
-
-func newMeterProvider(res *resource.Resource) (*metric.MeterProvider, error) {
-	metricExporter, err := stdoutmetric.New() //exporter
-	if err != nil {
-		return nil, err
-	}
-
-	meterProvider := metric.NewMeterProvider(
-		metric.WithResource(res),
-		metric.WithReader(metric.NewPeriodicReader(metricExporter,
-			// Default is 1m. Set to 3s for demonstrative purposes.
-			metric.WithInterval(3*time.Second))),
-	)
-	return meterProvider, nil
+		otellog.WithProcessor(otellog.NewBatchProcessor(exporter)),
+	), nil
 }
 
 func initTracer() (*sdktrace.TracerProvider, error) {
-	// Create stdout exporter to be able to retrieve
-	// the collected spans.
-	exporter, err := otlptrace.New(context.Background(), otlptracehttp.NewClient()) //tracing exporter
+	exporter, err := otlptrace.New(context.Background(), otlptracehttp.NewClient())
 	if err != nil {
 		return nil, err
 	}
 
-	// For the demonstration, use sdktrace.AlwaysSample sampler to sample all traces.
-	// In a production application, use sdktrace.ProbabilitySampler with a desired probability.
 	tp := sdktrace.NewTracerProvider(
 		sdktrace.WithSampler(sdktrace.AlwaysSample()),
 		sdktrace.WithBatcher(exporter),
 	)
+
 	otel.SetTracerProvider(tp)
-	otel.SetTextMapPropagator(propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{}))
-	return tp, err
+	otel.SetTextMapPropagator(
+		propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{}),
+	)
+	return tp, nil
 }
