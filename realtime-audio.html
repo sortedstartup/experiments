@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>OpenAI Realtime WebSocket Test</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-bottom: 20px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    button:disabled {
+      background: #6c757d;
+      cursor: not-allowed;
+    }
+    #log {
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 5px;
+      padding: 10px;
+      height: 300px;
+      overflow-y: auto;
+      font-family: monospace;
+      white-space: pre-wrap;
+    }
+    audio {
+      width: 100%;
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Realtime WebSocket Audio Test</h1>
+  <button id="connectBtn">Connect & Generate Audio</button>
+  <pre id="log"></pre>
+  <audio id="player" controls></audio>
+
+  <script>
+    let ws;
+    let audioChunks = [];
+    let isConnected = false;
+
+    async function connect() {
+      const logEl = document.getElementById("log");
+      const connectBtn = document.getElementById("connectBtn");
+      const audioEl = document.getElementById("player");
+      
+      function log(msg) { 
+        const timestamp = new Date().toLocaleTimeString();
+        logEl.textContent += `[${timestamp}] ${msg}\n`; 
+        logEl.scrollTop = logEl.scrollHeight;
+      }
+
+      // Replace with your actual API key
+      const API_KEY = "";
+      connectBtn.disabled = true;
+      connectBtn.textContent = "Connecting...";
+      audioChunks = [];
+
+      try {
+        ws = new WebSocket(
+          "wss://api.openai.com/v1/realtime?model=gpt-4o-realtime-preview",
+          [
+            "realtime",
+            "openai-insecure-api-key." + API_KEY,
+            "openai-beta.realtime-v1"
+          ]
+        );
+
+        ws.onopen = () => {
+          log(" Connected to OpenAI Realtime API");
+          isConnected = true;
+          connectBtn.textContent = "Connected";
+          
+          // Configure the session
+          ws.send(JSON.stringify({
+            type: "session.update",
+            session: {
+              type: "realtime",
+              modalities: ["text", "audio"],
+              instructions: "You are a helpful assistant. Please respond with a friendly greeting in a natural speaking voice.",
+              voice: "alloy",
+              output_audio_format: "pcm16",
+              turn_detection: {
+                type: "server_vad",
+              }
+            }
+          }));
+
+          // Send a conversation item to generate audio response
+          setTimeout(() => {
+            ws.send(JSON.stringify({
+              type: "conversation.item.create",
+              item: {
+                type: "message",
+                role: "user",
+                content: [{
+                  type: "input_text",
+                  text: "Hello! Please introduce yourself and tell me a short joke."
+                }]
+              }
+            }));
+
+            // Create a response
+            ws.send(JSON.stringify({
+              type: "response.create",
+              response: {
+                modalities: ["text", "audio"]
+              }
+            }));
+          }, 500);
+        };
+
+        ws.onmessage = (event) => {
+          const data = JSON.parse(event.data);
+          log(` Received: ${data.type}`);
+
+          if (data.type === "response.audio.delta") {
+            log(` Audio chunk received (${data.delta.length} chars base64)`);
+            
+            // Decode base64 to binary
+            const binaryString = atob(data.delta);
+            const bytes = new Uint8Array(binaryString.length);
+            for (let i = 0; i < binaryString.length; i++) {
+              bytes[i] = binaryString.charCodeAt(i);
+            }
+            
+            audioChunks.push(bytes);
+          }
+
+          if (data.type === "response.audio.done") {
+            log("Audio response completed, creating playable audio");
+            createAudioFromChunks();
+          }
+        };
+
+        ws.onerror = (err) => {
+          log(`WebSocket Error: ${err.message || 'Unknown error'}`);
+          connectBtn.disabled = false;
+          connectBtn.textContent = "Try Again";
+        };
+
+        ws.onclose = (event) => {
+          log(`Connection closed (code: ${event.code})`);
+        };
+
+      } catch (error) {
+        log(`Connection failed: ${error.message}`);
+      }
+    }
+
+    function createAudioFromChunks() {
+      if (audioChunks.length === 0) {
+        log("No audio chunks to play");
+        return;
+      }
+
+      const logEl = document.getElementById("log");
+
+      try {
+        // Calculate total length
+        const totalLength = audioChunks.reduce((sum, chunk) => sum + chunk.length, 0);
+        log(`Combining ${audioChunks.length} chunks, total ${totalLength} bytes`);
+
+        // Combine all chunks
+        const combinedAudio = new Uint8Array(totalLength);
+        let offset = 0;
+        for (const chunk of audioChunks) {
+          combinedAudio.set(chunk, offset);
+          offset += chunk.length;
+        }
+
+        // Convert PCM16 to WAV format
+        const wavData = createWavFile(combinedAudio, 24000, 1); // 24kHz, mono
+        const blob = new Blob([wavData], { type: 'audio/wav' });
+        const audioUrl = URL.createObjectURL(blob);
+
+        const audioEl = document.getElementById("player");
+        audioEl.src = audioUrl;
+        audioEl.load();
+        
+        
+        // Auto-play the audio
+        audioEl.play().catch(e => {
+          log(`Auto-play failed: ${e.message}. Click play button manually.`);
+        });
+
+      } catch (error) {
+        log(`Error creating audio: ${error.message}`);
+      }
+    }
+
+    function createWavFile(audioData, sampleRate, numChannels) {
+      const length = audioData.length;
+      const buffer = new ArrayBuffer(44 + length * 2);
+      const view = new DataView(buffer);
+
+      // WAV header
+      const writeString = (offset, string) => {
+        for (let i = 0; i < string.length; i++) {
+          view.setUint8(offset + i, string.charCodeAt(i));
+        }
+      };
+
+      writeString(0, 'RIFF');
+      view.setUint32(4, 36 + length * 2, true);
+      writeString(8, 'WAVE');
+      writeString(12, 'fmt ');
+      view.setUint32(16, 16, true);
+      view.setUint16(20, 1, true);
+      view.setUint16(22, numChannels, true);
+      view.setUint32(24, sampleRate, true);
+      view.setUint32(28, sampleRate * 2, true);
+      view.setUint16(32, 2, true);
+      view.setUint16(34, 16, true);
+      writeString(36, 'data');
+      view.setUint32(40, length * 2, true);
+
+      // Convert PCM data
+      const offset = 44;
+      for (let i = 0; i < length; i += 2) {
+        const sample = (audioData[i + 1] << 8) | audioData[i];
+        view.setInt16(offset + i, sample, true);
+      }
+
+      return buffer;
+    }
+
+    document.getElementById("connectBtn").onclick = connect;
+  </script>
+</body>
+</html>
