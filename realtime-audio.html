@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>OpenAI Realtime WebSocket Test</title>
+  <title>OpenAI Realtime WebSocket Audio Test</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -13,7 +13,7 @@
     button {
       padding: 10px 20px;
       font-size: 16px;
-      margin-bottom: 20px;
+      margin: 5px;
       background: #007bff;
       color: white;
       border: none;
@@ -26,6 +26,21 @@
     button:disabled {
       background: #6c757d;
       cursor: not-allowed;
+    }
+    .record-btn {
+      background: #dc3545;
+    }
+    .record-btn:hover {
+      background: #c82333;
+    }
+    .recording {
+      background: #28a745 !important;
+      animation: pulse 1s infinite;
+    }
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.7; }
+      100% { opacity: 1; }
     }
     #log {
       background: #f8f9fa;
@@ -41,11 +56,22 @@
       width: 100%;
       margin: 20px 0;
     }
+    .controls {
+      margin-bottom: 20px;
+    }
   </style>
 </head>
 <body>
   <h1>Realtime WebSocket Audio Test</h1>
-  <button id="connectBtn">Connect & Generate Audio</button>
+  
+  <div class="controls">
+    <button id="connectBtn">Connect</button>
+    <button id="recordBtn" class="record-btn" disabled>🎤 Start Recording</button>
+    <button id="sendTextBtn" disabled>Send Text Message</button>
+    <input type="file" id="audioFileInput" accept="audio/*" multiple style="margin: 10px 0;">
+    <button id="uploadAudioBtn" disabled>Upload Audio Files</button>
+  </div>
+  
   <pre id="log"></pre>
   <audio id="player" controls></audio>
 
@@ -53,10 +79,47 @@
     let ws;
     let audioChunks = [];
     let isConnected = false;
+    let mediaRecorder;
+    let recordedChunks = [];
+    let isRecording = false;
+
+    // Audio processing functions
+    function floatTo16BitPCM(float32Array) {
+      const buffer = new ArrayBuffer(float32Array.length * 2);
+      const view = new DataView(buffer);
+      let offset = 0;
+      for (let i = 0; i < float32Array.length; i++, offset += 2) {
+        let s = Math.max(-1, Math.min(1, float32Array[i]));
+        view.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7fff, true);
+      }
+      return buffer;
+    }
+
+    function base64EncodeAudio(float32Array) {
+      const arrayBuffer = floatTo16BitPCM(float32Array);
+      let binary = '';
+      let bytes = new Uint8Array(arrayBuffer);
+      const chunkSize = 0x8000; // 32KB chunk size
+      for (let i = 0; i < bytes.length; i += chunkSize) {
+        let chunk = bytes.subarray(i, i + chunkSize);
+        binary += String.fromCharCode.apply(null, chunk);
+      }
+      return btoa(binary);
+    }
+
+    // Decode audio file to Float32Array
+    async function decodeAudioFile(audioBuffer) {
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      const decodedData = await audioContext.decodeAudioData(audioBuffer);
+      return decodedData.getChannelData(0); // Get first channel
+    }
 
     async function connect() {
       const logEl = document.getElementById("log");
       const connectBtn = document.getElementById("connectBtn");
+      const recordBtn = document.getElementById("recordBtn");
+      const sendTextBtn = document.getElementById("sendTextBtn");
+      const uploadAudioBtn = document.getElementById("uploadAudioBtn");
       const audioEl = document.getElementById("player");
       
       function log(msg) { 
@@ -85,6 +148,9 @@
           log(" Connected to OpenAI Realtime API");
           isConnected = true;
           connectBtn.textContent = "Connected";
+          recordBtn.disabled = false;
+          sendTextBtn.disabled = false;
+          uploadAudioBtn.disabled = false;
           
           // Configure the session
           ws.send(JSON.stringify({
@@ -92,37 +158,17 @@
             session: {
               type: "realtime",
               modalities: ["text", "audio"],
-              instructions: "You are a helpful assistant. Please respond with a friendly greeting in a natural speaking voice.",
+              instructions: "You are a helpful assistant. Respond naturally to whatever the user says or asks.Answer in English only",
               voice: "alloy",
               output_audio_format: "pcm16",
               turn_detection: {
                 type: "server_vad",
+                threshold: 0.5,
+                prefix_padding_ms: 300,
+                silence_duration_ms: 500
               }
             }
           }));
-
-          // Send a conversation item to generate audio response
-          setTimeout(() => {
-            ws.send(JSON.stringify({
-              type: "conversation.item.create",
-              item: {
-                type: "message",
-                role: "user",
-                content: [{
-                  type: "input_text",
-                  text: "Hello! Please introduce yourself and tell me a short joke."
-                }]
-              }
-            }));
-
-            // Create a response
-            ws.send(JSON.stringify({
-              type: "response.create",
-              response: {
-                modalities: ["text", "audio"]
-              }
-            }));
-          }, 500);
         };
 
         ws.onmessage = (event) => {
@@ -146,26 +192,204 @@
             log("Audio response completed, creating playable audio");
             createAudioFromChunks();
           }
+
+          if (data.type === "response.done") {
+            log("🎉 Complete response finished");
+          }
+
+          if (data.type === "error") {
+            log(`❌ Error: ${JSON.stringify(data.error)}`);
+          }
         };
 
         ws.onerror = (err) => {
-          log(`WebSocket Error: ${err.message || 'Unknown error'}`);
-          connectBtn.disabled = false;
-          connectBtn.textContent = "Try Again";
+          log(`❌ WebSocket Error: ${err.message || 'Unknown error'}`);
+          resetConnection();
         };
 
         ws.onclose = (event) => {
-          log(`Connection closed (code: ${event.code})`);
+          log(`🔒 Connection closed (code: ${event.code})`);
+          resetConnection();
         };
 
       } catch (error) {
-        log(`Connection failed: ${error.message}`);
+        log(`❌ Connection failed: ${error.message}`);
+        resetConnection();
       }
+    }
+
+    function resetConnection() {
+      isConnected = false;
+      document.getElementById("connectBtn").disabled = false;
+      document.getElementById("connectBtn").textContent = "Connect";
+      document.getElementById("recordBtn").disabled = true;
+      document.getElementById("sendTextBtn").disabled = true;
+      document.getElementById("uploadAudioBtn").disabled = true;
+    }
+
+    // Recording functionality
+    async function toggleRecording() {
+      const recordBtn = document.getElementById("recordBtn");
+      const logEl = document.getElementById("log");
+      
+      function log(msg) { 
+        const timestamp = new Date().toLocaleTimeString();
+        logEl.textContent += `[${timestamp}] ${msg}\n`; 
+        logEl.scrollTop = logEl.scrollHeight;
+      }
+
+      if (!isRecording) {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          mediaRecorder = new MediaRecorder(stream);
+          recordedChunks = [];
+
+          mediaRecorder.ondataavailable = (event) => {
+            if (event.data.size > 0) {
+              recordedChunks.push(event.data);
+            }
+          };
+
+          mediaRecorder.onstop = async () => {
+            const audioBlob = new Blob(recordedChunks, { type: 'audio/wav' });
+            await processRecordedAudio(audioBlob);
+            
+            // Stop all tracks to release microphone
+            stream.getTracks().forEach(track => track.stop());
+          };
+
+          mediaRecorder.start();
+          isRecording = true;
+          recordBtn.textContent = "🛑 Stop Recording";
+          recordBtn.classList.add("recording");
+          log("🎤 Recording started...");
+
+        } catch (error) {
+          log(`❌ Error starting recording: ${error.message}`);
+        }
+      } else {
+        mediaRecorder.stop();
+        isRecording = false;
+        recordBtn.textContent = "🎤 Start Recording";
+        recordBtn.classList.remove("recording");
+        log("⏹️ Recording stopped, processing...");
+      }
+    }
+
+    // Process recorded audio and send to API
+    async function processRecordedAudio(audioBlob) {
+      const logEl = document.getElementById("log");
+      
+      function log(msg) { 
+        const timestamp = new Date().toLocaleTimeString();
+        logEl.textContent += `[${timestamp}] ${msg}\n`; 
+        logEl.scrollTop = logEl.scrollHeight;
+      }
+
+      try {
+        const arrayBuffer = await audioBlob.arrayBuffer();
+        const channelData = await decodeAudioFile(arrayBuffer);
+        const base64Chunk = base64EncodeAudio(channelData);
+        
+        log("📤 Sending recorded audio to API...");
+        audioChunks = []; // Clear previous response
+        
+        // Send audio to API
+        ws.send(JSON.stringify({
+          type: 'input_audio_buffer.append',
+          audio: base64Chunk
+        }));
+        
+        ws.send(JSON.stringify({type: 'input_audio_buffer.commit'}));
+        ws.send(JSON.stringify({type: 'response.create'}));
+        
+      } catch (error) {
+        log(`❌ Error processing audio: ${error.message}`);
+      }
+    }
+
+    // Upload audio files functionality
+    async function uploadAudioFiles() {
+      const fileInput = document.getElementById("audioFileInput");
+      const files = fileInput.files;
+      const logEl = document.getElementById("log");
+      
+      function log(msg) { 
+        const timestamp = new Date().toLocaleTimeString();
+        logEl.textContent += `[${timestamp}] ${msg}\n`; 
+        logEl.scrollTop = logEl.scrollHeight;
+      }
+
+      if (files.length === 0) {
+        log("⚠️ Please select audio files first");
+        return;
+      }
+
+      try {
+        log(`📁 Processing ${files.length} audio file(s)...`);
+        audioChunks = []; // Clear previous response
+
+        // Process each file
+        for (const file of files) {
+          log(`🎵 Processing: ${file.name}`);
+          const arrayBuffer = await file.arrayBuffer();
+          const channelData = await decodeAudioFile(arrayBuffer);
+          const base64Chunk = base64EncodeAudio(channelData);
+          
+          ws.send(JSON.stringify({
+            type: 'input_audio_buffer.append',
+            audio: base64Chunk
+          }));
+        }
+
+        // Commit and create response
+        ws.send(JSON.stringify({type: 'input_audio_buffer.commit'}));
+        ws.send(JSON.stringify({type: 'response.create'}));
+        
+        log("📤 All audio files sent to API");
+
+      } catch (error) {
+        log(`❌ Error uploading files: ${error.message}`);
+      }
+    }
+
+    // Send text message
+    function sendTextMessage() {
+      const message = prompt("Enter your message:");
+      if (!message) return;
+
+      const logEl = document.getElementById("log");
+      function log(msg) { 
+        const timestamp = new Date().toLocaleTimeString();
+        logEl.textContent += `[${timestamp}] ${msg}\n`; 
+        logEl.scrollTop = logEl.scrollHeight;
+      }
+
+      log(`💬 Sending text: "${message}"`);
+      audioChunks = []; // Clear previous response
+
+      ws.send(JSON.stringify({
+        type: "conversation.item.create",
+        item: {
+          type: "message",
+          role: "user",
+          content: [{
+            type: "input_text",
+            text: message
+          }]
+        }
+      }));
+
+      ws.send(JSON.stringify({
+        type: "response.create",
+        response: {
+          modalities: ["text", "audio"]
+        }
+      }));
     }
 
     function createAudioFromChunks() {
       if (audioChunks.length === 0) {
-        log("No audio chunks to play");
         return;
       }
 
@@ -240,7 +464,11 @@
       return buffer;
     }
 
+    // Event listeners
     document.getElementById("connectBtn").onclick = connect;
+    document.getElementById("recordBtn").onclick = toggleRecording;
+    document.getElementById("sendTextBtn").onclick = sendTextMessage;
+    document.getElementById("uploadAudioBtn").onclick = uploadAudioFiles;
   </script>
 </body>
 </html>
