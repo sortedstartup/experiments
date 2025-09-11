@@ -10,6 +10,9 @@ const sessionConfig = JSON.stringify({
         type: "realtime",
         model: "gpt-4o-mini-realtime-preview",  
         audio: {
+            input: {
+                turn_detection: null
+            },
             output: {
                 voice: "marin",
             },
