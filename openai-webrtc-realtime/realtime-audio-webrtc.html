@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>
+        Realtime Audio with WebRTC - OpenAI GPT Realtime Model
+    </h1>
+    <button id="connection">Connect With LLM</button>
+    <div id="status">Click Connect to start conversation</div>
+    
+    <script>
+    let audioElement;
+    let dataChannel;
+    let isConnected = false;
+
+    async function Connection() {
+        
+        const tokenResponse = await fetch("http://localhost:3000/token");
+        const data = await tokenResponse.json();
+        const EPHEMERAL_KEY = data.value;
+
+        document.getElementById("status").textContent = "Connecting...";
+
+        // Create a peer connection
+        const pc = new RTCPeerConnection();
+
+        // Set up to play remote audio from the model
+        audioElement = document.createElement("audio");
+        audioElement.autoplay = true;
+        document.body.appendChild(audioElement);
+        pc.ontrack = (e) => {
+            audioElement.srcObject = e.streams[0];
+            console.log("Audio stream received from LLM");
+        };
+        
+        // Add local audio track for microphone input in the browser
+        const ms = await navigator.mediaDevices.getUserMedia({
+            audio: true,
+        });
+        pc.addTrack(ms.getTracks()[0]);
+        console.log("Microphone access granted");
+        
+        // Set up data channel for sending and receiving events
+        dataChannel = pc.createDataChannel("oai-events");
+        
+        // Handle data channel events
+        dataChannel.onopen = () => {
+            console.log("Data channel opened - Ready for conversation!");
+            document.getElementById("status").textContent = "Connected! Start speaking...";
+            document.getElementById("connection").textContent = "Connected";
+            document.getElementById("connection").disabled = true;
+            isConnected = true;
+        };
+        
+        dataChannel.onmessage = (event) => {
+            const message = JSON.parse(event.data);
+            console.log("Received message from LLM:", message);
+            
+            // Handle different message types
+            if (message.type === "session.created") {
+                console.log("Session created successfully");
+            } else if (message.type === "conversation.item.created") {
+                console.log("Conversation item created");
+            } else if (message.type === "response.audio.delta") {
+                console.log("Receiving audio response...");
+            } else if (message.type === "response.done") {
+                console.log("LLM response completed");
+            }
+        };
+
+        dataChannel.onerror = (error) => {
+            console.error("Data channel error:", error);
+            document.getElementById("status").textContent = "Connection error";
+        };
+        
+        // Start the session using the Session Description Protocol (SDP)
+        const offer = await pc.createOffer();
+        await pc.setLocalDescription(offer);
+        
+        const baseUrl = "https://api.openai.com/v1/realtime/calls";
+        const model = "gpt-4o-mini-realtime-preview";
+        const sdpResponse = await fetch(`${baseUrl}?model=${model}`, {
+            method: "POST",
+            body: offer.sdp,
+            headers: {
+                Authorization: `Bearer ${EPHEMERAL_KEY}`,
+                "Content-Type": "application/sdp",
+            },
+        });
+        
+        if (!sdpResponse.ok) {
+            throw new Error(`HTTP error! status: ${sdpResponse.status}`);
+        }
+        
+        const answer = {
+            type: "answer",
+            sdp: await sdpResponse.text(),
+        };
+        console.log("Received SDP answer");
+        await pc.setRemoteDescription(answer);
+        
+        console.log("WebRTC connection established");
+    }
+
+    // Event listeners
+    document.getElementById("connection").onclick = function() {
+        if (!isConnected) {
+            Connection().catch(error => {
+                console.error("Connection failed:", error);
+                document.getElementById("status").textContent = "Connection failed. Try again.";
+            });
+        }
+    }
+    </script>
+  </body>
+</html>

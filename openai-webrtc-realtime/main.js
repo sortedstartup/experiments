@@ -1,6 +1,8 @@
 import express from "express";
 import cors from "cors";
 
+import { OPENAI_API_KEY } from "./key.js";
+
 const app = express();
 app.use(cors());
 const sessionConfig = JSON.stringify({
@@ -25,7 +27,7 @@ app.get("/token", async (req, res) => {
             {
                 method: "POST",
                 headers: {
-                    Authorization: `Bearer `,
+                    Authorization: `Bearer ${OPENAI_API_KEY}`,
                     "Content-Type": "application/json",
                 },
                 body: sessionConfig,
