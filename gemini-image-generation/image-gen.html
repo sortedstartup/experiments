@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>AI Image Generator</title>
+  </head>
+  <body>
+    <h1>AI Image Generator</h1>
+
+    <label>Choose Model:</label>
+    <select id="modelSelect">
+      <option value="gemini-2.5-flash-image-preview">
+        Gemini 2.5 Flash Image (Nano Banana)
+      </option>
+      <option value="imagen-4.0-generate-001">Imagen 4.0</option>
+      <option value="imagen-3.0-generate-001">Imagen 3.0</option>
+    </select>
+    <br /><br />
+
+    <label>Text Prompt:</label><br />
+    <textarea
+      id="prompt"
+      rows="4"
+      cols="60"
+      placeholder="Describe the image you want to generate..."
+    >
+A majestic golden eagle soaring over snow-capped mountains at sunset</textarea
+    >
+    <br /><br />
+
+    <label>Negative Prompt (Optional):</label><br />
+    <input
+      type="text"
+      id="negativePrompt"
+      placeholder="What to avoid in the image"
+      size="60"
+    />
+    <br /><br />
+
+    <label>Number of Images:</label>
+    <select id="numberOfImages">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+    </select>
+
+    <label>Aspect Ratio:</label>
+    <select id="aspectRatio">
+      <option value="1:1">1:1 (Square)</option>
+      <option value="4:3">4:3 (Landscape)</option>
+      <option value="3:4">3:4 (Portrait)</option>
+      <option value="16:9">16:9 (Wide)</option>
+      <option value="9:16">9:16 (Tall)</option>
+    </select>
+
+    <label>Size:</label>
+    <select id="imageSize">
+      <option value="1K">1024x1024</option>
+      <option value="2K">2048x2048</option>
+    </select>
+    <br /><br />
+
+    <button id="generateBtn">Generate Images</button>
+    <br /><br />
+
+    <div id="status" style="display: none">
+      Generating images... Please wait
+    </div>
+    <div id="response"></div>
+
+    <div id="imageContainer"></div>
+
+    <script type="module">
+      // Replace with your actual API key
+      import { GEMINI_KEY } from "./key.js"; 
+      const API_KEY = GEMINI_KEY; 
+
+      async function generateImages() {
+        const model = document.getElementById("modelSelect").value;
+        const prompt = document.getElementById("prompt").value.trim();
+        const negativePrompt = document
+          .getElementById("negativePrompt")
+          .value.trim();
+        const numberOfImages = parseInt(
+          document.getElementById("numberOfImages").value
+        );
+        const aspectRatio = document.getElementById("aspectRatio").value;
+        const imageSize = document.getElementById("imageSize").value;
+
+        if (!prompt) {
+          alert("Please enter a text prompt");
+          return;
+        }
+
+        // Show status
+        document.getElementById("status").style.display = "block";
+        document.getElementById("response").innerHTML = "";
+        document.getElementById("imageContainer").innerHTML = "";
+        document.getElementById("generateBtn").disabled = true;
+
+        try {
+          let response;
+
+          if (model === "gemini-2.5-flash-image-preview") {
+            // Gemini native image generation
+            response = await fetch(
+              `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`,
+              {
+                method: "POST",
+                headers: {
+                  "x-goog-api-key": API_KEY,
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  contents: [
+                    {
+                      parts: [
+                        {
+                          text:
+                            prompt +
+                            (negativePrompt
+                              ? ` (avoid: ${negativePrompt})`
+                              : ""),
+                        },
+                      ],
+                    },
+                  ],
+                  generationConfig: {
+                    responseModalities: ["TEXT", "IMAGE"],
+                  },
+                }),
+              }
+            );
+          } else {
+            // Imagen models
+            response = await fetch(
+              `https://generativelanguage.googleapis.com/v1beta/models/${model}:predict`,
+              {
+                method: "POST",
+                headers: {
+                  "x-goog-api-key": API_KEY,
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  instances: [
+                    {
+                      prompt: prompt,
+                    },
+                  ],
+                  parameters: {
+                    sampleCount: numberOfImages,
+                    aspectRatio: aspectRatio,
+                    sampleImageSize: imageSize,
+                    ...(negativePrompt && { negativePrompt: negativePrompt }),
+                  },
+                }),
+              }
+            );
+          }
+
+          const data = await response.json();
+
+          if (!response.ok) {
+            throw new Error(data.error?.message || "Image generation failed");
+          }
+
+          // Display images
+          displayImages(data, model);
+          document.getElementById("response").innerHTML =
+            '<p style="color:green;">Images generated successfully!</p>';
+        } catch (error) {
+          document.getElementById("response").innerHTML =
+            '<p style="color:red;">Error: ' + error.message + "</p>";
+        } finally {
+          document.getElementById("status").style.display = "none";
+          document.getElementById("generateBtn").disabled = false;
+        }
+      }
+
+      function displayImages(data, model) {
+        const container = document.getElementById("imageContainer");
+        container.innerHTML = "";
+
+        if (model === "gemini-2.5-flash-image-preview") {
+          // Handle Gemini response
+          const parts = data.candidates?.[0]?.content?.parts || [];
+          parts.forEach((part, index) => {
+            if (
+              part.inlineData &&
+              part.inlineData.mimeType?.startsWith("image/")
+            ) {
+              const img = document.createElement("img");
+              img.src = `data:${part.inlineData.mimeType};base64,${part.inlineData.data}`;
+              img.width = 400;
+              img.style.margin = "10px";
+              img.style.border = "1px solid #ccc";
+
+              const downloadLink = document.createElement("a");
+              downloadLink.href = img.src;
+              downloadLink.download = `gemini_image_${index + 1}.png`;
+              downloadLink.textContent = "Download";
+              downloadLink.style.display = "block";
+              downloadLink.style.marginBottom = "10px";
+
+              container.appendChild(downloadLink);
+              container.appendChild(img);
+              container.appendChild(document.createElement("br"));
+            }
+          });
+        } else {
+          // Handle Imagen response
+          const predictions = data.predictions || [];
+          predictions.forEach((prediction, index) => {
+            if (prediction.bytesBase64Encoded) {
+              const img = document.createElement("img");
+              img.src = `data:image/png;base64,${prediction.bytesBase64Encoded}`;
+              img.width = 400;
+              img.style.margin = "10px";
+              img.style.border = "1px solid #ccc";
+
+              const downloadLink = document.createElement("a");
+              downloadLink.href = img.src;
+              downloadLink.download = `imagen_image_${index + 1}.png`;
+              downloadLink.textContent = "Download";
+              downloadLink.style.display = "block";
+              downloadLink.style.marginBottom = "10px";
+
+              container.appendChild(downloadLink);
+              container.appendChild(img);
+              container.appendChild(document.createElement("br"));
+            }
+          });
+        }
+      }
+
+      // Event listener
+      document
+        .getElementById("generateBtn")
+        .addEventListener("click", generateImages);
+
+      // Quick prompt buttons
+      function addQuickPrompts() {
+        const quickPrompts = [
+          "A photorealistic sunset over calm ocean waters",
+          "A futuristic city skyline with flying cars",
+          "A cute robot playing with a kitten in a garden",
+          "An abstract painting with vibrant colors and geometric shapes",
+        ];
+
+        const container = document.createElement("div");
+        container.innerHTML = "<br><label>Quick Prompts:</label><br>";
+
+        quickPrompts.forEach((promptText) => {
+          const button = document.createElement("button");
+          button.textContent = promptText.substring(0, 30) + "...";
+          button.style.margin = "5px";
+          button.onclick = () => {
+            document.getElementById("prompt").value = promptText;
+          };
+          container.appendChild(button);
+        });
+
+        document.body.insertBefore(
+          container,
+          document.getElementById("generateBtn")
+        );
+      }
+
+      // Add quick prompts on load
+      window.addEventListener("load", addQuickPrompts);
+    </script>
+  </body>
+</html>

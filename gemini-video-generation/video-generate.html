@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Veo 3 Video Generation</title>
+</head>
+<body>
+    <h1>Veo 3 Video Generator</h1>
+    
+    <label>Text Prompt:</label><br>
+    <textarea id="prompt" rows="4" cols="60" placeholder="Describe the video you want to generate...">A cinematic shot of a golden retriever playing in a field of sunflowers</textarea>
+    <br><br>
+    
+    <label>Negative Prompt (Optional):</label><br>
+    <input type="text" id="negativePrompt" placeholder="What to avoid in the video" size="60" />
+    <br><br>
+    
+    <label>Resolution:</label>
+    <select id="resolution">
+        <option value="720p">720p</option>
+        <option value="1080p">1080p</option>
+    </select>
+    <br><br>
+    
+    <label>Aspect Ratio:</label>
+    <select id="aspectRatio">
+        <option value="16:9">16:9 (Landscape)</option>
+        <option value="9:16">9:16 (Portrait)</option>
+    </select>
+    <br><br>
+    
+    <button id="generateBtn">Generate Video</button>
+    <br><br>
+    
+    <div id="status" style="display:none;">Generating video... This may take 1-6 minutes.</div>
+    <div id="response"></div>
+    
+    <video id="videoPlayer" width="600" controls style="display:none;"></video>
+
+    <script type="module">
+        import { GEMINI_KEY } from './key.js';
+        // Replace with your actual API key
+        const API_KEY = GEMINI_KEY;
+        const BASE_URL = 'https://generativelanguage.googleapis.com/v1beta';
+        
+        let currentOperation = null;
+
+        async function generateVideo() {
+            const prompt = document.getElementById('prompt').value.trim();
+            const negativePrompt = document.getElementById('negativePrompt').value.trim();
+            const resolution = document.getElementById('resolution').value;
+            const aspectRatio = document.getElementById('aspectRatio').value;
+            
+            if (!prompt) {
+                alert('Please enter a text prompt');
+                return;
+            }
+
+            // Show status
+            document.getElementById('status').style.display = 'block';
+            document.getElementById('response').innerHTML = '';
+            document.getElementById('videoPlayer').style.display = 'none';
+            document.getElementById('generateBtn').disabled = true;
+
+            try {
+                // Start video generation
+                const response = await fetch(`${BASE_URL}/models/veo-3.0-generate-001:predictLongRunning`, {
+                    method: 'POST',
+                    headers: {
+                        'x-goog-api-key': API_KEY,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        instances: [{
+                            prompt: prompt
+                        }],
+                        parameters: {
+                            aspectRatio: aspectRatio,
+                            resolution: resolution,
+                            negativePrompt: negativePrompt || undefined,
+                            // generateAudio: true,
+                            durationSeconds: 8
+                        }
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error?.message || 'Failed to start video generation');
+                }
+
+                currentOperation = data.name;
+                document.getElementById('response').innerHTML = '<p>Video generation started. Operation ID: ' + data.name + '</p>';
+                
+                // Start polling for completion
+                pollVideoStatus();
+
+            } catch (error) {
+                document.getElementById('response').innerHTML = '<p style="color:red;">Error: ' + error.message + '</p>';
+                document.getElementById('status').style.display = 'none';
+                document.getElementById('generateBtn').disabled = false;
+            }
+        }
+
+        async function pollVideoStatus() {
+            if (!currentOperation) return;
+
+            try {
+                const response = await fetch(`${BASE_URL}/${currentOperation}`, {
+                    method: 'GET',
+                    headers: {
+                        'x-goog-api-key': API_KEY
+                    }
+                });
+
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error('Failed to check video status');
+                }
+
+                if (data.done) {
+                    // Video generation complete
+                    document.getElementById('status').style.display = 'none';
+                    document.getElementById('generateBtn').disabled = false;
+                    
+                    if (data.response?.generatedSamples?.[0]?.video?.uri) {
+                        // Video generated successfully
+                        const videoUri = data.response.generatedSamples[0].video.uri;
+                        document.getElementById('response').innerHTML = '<p style="color:green;">Video generated successfully!</p>';
+                        
+                        // Display video
+                        const videoPlayer = document.getElementById('videoPlayer');
+                        videoPlayer.src = videoUri;
+                        videoPlayer.style.display = 'block';
+                        
+                        // Add download link
+                        document.getElementById('response').innerHTML += '<p><a href="' + videoUri + '" download="veo3_video.mp4">Download Video</a></p>';
+                    } else {
+                        document.getElementById('response').innerHTML = '<p style="color:red;">Video generation failed or was filtered</p>';
+                    }
+                } else {
+                    // Still processing, check again in 10 seconds
+                    setTimeout(pollVideoStatus, 10000);
+                }
+
+            } catch (error) {
+                document.getElementById('response').innerHTML = '<p style="color:red;">Error checking status: ' + error.message + '</p>';
+                document.getElementById('status').style.display = 'none';
+                document.getElementById('generateBtn').disabled = false;
+            }
+        }
+
+        // Event listener
+        document.getElementById('generateBtn').addEventListener('click', generateVideo);
+    </script>
+</body>
+</html>
