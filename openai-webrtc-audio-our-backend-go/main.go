@@ -103,12 +103,34 @@ const htmlContent = `<!DOCTYPE html>
             }));
           };
 
-          dataChannel.onmessage = (event) => {
-            const msg = JSON.parse(event.data);
-            console.log("📨", msg.type);
-            if (msg.type === "session.created") {
-              document.getElementById("status").textContent = "✅ Ready - Speak!";
-              isConnected = true;
+          // ===== Robust handler: decode binary (ArrayBuffer/Blob) before JSON.parse =====
+          dataChannel.onmessage = async (event) => {
+            try {
+              let text;
+              if (typeof event.data === "string") {
+                text = event.data;
+              } else if (event.data instanceof ArrayBuffer) {
+                text = new TextDecoder().decode(event.data);
+              } else if (event.data instanceof Blob) {
+                text = await event.data.text();
+              } else {
+                console.warn("Unknown data type:", typeof event.data);
+                return;
+              }
+
+              try {
+                const msg = JSON.parse(text);
+                console.log("📨", msg.type);
+                if (msg.type === "session.created") {
+                  document.getElementById("status").textContent = "✅ Ready - Speak!";
+                  isConnected = true;
+                }
+              } catch (parseErr) {
+                // Not JSON — could be base64 or text, just print
+                console.log("Non-JSON data channel message:", text);
+              }
+            } catch (err) {
+              console.error("dataChannel.onmessage error:", err);
             }
           };
 
@@ -166,7 +188,9 @@ func handleICECandidate(w http.ResponseWriter, r *http.Request) {
 	json.NewDecoder(r.Body).Decode(&req)
 
 	if clientPC != nil && req.Candidate.Candidate != "" {
-		clientPC.AddICECandidate(req.Candidate)
+		if err := clientPC.AddICECandidate(req.Candidate); err != nil {
+			fmt.Printf("AddICECandidate error: %v\n", err)
+		}
 	}
 
 	w.Header().Set("Content-Type", "application/json")
@@ -267,19 +291,45 @@ func handleWebRTCOffer(w http.ResponseWriter, r *http.Request) {
 	})
 
 	// Audio from OpenAI -> Client
+	// NOTE: write into pre-created clientOutboundTrack (created below during answer creation)
 	openaiPC.OnTrack(func(remoteTrack *webrtc.TrackRemote, receiver *webrtc.RTPReceiver) {
-		fmt.Println("🔊 Audio: OpenAI -> Client")
+		fmt.Println("🔊 Audio: OpenAI -> Client (relay)")
 
+		// If we have a pre-created outbound track, write RTP into it.
+		if clientOutboundTrack != nil {
+			rtpBuf := make([]byte, 1400)
+			for {
+				i, _, readErr := remoteTrack.Read(rtpBuf)
+				if readErr != nil {
+					if readErr == io.EOF {
+						fmt.Println("OpenAI track EOF")
+						break
+					}
+					fmt.Println("openai read error:", readErr)
+					break
+				}
+				if _, writeErr := clientOutboundTrack.Write(rtpBuf[:i]); writeErr != nil {
+					fmt.Printf("write to client outbound err: %v\n", writeErr)
+				}
+			}
+			return
+		}
+
+		// Fallback (shouldn't happen with placeholder): create a new local track and add it (note: requires renegotiation)
 		localTrack, err := webrtc.NewTrackLocalStaticRTP(
 			remoteTrack.Codec().RTPCodecCapability,
 			remoteTrack.ID(),
 			remoteTrack.StreamID(),
 		)
 		if err != nil {
+			fmt.Printf("fallback create track err: %v\n", err)
 			return
 		}
 
-		clientPC.AddTrack(localTrack)
+		if _, err := clientPC.AddTrack(localTrack); err != nil {
+			fmt.Printf("fallback add track err: %v\n", err)
+			return
+		}
 
 		go func() {
 			rtpBuf := make([]byte, 1400)
@@ -300,84 +350,71 @@ func handleWebRTCOffer(w http.ResponseWriter, r *http.Request) {
 
 		dc.OnMessage(func(msg webrtc.DataChannelMessage) {
 			if openaiDataChannel != nil {
-				openaiDataChannel.Send(msg.Data)
+				// forward raw bytes (may be string or binary)
+				if err := openaiDataChannel.Send(msg.Data); err != nil {
+					fmt.Printf("forward to openai datachannel err: %v\n", err)
+				}
 			}
 		})
 	})
 
 	openaiDataChannel, _ = openaiPC.CreateDataChannel("openai", nil)
 	openaiDataChannel.OnMessage(func(msg webrtc.DataChannelMessage) {
-		// Parse the JSON message
+		// Try parse JSON for logging; if not JSON, print raw
 		var message map[string]interface{}
 		if err := json.Unmarshal(msg.Data, &message); err != nil {
 			fmt.Printf("📥 OpenAI (raw): %s\n", string(msg.Data))
-			return
+		} else {
+			msgType, _ := message["type"].(string)
+			fmt.Printf("📥 OpenAI Event: %s\n", msgType)
+			prettyJSON, err := json.MarshalIndent(message, "", "  ")
+			if err == nil {
+				fmt.Printf("📥 OpenAI Full Message:\n%s\n", string(prettyJSON))
+			}
 		}
 
-		// Print the message type
-		msgType, _ := message["type"].(string)
-		fmt.Printf("📥 OpenAI Event: %s\n", msgType)
-
-		// Print full message for detailed debugging
-		prettyJSON, err := json.MarshalIndent(message, "", "  ")
-		if err == nil {
-			fmt.Printf("📥 OpenAI Full Message:\n%s\n", string(prettyJSON))
-		}
-
-		// Handle specific message types with detailed info
-		switch msgType {
-		case "session.created":
-			fmt.Println("🎯 Session created successfully!")
-
-		case "session.updated":
-			fmt.Println("📋 Session configuration updated")
-
-		case "input_audio_buffer.speech_started":
-			fmt.Println("🎤 Speech detection: Started")
-
-		case "input_audio_buffer.speech_stopped":
-			fmt.Println("🔇 Speech detection: Stopped")
-
-		case "response.created":
-			fmt.Println("🤖 OpenAI is generating response")
-
-		case "response.audio.delta":
-			fmt.Println("🔊 Receiving audio chunk from OpenAI")
-
-		case "response.audio_transcript.delta":
-			if delta, ok := message["delta"].(string); ok {
-				fmt.Printf("📝 AI Transcript: '%s'\n", delta)
-			}
-
-		case "response.output_audio_transcript.delta":
-			if delta, ok := message["delta"].(string); ok {
-				fmt.Printf("📝 AI Speaking: '%s'\n", delta)
-			}
-
-		case "response.done":
-			fmt.Println("✅ Response completed")
-
-		case "error":
-			if errorMsg, ok := message["error"].(map[string]interface{}); ok {
-				fmt.Printf("❌ OpenAI Error: %v\n", errorMsg)
-			}
-
-		default:
-			fmt.Printf("❓ Unknown OpenAI event: %s\n", msgType)
-		}
-
-		fmt.Println("─────────────────────────────────────") // Separator line
-
-		// Forward to client
+		// Forward to client (raw bytes)
 		if clientDataChannel != nil && clientDataChannel.ReadyState() == webrtc.DataChannelStateOpen {
-			clientDataChannel.Send(msg.Data)
+			if err := clientDataChannel.Send(msg.Data); err != nil {
+				fmt.Printf("forward to client datachannel err: %v\n", err)
+			}
 		}
 	})
 
 	// Handle client offer/answer first
-	clientPC.SetRemoteDescription(req.Offer)
-	clientAnswer, _ := clientPC.CreateAnswer(nil)
-	clientPC.SetLocalDescription(clientAnswer)
+	// Set remote offer
+	if err := clientPC.SetRemoteDescription(req.Offer); err != nil {
+		http.Error(w, "SetRemoteDescription failed: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// --- Create placeholder outbound track BEFORE creating the answer ---
+	// Typical browser codec is opus; create a track the browser will expect
+	placeholder, err := webrtc.NewTrackLocalStaticRTP(
+		webrtc.RTPCodecCapability{MimeType: "audio/opus", ClockRate: 48000, Channels: 2},
+		"openai-audio", "pion-openai",
+	)
+	if err != nil {
+		fmt.Printf("Error creating placeholder outbound track: %v\n", err)
+	} else {
+		clientOutboundTrack = placeholder
+		if _, err := clientPC.AddTrack(clientOutboundTrack); err != nil {
+			fmt.Printf("Error adding placeholder outbound track to clientPC: %v\n", err)
+			// keep going; audio won't reach client unless added
+		} else {
+			fmt.Println("➕ Added placeholder outbound track to clientPC (pre-negotiation)")
+		}
+	}
+
+	clientAnswer, err := clientPC.CreateAnswer(nil)
+	if err != nil {
+		http.Error(w, "CreateAnswer failed: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if err := clientPC.SetLocalDescription(clientAnswer); err != nil {
+		http.Error(w, "SetLocalDescription failed: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
 
 	fmt.Println("✅ Setup complete - waiting for audio from client")
 	w.Header().Set("Content-Type", "application/json")
@@ -467,7 +504,7 @@ func connectToOpenAI(offer webrtc.SessionDescription, token string) error {
 	fmt.Printf("Response Status: %d\n", resp.StatusCode)
 	fmt.Printf("Response Body Length: %d chars\n", len(responseBody))
 
-	// Fix: Accept both 200 and 201 as success
+	// Accept both 200 and 201
 	if resp.StatusCode != 200 && resp.StatusCode != 201 {
 		return fmt.Errorf("status %d: %s", resp.StatusCode, responseBody)
 	}
