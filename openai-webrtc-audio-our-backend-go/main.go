@@ -9,6 +9,7 @@ import (
 	"net/http"
 
 	"github.com/pion/webrtc/v3"
+	"github.com/pion/webrtc/v3/pkg/media/oggwriter"
 	"github.com/rs/cors"
 )
 
@@ -293,52 +294,36 @@ func handleWebRTCOffer(w http.ResponseWriter, r *http.Request) {
 	// Audio from OpenAI -> Client
 	// NOTE: write into pre-created clientOutboundTrack (created below during answer creation)
 	openaiPC.OnTrack(func(remoteTrack *webrtc.TrackRemote, receiver *webrtc.RTPReceiver) {
-		fmt.Println("🔊 Audio: OpenAI -> Client (relay)")
+		fmt.Println("🔊 Audio: OpenAI -> Client (relay + save)")
 
-		// If we have a pre-created outbound track, write RTP into it.
-		if clientOutboundTrack != nil {
-			rtpBuf := make([]byte, 1400)
-			for {
-				i, _, readErr := remoteTrack.Read(rtpBuf)
-				if readErr != nil {
-					if readErr == io.EOF {
-						fmt.Println("OpenAI track EOF")
-						break
-					}
-					fmt.Println("openai read error:", readErr)
-					break
-				}
-				if _, writeErr := clientOutboundTrack.Write(rtpBuf[:i]); writeErr != nil {
-					fmt.Printf("write to client outbound err: %v\n", writeErr)
-				}
-			}
-			return
-		}
-
-		// Fallback (shouldn't happen with placeholder): create a new local track and add it (note: requires renegotiation)
-		localTrack, err := webrtc.NewTrackLocalStaticRTP(
-			remoteTrack.Codec().RTPCodecCapability,
-			remoteTrack.ID(),
-			remoteTrack.StreamID(),
-		)
+		oggFile, err := oggwriter.New("openai-output.ogg", 48000, 2)
 		if err != nil {
-			fmt.Printf("fallback create track err: %v\n", err)
-			return
-		}
-
-		if _, err := clientPC.AddTrack(localTrack); err != nil {
-			fmt.Printf("fallback add track err: %v\n", err)
+			fmt.Println("oggwriter error:", err)
 			return
 		}
 
 		go func() {
-			rtpBuf := make([]byte, 1400)
+			defer oggFile.Close()
+
 			for {
-				i, _, readErr := remoteTrack.Read(rtpBuf)
+				pkt, _, readErr := remoteTrack.ReadRTP()
 				if readErr != nil {
+					fmt.Println("OpenAI audio read end:", readErr)
 					break
 				}
-				localTrack.Write(rtpBuf[:i])
+
+				// 1. Save to ogg
+				if err := oggFile.WriteRTP(pkt); err != nil {
+					fmt.Println("ogg write err:", err)
+					break
+				}
+
+				// 2. Relay to browser
+				if clientOutboundTrack != nil {
+					if writeErr := clientOutboundTrack.WriteRTP(pkt); writeErr != nil {
+						fmt.Printf("relay write err: %v\n", writeErr)
+					}
+				}
 			}
 		}()
 	})
