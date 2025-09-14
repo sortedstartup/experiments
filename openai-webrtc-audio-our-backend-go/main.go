@@ -1,45 +1,187 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
-	"os"
-	"sync"
 
-	"github.com/gorilla/websocket"
-	"github.com/pion/rtp"
-	"github.com/pion/webrtc/v4"
+	"github.com/pion/webrtc/v3"
+	"github.com/rs/cors"
 )
 
-type OpenAIRealtimeProxy struct {
-	peerConnection *webrtc.PeerConnection
-	openAIConn     *websocket.Conn
-	audioTrack     *webrtc.TrackLocalStaticRTP
-	mu             sync.Mutex
-	sequenceNumber uint16
-	timestamp      uint32
+// Global variables - single user
+var (
+	clientPC          *webrtc.PeerConnection
+	openaiPC          *webrtc.PeerConnection
+	clientDataChannel *webrtc.DataChannel
+	openaiDataChannel *webrtc.DataChannel
+	OPENAI_API_KEY    = ""
+	openAIConnected   = false
+)
+
+type ICECandidateRequest struct {
+	Candidate webrtc.ICECandidateInit `json:"candidate"`
 }
+
+type WebRTCOfferRequest struct {
+	Offer webrtc.SessionDescription `json:"offer"`
+}
+
+type WebRTCOfferResponse struct {
+	Answer webrtc.SessionDescription `json:"answer"`
+}
+
+const htmlContent = `<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OpenAI Realtime WebRTC - Simple</title>
+  </head>
+  <body>
+    <h1>Realtime Audio with WebRTC - Simple</h1>
+    <button id="connection">Connect With LLM</button>
+    <div id="status">Click Connect to start</div>
+
+    <script>
+      let audioElement;
+      let dataChannel;
+      let isConnected = false;
+      let pc = null;
+
+      async function Connection() {
+        try {
+          document.getElementById("status").textContent = "Connecting...";
+          pc = new RTCPeerConnection();
+
+          pc.onicecandidate = (event) => {
+            if (event.candidate) {
+              fetch("/ice-candidate", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ candidate: event.candidate }),
+              }).catch(() => {});
+            }
+          };
+
+          pc.onconnectionstatechange = () => {
+            console.log("Connection state:", pc.connectionState);
+            document.getElementById("status").textContent = ` + "`Connection: ${pc.connectionState}`" + `;
+          };
+
+          pc.ontrack = (e) => {
+            console.log("🔊 Audio received");
+            if (!audioElement) {
+              audioElement = document.createElement("audio");
+              audioElement.autoplay = true;
+              document.body.appendChild(audioElement);
+            }
+            audioElement.srcObject = e.streams[0];
+          };
+
+          // Add microphone
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          stream.getTracks().forEach(track => {
+            pc.addTrack(track, stream);
+          });
+          
+          // Data channel
+          dataChannel = pc.createDataChannel("oai-events");
+          dataChannel.onopen = () => {
+            console.log("✅ Data channel open");
+            dataChannel.send(JSON.stringify({
+              type: "session.update",
+              session: {
+                modalities: ["audio"],
+                voice: "alloy",
+                turn_detection: { type: "server_vad" },
+                instructions: "You are helpful. Answer in ENGLISH only."
+              }
+            }));
+          };
+
+          dataChannel.onmessage = (event) => {
+            const msg = JSON.parse(event.data);
+            console.log("📨", msg.type);
+            if (msg.type === "session.created") {
+              document.getElementById("status").textContent = "✅ Ready - Speak!";
+              isConnected = true;
+            }
+          };
+
+          const offer = await pc.createOffer();
+          await pc.setLocalDescription(offer);
+
+          const response = await fetch("/webrtc-offer", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ offer: offer }),
+          });
+
+          if (!response.ok) {
+            throw new Error(` + "`HTTP ${response.status}`" + `);
+          }
+
+          const { answer } = await response.json();
+          await pc.setRemoteDescription(answer);
+
+        } catch (error) {
+          console.error("Failed:", error);
+          document.getElementById("status").textContent = ` + "`Failed: ${error.message}`" + `;
+        }
+      }
+
+      document.getElementById("connection").onclick = () => {
+        if (!isConnected) Connection();
+      };
+    </script>
+  </body>
+</html>`
 
 func main() {
-	proxy := &OpenAIRealtimeProxy{}
+	mux := http.NewServeMux()
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "text/html")
+		w.Write([]byte(htmlContent))
+	})
+	mux.HandleFunc("/ice-candidate", handleICECandidate)
+	mux.HandleFunc("/webrtc-offer", handleWebRTCOffer)
 
-	http.HandleFunc("/offer", proxy.handleOffer)
-	http.HandleFunc("/", serveIndex)
+	c := cors.New(cors.Options{
+		AllowedOrigins: []string{"*"},
+		AllowedMethods: []string{"GET", "POST", "OPTIONS"},
+		AllowedHeaders: []string{"*"},
+	})
 
-	log.Println("Server starting on :8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	handler := c.Handler(mux)
+	fmt.Println("🚀 Server running on http://localhost:3000")
+	log.Fatal(http.ListenAndServe(":3000", handler))
 }
 
-func (p *OpenAIRealtimeProxy) handleOffer(w http.ResponseWriter, r *http.Request) {
-	var offer webrtc.SessionDescription
-	if err := json.NewDecoder(r.Body).Decode(&offer); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+func handleICECandidate(w http.ResponseWriter, r *http.Request) {
+	var req ICECandidateRequest
+	json.NewDecoder(r.Body).Decode(&req)
+
+	if clientPC != nil && req.Candidate.Candidate != "" {
+		clientPC.AddICECandidate(req.Candidate)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]bool{"success": true})
+}
+
+func handleWebRTCOffer(w http.ResponseWriter, r *http.Request) {
+	var req WebRTCOfferRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Bad request", http.StatusBadRequest)
 		return
 	}
 
-	// Create WebRTC peer connection
+	fmt.Println("🚀 Setting up WebRTC...")
+
 	config := webrtc.Configuration{
 		ICEServers: []webrtc.ICEServer{
 			{URLs: []string{"stun:stun.l.google.com:19302"}},
@@ -47,316 +189,293 @@ func (p *OpenAIRealtimeProxy) handleOffer(w http.ResponseWriter, r *http.Request
 	}
 
 	var err error
-	p.peerConnection, err = webrtc.NewPeerConnection(config)
+	clientPC, err = webrtc.NewPeerConnection(config)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, "Client PC failed", http.StatusInternalServerError)
 		return
 	}
 
-	// Create audio track for sending audio to client
-	p.audioTrack, err = webrtc.NewTrackLocalStaticRTP(
-		webrtc.RTPCodecCapability{MimeType: webrtc.MimeTypeOpus},
-		"audio", "openai-proxy",
-	)
+	openaiPC, err = webrtc.NewPeerConnection(config)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, "OpenAI PC failed", http.StatusInternalServerError)
 		return
 	}
 
-	// Add audio track to peer connection
-	if _, err = p.peerConnection.AddTrack(p.audioTrack); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	// Handle incoming audio from client
-	p.peerConnection.OnTrack(func(track *webrtc.TrackRemote, receiver *webrtc.RTPReceiver) {
-		log.Printf("Received track: %s", track.Kind())
-
-		if track.Kind() == webrtc.RTPCodecTypeAudio {
-			go p.handleIncomingAudio(track)
+	// ICE forwarding
+	clientPC.OnICECandidate(func(c *webrtc.ICECandidate) {
+		if c != nil {
+			openaiPC.AddICECandidate(c.ToJSON())
 		}
 	})
 
-	// Set remote description (offer from client)
-	if err = p.peerConnection.SetRemoteDescription(offer); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
+	openaiPC.OnICECandidate(func(c *webrtc.ICECandidate) {
+		if c != nil {
+			clientPC.AddICECandidate(c.ToJSON())
+		}
+	})
 
-	// Create answer
-	answer, err := p.peerConnection.CreateAnswer(nil)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
+	// Connection status
+	clientPC.OnConnectionStateChange(func(s webrtc.PeerConnectionState) {
+		fmt.Printf("📡 Client: %s\n", s)
+	})
 
-	// Set local description
-	if err = p.peerConnection.SetLocalDescription(answer); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
+	openaiPC.OnConnectionStateChange(func(s webrtc.PeerConnectionState) {
+		fmt.Printf("🤖 OpenAI: %s\n", s)
+	})
 
-	// Connect to OpenAI Realtime API
-	go p.connectToOpenAI()
+	// THIS IS THE KEY: Just like Node.js - add tracks when received from client
+	clientPC.OnTrack(func(remoteTrack *webrtc.TrackRemote, receiver *webrtc.RTPReceiver) {
+		fmt.Println("🎤 Audio: Client -> OpenAI")
+		fmt.Printf("Track details: kind=%s, id=%s\n", remoteTrack.Kind(), remoteTrack.ID())
 
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(answer)
-}
-
-func (p *OpenAIRealtimeProxy) connectToOpenAI() {
-	// First, get ephemeral token from OpenAI
-	token, err := p.getEphemeralToken()
-	if err != nil {
-		log.Printf("Failed to get ephemeral token: %v", err)
-		return
-	}
-
-	// Connect to OpenAI WebSocket endpoint
-	url := "wss://api.openai.com/v1/realtime?model=gpt-4o-realtime-preview-2024-10-01"
-
-	header := http.Header{}
-	header.Set("Authorization", "Bearer "+token)
-	header.Set("OpenAI-Beta", "realtime=v1")
-
-	conn, _, err := websocket.DefaultDialer.Dial(url, header)
-	if err != nil {
-		log.Printf("Failed to connect to OpenAI: %v", err)
-		return
-	}
-	defer conn.Close()
-
-	p.mu.Lock()
-	p.openAIConn = conn
-	p.mu.Unlock()
-
-	// Send session configuration
-	sessionConfig := map[string]interface{}{
-		"type": "session.update",
-		"session": map[string]interface{}{
-			"modalities":   []string{"text", "audio"},
-			"instructions": "You are a helpful assistant. Respond naturally to voice conversations.",
-			"voice":        "alloy",
-			"turn_detection": map[string]interface{}{
-				"type": "server_vad",
-			},
-		},
-	}
-
-	if err := conn.WriteJSON(sessionConfig); err != nil {
-		log.Printf("Failed to send session config: %v", err)
-		return
-	}
-
-	// Handle messages from OpenAI
-	p.handleOpenAIMessages(conn)
-}
-
-func (p *OpenAIRealtimeProxy) getEphemeralToken() (string, error) {
-	// Replace with your actual OpenAI API key
-	apiKey := os.Getenv("OPENAI_API_KEY")
-	if apiKey == "" {
-		return "", fmt.Errorf("OPENAI_API_KEY environment variable not set")
-	}
-
-	// In production, you'd make an HTTP request to OpenAI's session endpoint
-	// to get an ephemeral token. For now, return the API key
-	return apiKey, nil
-}
-
-func (p *OpenAIRealtimeProxy) handleIncomingAudio(track *webrtc.TrackRemote) {
-	log.Println("Started handling incoming audio from client")
-
-	for {
-		rtpPacket, _, err := track.ReadRTP()
+		// Create local track for OpenAI (like Node.js does)
+		localTrack, err := webrtc.NewTrackLocalStaticRTP(
+			remoteTrack.Codec().RTPCodecCapability,
+			remoteTrack.ID(),
+			remoteTrack.StreamID(),
+		)
 		if err != nil {
-			log.Printf("Error reading RTP: %v", err)
+			fmt.Printf("Error creating track: %v\n", err)
 			return
 		}
 
-		// Forward audio data to OpenAI
-		p.forwardAudioToOpenAI(rtpPacket.Payload)
-	}
-}
-
-func (p *OpenAIRealtimeProxy) forwardAudioToOpenAI(audioData []byte) {
-	p.mu.Lock()
-	conn := p.openAIConn
-	p.mu.Unlock()
-
-	if conn == nil {
-		return
-	}
-
-	// Send audio to OpenAI
-	audioMessage := map[string]interface{}{
-		"type":  "input_audio_buffer.append",
-		"audio": audioData, // In practice, you'd encode this properly as base64
-	}
-
-	if err := conn.WriteJSON(audioMessage); err != nil {
-		log.Printf("Failed to send audio to OpenAI: %v", err)
-	}
-}
-
-func (p *OpenAIRealtimeProxy) handleOpenAIMessages(conn *websocket.Conn) {
-	for {
-		var message map[string]interface{}
-		if err := conn.ReadJSON(&message); err != nil {
-			log.Printf("Error reading from OpenAI: %v", err)
+		// Add track to OpenAI peer connection (like Node.js addTrack)
+		if _, err := openaiPC.AddTrack(localTrack); err != nil {
+			fmt.Printf("Error adding track: %v\n", err)
 			return
 		}
 
-		messageType, ok := message["type"].(string)
-		if !ok {
-			continue
-		}
-
-		switch messageType {
-		case "response.audio.delta":
-			// Handle audio response from OpenAI
-			if audioData, ok := message["delta"].(string); ok {
-				p.sendAudioToClient([]byte(audioData))
+		// Start relaying audio data
+		go func() {
+			rtpBuf := make([]byte, 1400)
+			for {
+				i, _, readErr := remoteTrack.Read(rtpBuf)
+				if readErr != nil {
+					if readErr == io.EOF {
+						break
+					}
+					break
+				}
+				localTrack.Write(rtpBuf[:i])
 			}
-		case "response.audio_transcript.delta":
-			log.Printf("OpenAI transcript: %v", message["delta"])
-		case "error":
-			log.Printf("OpenAI error: %v", message["error"])
-		default:
-			log.Printf("Received message type: %s", messageType)
+		}()
+
+		// NOW connect to OpenAI after we have audio - just like Node.js!
+		if !openAIConnected {
+			connectToOpenAIWithAudio()
 		}
-	}
+	})
+
+	// Audio from OpenAI -> Client
+	openaiPC.OnTrack(func(remoteTrack *webrtc.TrackRemote, receiver *webrtc.RTPReceiver) {
+		fmt.Println("🔊 Audio: OpenAI -> Client")
+
+		localTrack, err := webrtc.NewTrackLocalStaticRTP(
+			remoteTrack.Codec().RTPCodecCapability,
+			remoteTrack.ID(),
+			remoteTrack.StreamID(),
+		)
+		if err != nil {
+			return
+		}
+
+		clientPC.AddTrack(localTrack)
+
+		go func() {
+			rtpBuf := make([]byte, 1400)
+			for {
+				i, _, readErr := remoteTrack.Read(rtpBuf)
+				if readErr != nil {
+					break
+				}
+				localTrack.Write(rtpBuf[:i])
+			}
+		}()
+	})
+
+	// Data channel setup
+	clientPC.OnDataChannel(func(dc *webrtc.DataChannel) {
+		clientDataChannel = dc
+		fmt.Println("📡 Client data channel")
+
+		dc.OnMessage(func(msg webrtc.DataChannelMessage) {
+			if openaiDataChannel != nil {
+				openaiDataChannel.Send(msg.Data)
+			}
+		})
+	})
+
+	openaiDataChannel, _ = openaiPC.CreateDataChannel("openai", nil)
+	openaiDataChannel.OnMessage(func(msg webrtc.DataChannelMessage) {
+		// Parse the JSON message
+		var message map[string]interface{}
+		if err := json.Unmarshal(msg.Data, &message); err != nil {
+			fmt.Printf("📥 OpenAI (raw): %s\n", string(msg.Data))
+			return
+		}
+
+		// Print the message type
+		msgType, _ := message["type"].(string)
+		fmt.Printf("📥 OpenAI Event: %s\n", msgType)
+
+		// Print full message for detailed debugging
+		prettyJSON, err := json.MarshalIndent(message, "", "  ")
+		if err == nil {
+			fmt.Printf("📥 OpenAI Full Message:\n%s\n", string(prettyJSON))
+		}
+
+		// Handle specific message types with detailed info
+		switch msgType {
+		case "session.created":
+			fmt.Println("🎯 Session created successfully!")
+
+		case "session.updated":
+			fmt.Println("📋 Session configuration updated")
+
+		case "input_audio_buffer.speech_started":
+			fmt.Println("🎤 Speech detection: Started")
+
+		case "input_audio_buffer.speech_stopped":
+			fmt.Println("🔇 Speech detection: Stopped")
+
+		case "response.created":
+			fmt.Println("🤖 OpenAI is generating response")
+
+		case "response.audio.delta":
+			fmt.Println("🔊 Receiving audio chunk from OpenAI")
+
+		case "response.audio_transcript.delta":
+			if delta, ok := message["delta"].(string); ok {
+				fmt.Printf("📝 AI Transcript: '%s'\n", delta)
+			}
+
+		case "response.output_audio_transcript.delta":
+			if delta, ok := message["delta"].(string); ok {
+				fmt.Printf("📝 AI Speaking: '%s'\n", delta)
+			}
+
+		case "response.done":
+			fmt.Println("✅ Response completed")
+
+		case "error":
+			if errorMsg, ok := message["error"].(map[string]interface{}); ok {
+				fmt.Printf("❌ OpenAI Error: %v\n", errorMsg)
+			}
+
+		default:
+			fmt.Printf("❓ Unknown OpenAI event: %s\n", msgType)
+		}
+
+		fmt.Println("─────────────────────────────────────") // Separator line
+
+		// Forward to client
+		if clientDataChannel != nil && clientDataChannel.ReadyState() == webrtc.DataChannelStateOpen {
+			clientDataChannel.Send(msg.Data)
+		}
+	})
+
+	// Handle client offer/answer first
+	clientPC.SetRemoteDescription(req.Offer)
+	clientAnswer, _ := clientPC.CreateAnswer(nil)
+	clientPC.SetLocalDescription(clientAnswer)
+
+	fmt.Println("✅ Setup complete - waiting for audio from client")
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(WebRTCOfferResponse{Answer: clientAnswer})
 }
 
-func (p *OpenAIRealtimeProxy) sendAudioToClient(audioData []byte) {
-	if p.audioTrack == nil {
+func connectToOpenAIWithAudio() {
+	openAIConnected = true
+	fmt.Println("🔗 Now connecting to OpenAI with audio...")
+
+	// Create offer AFTER we have audio tracks (like Node.js)
+	openaiOffer, err := openaiPC.CreateOffer(nil)
+	if err != nil {
+		fmt.Printf("Error creating OpenAI offer: %v\n", err)
 		return
 	}
 
-	// Create RTP packet with audio data using the pion/rtp package
-	p.sequenceNumber++
-	p.timestamp += 960 // 20ms of audio at 48kHz (typical for Opus)
+	openaiPC.SetLocalDescription(openaiOffer)
+	fmt.Printf("OpenAI Offer created with %d characters\n", len(openaiOffer.SDP))
 
-	packet := &rtp.Packet{
-		Header: rtp.Header{
-			Version:        2,
-			PayloadType:    111, // Opus payload type
-			SequenceNumber: p.sequenceNumber,
-			Timestamp:      p.timestamp,
-			SSRC:           12345,
-		},
-		Payload: audioData,
+	// Get token
+	token, err := getOpenAIToken()
+	if err != nil {
+		fmt.Printf("Token error: %v\n", err)
+		return
 	}
 
-	if err := p.audioTrack.WriteRTP(packet); err != nil {
-		log.Printf("Failed to send audio to client: %v", err)
+	// Connect to OpenAI
+	if err := connectToOpenAI(openaiOffer, token); err != nil {
+		fmt.Printf("OpenAI error: %v\n", err)
+		return
 	}
+
+	fmt.Println("✅ Connected to OpenAI!")
 }
 
-func serveIndex(w http.ResponseWriter, r *http.Request) {
-	html := `
-<!DOCTYPE html>
-<html>
-<head>
-    <title>OpenAI WebRTC Audio Proxy</title>
-</head>
-<body>
-    <h1>OpenAI Realtime Audio</h1>
-    <button id="start">Start Audio Chat</button>
-    <button id="stop" disabled>Stop</button>
-    <div id="status">Ready to connect</div>
-    <audio id="remoteAudio" autoplay></audio>
-    
-    <script>
-        const startButton = document.getElementById('start');
-        const stopButton = document.getElementById('stop');
-        const status = document.getElementById('status');
-        const remoteAudio = document.getElementById('remoteAudio');
-        let peerConnection;
-        let localStream;
+func getOpenAIToken() (string, error) {
+	config := map[string]interface{}{
+		"session": map[string]interface{}{
+			"type":  "realtime",
+			"model": "gpt-4o-mini-realtime-preview",
+			"audio": map[string]interface{}{
+				"output": map[string]interface{}{"voice": "alloy"},
+				"input":  map[string]interface{}{"turn_detection": map[string]interface{}{"type": "server_vad"}},
+			},
+			"instructions": "You are helpful. Answer briefly in ENGLISH only.",
+		},
+	}
 
-        startButton.onclick = async () => {
-            try {
-                status.textContent = 'Getting microphone access...';
-                
-                // Get user media (microphone)
-                localStream = await navigator.mediaDevices.getUserMedia({ 
-                    audio: {
-                        echoCancellation: true,
-                        noiseSuppression: true,
-                        autoGainControl: true
-                    }
-                });
-                
-                status.textContent = 'Creating connection...';
-                
-                // Create peer connection
-                peerConnection = new RTCPeerConnection({
-                    iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
-                });
+	data, _ := json.Marshal(config)
+	req, _ := http.NewRequest("POST", "https://api.openai.com/v1/realtime/client_secrets", bytes.NewBuffer(data))
+	req.Header.Set("Authorization", "Bearer "+OPENAI_API_KEY)
+	req.Header.Set("Content-Type", "application/json")
 
-                // Add local stream to peer connection
-                localStream.getTracks().forEach(track => {
-                    peerConnection.addTrack(track, localStream);
-                });
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
 
-                // Handle remote stream
-                peerConnection.ontrack = event => {
-                    remoteAudio.srcObject = event.streams[0];
-                    status.textContent = 'Connected! Speak into your microphone.';
-                };
+	var result map[string]interface{}
+	json.NewDecoder(resp.Body).Decode(&result)
 
-                // Handle connection state changes
-                peerConnection.onconnectionstatechange = () => {
-                    console.log('Connection state:', peerConnection.connectionState);
-                    if (peerConnection.connectionState === 'connected') {
-                        status.textContent = 'Connected to OpenAI! Speak into your microphone.';
-                    }
-                };
+	if value, ok := result["value"].(string); ok {
+		return value, nil
+	}
+	return "", fmt.Errorf("no token received")
+}
 
-                // Create offer
-                const offer = await peerConnection.createOffer();
-                await peerConnection.setLocalDescription(offer);
+func connectToOpenAI(offer webrtc.SessionDescription, token string) error {
+	req, _ := http.NewRequest("POST",
+		"https://api.openai.com/v1/realtime/calls?model=gpt-4o-mini-realtime-preview",
+		bytes.NewBufferString(offer.SDP))
+	req.Header.Set("Authorization", "Bearer "+token)
+	req.Header.Set("Content-Type", "application/sdp")
 
-                status.textContent = 'Connecting to server...';
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
 
-                // Send offer to server
-                const response = await fetch('/offer', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(offer)
-                });
+	buf := new(bytes.Buffer)
+	buf.ReadFrom(resp.Body)
+	responseBody := buf.String()
 
-                if (!response.ok) {
-                    throw new Error('Failed to connect to server');
-                }
+	fmt.Printf("Response Status: %d\n", resp.StatusCode)
+	fmt.Printf("Response Body Length: %d chars\n", len(responseBody))
 
-                const answer = await response.json();
-                await peerConnection.setRemoteDescription(answer);
+	// Fix: Accept both 200 and 201 as success
+	if resp.StatusCode != 200 && resp.StatusCode != 201 {
+		return fmt.Errorf("status %d: %s", resp.StatusCode, responseBody)
+	}
 
-                startButton.disabled = true;
-                stopButton.disabled = false;
-                
-            } catch (error) {
-                console.error('Error:', error);
-                status.textContent = 'Error: ' + error.message;
-            }
-        };
-
-        stopButton.onclick = () => {
-            if (peerConnection) {
-                peerConnection.close();
-            }
-            if (localStream) {
-                localStream.getTracks().forEach(track => track.stop());
-            }
-            startButton.disabled = false;
-            stopButton.disabled = true;
-            status.textContent = 'Disconnected';
-        };
-    </script>
-</body>
-</html>`
-	w.Header().Set("Content-Type", "text/html")
-	fmt.Fprint(w, html)
+	// Success! Set the SDP answer from OpenAI
+	fmt.Println("✅ Got SDP answer from OpenAI!")
+	return openaiPC.SetRemoteDescription(webrtc.SessionDescription{
+		Type: webrtc.SDPTypeAnswer,
+		SDP:  responseBody,
+	})
 }
