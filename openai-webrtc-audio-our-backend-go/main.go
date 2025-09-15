@@ -14,12 +14,13 @@ import (
 
 // Global variables - single user
 var (
-	clientPC          *webrtc.PeerConnection
-	openaiPC          *webrtc.PeerConnection
-	clientDataChannel *webrtc.DataChannel
-	openaiDataChannel *webrtc.DataChannel
-	OPENAI_API_KEY    = ""
-	openAIConnected   = false
+	clientPC            *webrtc.PeerConnection
+	openaiPC            *webrtc.PeerConnection
+	clientDataChannel   *webrtc.DataChannel
+	openaiDataChannel   *webrtc.DataChannel
+	clientOutboundTrack *webrtc.TrackLocalStaticRTP // placeholder track for OpenAI -> client audio
+	OPENAI_API_KEY      = ""
+	openAIConnected     = false
 )
 
 type ICECandidateRequest struct {
@@ -296,6 +297,7 @@ func handleWebRTCOffer(w http.ResponseWriter, r *http.Request) {
 					fmt.Printf("forward to OpenAI err: %v\n", err)
 				}
 			}
+
 		}()
 
 		// Connect to OpenAI once we have audio
