@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OpenAI Realtime WebRTC - Auto VAD</title>
+  </head>
+  <body>
+    <h1>Realtime Audio with WebRTC - Auto VAD</h1>
+    <button id="connection">Connect With LLM</button>
+    <div id="status">Click Connect to start</div>
+
+    <script>
+      let audioElement;
+      let dataChannel;
+      let isConnected = false;
+      let pc = null;
+
+      async function Connection() {
+        try {
+          document.getElementById("status").textContent = "Connecting...";
+
+          // Create peer connection
+          pc = new RTCPeerConnection();
+
+          // ICE candidate handling
+          pc.onicecandidate = (event) => {
+            if (event.candidate) {
+              fetch("http://localhost:3000/ice-candidate", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ candidate: event.candidate }),
+              }).catch((err) =>
+                console.error("Error sending ICE candidate:", err)
+              );
+            }
+          };
+
+          // Connection state monitoring
+          pc.onconnectionstatechange = () => {
+            console.log("Connection state:", pc.connectionState);
+
+            if (pc.connectionState === "connected") {
+              document.getElementById("status").textContent = "Connected ";
+            } else if (pc.connectionState === "failed") {
+              document.getElementById("status").textContent =
+                "Connection failed. Try again.";
+            } else {
+              document.getElementById(
+                "status"
+              ).textContent = `Connection: ${pc.connectionState}`;
+            }
+          };
+
+          // Set up audio playback
+          audioElement = document.createElement("audio");
+          audioElement.autoplay = true;
+          document.body.appendChild(audioElement);
+
+          pc.ontrack = (e) => {
+            if (!audioElement) {
+              audioElement = document.createElement("audio");
+              audioElement.autoplay = true;
+              audioElement.muted = false; // Explicitly unmute
+              document.body.appendChild(audioElement);
+            }
+            audioElement.srcObject = e.streams[0];
+            console.log("🔊 Audio stream received from OpenAI");
+          };
+
+          // Add microphone
+          const ms = await navigator.mediaDevices.getUserMedia({ audio: true });
+          pc.addTrack(ms.getTracks()[0]);
+          console.log("🎤 Microphone streaming to OpenAI");
+
+          // Set up data channel
+          dataChannel = pc.createDataChannel("oai-events");
+
+          dataChannel.onopen = () => {
+            console.log("✅ Data channel opened");
+            document.getElementById("status").textContent =
+              "Initializing session...";
+
+            // Send session.update with VAD enabled
+            const sessionUpdate = {
+              type: "session.update",
+              session: {
+                modalities: ["audio"],
+                voice: "marin",
+                turn_detection: {
+                  type: "server_vad",
+                  threshold: 0.5,
+                  prefix_padding_ms: 300,
+                  silence_duration_ms: 800,
+                },
+                instructions:
+                  "You are a helpful AI assistant. Respond conversationally and naturally when the user speaks. Answer in ENGLISH only.",
+              },
+            };
+
+            dataChannel.send(JSON.stringify(sessionUpdate));
+            console.log("📤 Session configured with VAD");
+          };
+
+          // Simple message handling - VAD does everything
+          dataChannel.onmessage = (event) => {
+            const message = JSON.parse(event.data);
+            console.log("📨 Received:", message.type);
+
+            if (message.type === "session.created") {
+              console.log("🎯 Session ready with VAD!");
+              document.getElementById("status").textContent =
+                "✅ Ready - Just speak naturally!";
+              document.getElementById("connection").textContent = "Connected";
+              document.getElementById("connection").disabled = true;
+              isConnected = true;
+            } else if (message.type === "session.updated") {
+              console.log("📋 VAD session configured");
+            } else if (message.type === "input_audio_buffer.speech_started") {
+              console.log("🎤 Detected speech start");
+              document.getElementById("status").textContent = "🎤 Listening...";
+            } else if (message.type === "input_audio_buffer.speech_stopped") {
+              console.log("🔇 Detected speech stop");
+              document.getElementById("status").textContent =
+                "🤔 Processing...";
+            } else if (message.type === "response.create") {
+              console.log("🎯 Auto-generating response");
+              document.getElementById("status").textContent =
+                "🤖 Generating response...";
+            } else if (message.type === "response.audio.delta") {
+              document.getElementById("status").textContent =
+                "🔊 AI speaking...";
+            } else if (message.type === "response.done") {
+              console.log("✅ Response completed");
+              document.getElementById("status").textContent =
+                "✅ Ready - Speak again!";
+            } else if (message.type === "error") {
+              console.error("❌ Error:", message);
+              document.getElementById(
+                "status"
+              ).textContent = `Error: ${message.error?.message}`;
+            }
+          };
+
+          dataChannel.onerror = (error) => {
+            console.error("❌ Data channel error:", error);
+            document.getElementById("status").textContent =
+              "Data channel error";
+          };
+
+          // Create offer and send to backend
+          const offer = await pc.createOffer();
+          await pc.setLocalDescription(offer);
+
+          const response = await fetch("http://localhost:3000/webrtc-offer", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ offer: offer }),
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          const { answer } = await response.json();
+          await pc.setRemoteDescription(answer);
+
+          console.log("WebRTC connection initiated");
+        } catch (error) {
+          console.error("Connection failed:", error);
+          document.getElementById(
+            "status"
+          ).textContent = `Failed: ${error.message}`;
+        }
+      }
+
+      document.getElementById("connection").onclick = () => {
+        if (!isConnected) Connection();
+      };
+    </script>
+  </body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OpenAI Realtime WebRTC</title>
+  </head>
+  <body>
+    <h1>Realtime Audio with WebRTC - OpenAI GPT</h1>
+    <button id="connection">Connect With LLM</button>
+    <button id="commit" disabled>Commit</button>
+    <button id="responseCreate" disabled>Response Create</button>
+
+    <div id="status">Click Connect to start</div>
+    
+    <script>
+    let audioElement;
+    let dataChannel;
+    let isConnected = false;
+
+    async function Connection() {
+        try {
+            const tokenResponse = await fetch("http://localhost:3000/token");
+            const data = await tokenResponse.json();
+            const EPHEMERAL_KEY = data.value;
+
+            document.getElementById("status").textContent = "Connecting...";
+
+        // Create a peer connection
+            const pc = new RTCPeerConnection();
+
+        // Set up to play remote audio from the model
+            audioElement = document.createElement("audio");
+            audioElement.autoplay = true;
+            document.body.appendChild(audioElement);
+            pc.ontrack = (e) => {
+                audioElement.srcObject = e.streams[0];
+                console.log("Audio stream received from LLM");
+            };
+            
+            // Add microphone track - audio continuously streams to OpenAI
+            const ms = await navigator.mediaDevices.getUserMedia({ audio: true });
+            pc.addTrack(ms.getTracks()[0]);
+            console.log("Microphone streaming to OpenAI");
+            
+            // Set up data channel for control commands
+            dataChannel = pc.createDataChannel("oai-events");
+            
+            // Data channel event handlers
+            dataChannel.onopen = () => {
+                console.log("Data channel opened - Ready!");
+                document.getElementById("status").textContent = "Connected! Speak, then use buttons";
+                document.getElementById("connection").textContent = "Connected";
+                document.getElementById("connection").disabled = true;
+                // Enable the correct buttons
+                document.getElementById("commit").disabled = false;
+                document.getElementById("responseCreate").disabled = false;
+                isConnected = true;
+            };
+            
+            dataChannel.onmessage = (event) => {
+                const message = JSON.parse(event.data);
+                console.log("Received from OpenAI:", message);
+                
+                // Handle different message types
+                if (message.type === "input_audio_buffer.committed") {
+                    console.log("✅ Audio committed:", message.item_id);
+                } else if (message.type === "response.created") {
+                    console.log("🎯 Response generation started");
+                } else if (message.type === "response.audio.delta") {
+                    console.log("🔊 Receiving audio response...");
+                } else if (message.type === "response.done") {
+                    console.log("✅ Response completed");
+                    document.getElementById("status").textContent = "Response completed! Speak again if needed.";
+                }
+            };
+
+            dataChannel.onerror = (error) => {
+                console.error("Data channel error:", error);
+                document.getElementById("status").textContent = "Data channel error";
+            };
+            
+        // Start the session using the Session Description Protocol (SDP)
+            const offer = await pc.createOffer();
+            await pc.setLocalDescription(offer);
+            
+            const baseUrl = "https://api.openai.com/v1/realtime/calls";
+            const model = "gpt-4o-mini-realtime-preview";
+            const sdpResponse = await fetch(`${baseUrl}?model=${model}`, {
+                method: "POST",
+                body: offer.sdp,
+                headers: {
+                    Authorization: `Bearer ${EPHEMERAL_KEY}`,
+                    "Content-Type": "application/sdp",
+                },
+            });
+            
+            if (!sdpResponse.ok) {
+                throw new Error(`HTTP error! status: ${sdpResponse.status}`);
+            }
+            
+            const answer = {
+                type: "answer",
+                sdp: await sdpResponse.text(),
+            };
+            console.log("Received SDP answer");
+            await pc.setRemoteDescription(answer);
+            
+            console.log("WebRTC connection established");
+            
+        } catch (error) {
+            console.error("Connection failed:", error);
+            document.getElementById("status").textContent = "Connection failed. Try again.";
+        }
+    }
+
+    // Send response.create command
+    function ResponseCreate() {
+        if (dataChannel && dataChannel.readyState === 'open') {
+            document.getElementById("status").textContent = "Requesting response...";
+            
+            dataChannel.send(JSON.stringify({ 
+                type: "response.create" 
+            }));
+            console.log("🤖 Response generation requested");
+            
+        } else {
+            console.log("Data channel not ready");
+            document.getElementById("status").textContent = "Connection not ready";
+        }
+    }
+
+    // Send input_audio_buffer.commit command
+    function CommitAudio() {
+        if (dataChannel && dataChannel.readyState === 'open') {
+            document.getElementById("status").textContent = "Committing audio...";
+            
+            dataChannel.send(JSON.stringify({ 
+                type: "input_audio_buffer.commit" 
+            }));
+            console.log("📤 Audio buffer committed");
+
+        } else {
+            console.log("Data channel not ready");
+            document.getElementById("status").textContent = "Connection not ready";
+        }
+    }
+
+    // Event listeners
+    document.getElementById("connection").onclick = function() {
+        if (!isConnected) {
+            Connection();
+        }
+    }
+
+    document.getElementById("responseCreate").onclick = function() {
+        ResponseCreate();
+    }
+
+    document.getElementById("commit").onclick = function() {
+        CommitAudio();
+    }
+    </script>
+  </body>
+</html>
