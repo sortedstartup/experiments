@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io"
 	"log"
 	"net/http"
 
@@ -249,11 +248,12 @@ func handleWebRTCOffer(w http.ResponseWriter, r *http.Request) {
 	})
 
 	// THIS IS THE KEY: Just like Node.js - add tracks when received from client
+	// Audio from Client -> OpenAI (and save to file)
 	clientPC.OnTrack(func(remoteTrack *webrtc.TrackRemote, receiver *webrtc.RTPReceiver) {
-		fmt.Println("🎤 Audio: Client -> OpenAI")
+		fmt.Println("🎤 Audio: Client -> OpenAI (relay + save)")
 		fmt.Printf("Track details: kind=%s, id=%s\n", remoteTrack.Kind(), remoteTrack.ID())
 
-		// Create local track for OpenAI (like Node.js does)
+		// Create local track for OpenAI
 		localTrack, err := webrtc.NewTrackLocalStaticRTP(
 			remoteTrack.Codec().RTPCodecCapability,
 			remoteTrack.ID(),
@@ -264,28 +264,41 @@ func handleWebRTCOffer(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		// Add track to OpenAI peer connection (like Node.js addTrack)
 		if _, err := openaiPC.AddTrack(localTrack); err != nil {
-			fmt.Printf("Error adding track: %v\n", err)
+			fmt.Printf("Error adding track to OpenAI PC: %v\n", err)
 			return
 		}
 
-		// Start relaying audio data
+		// Save client audio to OGG (like we do for OpenAI)
+		oggFile, err := oggwriter.New("client-output.ogg", 48000, 2)
+		if err != nil {
+			fmt.Println("oggwriter error:", err)
+			return
+		}
+
 		go func() {
-			rtpBuf := make([]byte, 1400)
+			defer oggFile.Close()
 			for {
-				i, _, readErr := remoteTrack.Read(rtpBuf)
+				pkt, _, readErr := remoteTrack.ReadRTP()
 				if readErr != nil {
-					if readErr == io.EOF {
-						break
-					}
+					fmt.Println("Client audio read end:", readErr)
 					break
 				}
-				localTrack.Write(rtpBuf[:i])
+
+				// 1. Save to OGG
+				if err := oggFile.WriteRTP(pkt); err != nil {
+					fmt.Println("ogg write err:", err)
+					break
+				}
+
+				// 2. Relay to OpenAI
+				if err := localTrack.WriteRTP(pkt); err != nil {
+					fmt.Printf("forward to OpenAI err: %v\n", err)
+				}
 			}
 		}()
 
-		// NOW connect to OpenAI after we have audio - just like Node.js!
+		// Connect to OpenAI once we have audio
 		if !openAIConnected {
 			connectToOpenAIWithAudio()
 		}
