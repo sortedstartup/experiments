@@ -1,0 +1,64 @@
+syntax="proto3";
+
+package sortedtest;
+
+option go_package = "sortedstartup/multi-tenant/test/proto";
+
+
+service sortedtest {
+    rpc CreateTenant(CreateTenantRequest) returns (CreateTenantResponse);
+    rpc CreateProject(CreateProjectRequest) returns (CreateProjectResponse);
+    rpc CreateTask(CreateTaskRequest) returns (CreateTaskResponse);
+    rpc GetProjects(GetProjectsRequest) returns (GetProjectsResponse);
+    rpc GetTasks(GetTasksRequest) returns (GetTasksResponse);
+}
+
+message CreateTenantRequest {
+    string name = 1;
+}   
+
+message CreateTenantResponse {
+    string message = 1;
+}
+
+message CreateProjectRequest {
+    string name = 1;
+}
+
+message CreateProjectResponse {
+    string message = 1;
+}
+
+message CreateTaskRequest {
+    string project_id = 1;
+    string name = 2;
+}
+
+message CreateTaskResponse {
+    string message = 1;
+}
+
+message GetProjectsRequest {}
+
+message GetProjectsResponse {
+    repeated Project projects = 1;
+}
+
+message Project {
+    string id = 1;
+    string name = 2;
+}
+
+message GetTasksRequest {
+    string project_id = 1;
+}
+
+message GetTasksResponse {
+    repeated Task tasks = 1;
+}
+
+message Task {
+    string id = 1;
+    string name = 2;
+    string project_id = 3;
+}
