@@ -99,7 +99,7 @@ func main() {
 			return
 		}
 
-		input := r.FormValue("name")
+		input := r.FormValue("user_input")
 		if input == "" {
 			http.Error(w, "Component name is required", http.StatusBadRequest)
 			return
