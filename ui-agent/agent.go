@@ -67,6 +67,11 @@ func main() {
 
 	// Serve index.html on root path
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		email := r.Header.Get("X-Forwarded-Email")
+		user := r.Header.Get("X-Forwarded-User")
+
+		log.Printf("Page access - User: %s, Email: %s", user, email)
+
 		http.ServeFile(w, r, "index.html")
 	})
 
