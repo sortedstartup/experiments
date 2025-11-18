@@ -2,3 +2,38 @@ Deepak: The next major task is to implement a rich content editor for blog posts
 Sanskar: What are the minimum features we need?
 Deepak: We definitely need support for **bold text**, *italic text*, and a way to insert **code blocks**. We also need to ensure the workflow for saving is updated to handle the new format.
 Sanskar: So, the process is: User navigates to Edit Post -> Editor loads -> User writes with rich content features -> Save button updates the post. I'll mock up a quick flow for the issue body.
+
+Deepak: Also, we should think about draft handling. Right now, if someone closes the tab, everything is gone.
+Sanskar: Yeah, autosave needs to be part of this. Maybe localStorage first, server-side later?
+Deepak: Agreed. Let's just get basic autosave in place for now.
+
+Sanskar: Another thing — should the editor support preview mode? Some writers prefer to see formatted output.
+Deepak: Yes, preview mode is important. We can add a toggle. But it shouldn’t reload the full page.
+
+Sanskar: What about media? Images, gifs?
+Deepak: Not for phase one. But we should at least plan how images might be embedded later. Maybe put a placeholder toolbar button or at least a comment in the code.
+
+Sanskar: Got it.
+Deepak: Oh, and we need validation. We can't allow arbitrary scripts or dangerous HTML.
+Sanskar: Yep, sanitization on save and on render.
+
+Deepak: The rendering pipeline for the blog view must be updated too. Old posts should still work.
+Sanskar: True, some posts are in plain text. We’ll need a fallback or migration logic.
+
+Deepak: Also, remember that undo/redo needs proper testing. Rich editors can break undo history if not done right.
+Sanskar: Good point, adding that.
+
+Deepak: And let's add metrics. I want to log how often each formatting feature is used — it helps prioritize later improvements.
+Sanskar: Sure, usage analytics.
+
+Deepak: Toolbar UI also needs polish. The spacing is cramped. Maybe align icons properly and add tooltips.
+Sanskar: Noted.
+
+Deepak: Finally, think about error handling. If the editor fails to load, we should fall back to a simple textarea instead of a blank screen.
+Sanskar: Yeah, graceful fallback.
+
+Sankar: or we can create a separate issue of undo/redo testing
+Deepak: sure, that sounds obvious, and then make sure it should not be in above issue it should be seperate
+
+Sanskar: just remember, about that bug in code copy code, will add it to issues
+Deepak: yes, that's important, note and complete

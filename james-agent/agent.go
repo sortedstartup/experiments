@@ -32,14 +32,13 @@ func main() {
 	}
 
 	// Create model
-	model, err := gemini.NewModel(ctx, "gemini-2.0-flash", &genai.ClientConfig{
+	model, err := gemini.NewModel(ctx, "gemini-2.5-flash", &genai.ClientConfig{
 		APIKey: os.Getenv("GOOGLE_API_KEY"),
 	})
 	if err != nil {
 		log.Fatalf("Failed to create model: %v", err)
 	}
 
-	// Create custom tools
 	transcriptTool, err := functiontool.New(functiontool.Config{
 		Name:        "GenerateSystemPromptFromTranscript",
 		Description: "Reads a meeting transcript file and generates a system prompt from its contents with GitHub action suggestions",
@@ -48,7 +47,7 @@ func main() {
 		log.Fatalf("Failed to create GenerateSystemPromptFromTranscript tool: %v", err)
 	}
 
-	githubTool, err := functiontool.New(functiontool.Config{
+	githubActionTool, err := functiontool.New(functiontool.Config{
 		Name:        "GitHubMCPServerAction",
 		Description: "Tool for interacting with GitHub via REST API to create, update, or close issues",
 	}, GitHubMCPServerAction)
@@ -56,14 +55,27 @@ func main() {
 		log.Fatalf("Failed to create GitHubMCPServerAction tool: %v", err)
 	}
 
+	githubListTool, err := functiontool.New(functiontool.Config{
+		Name:        "GitHubMCPServerListIssues",
+		Description: "Lists existing GitHub issues for a repository. Use this to check for duplicates before creating new issues.",
+	}, GitHubMCPServerListIssues)
+	if err != nil {
+		log.Fatalf("Failed to create GitHubMCPServerListIssues tool: %v", err)
+	}
+
 	// Create agent
 	agent, err := llmagent.New(llmagent.Config{
 		Name:        "james_agent",
 		Model:       model,
 		Description: "Agent that processes meeting transcripts, generates actionable prompts, and interacts with GitHub MCP server to manage issues based on meeting discussions.",
-		Instruction: `You are a helpful agent that reads meeting transcripts, summarizes key points, and performs GitHub issue actions (create, update, close) using the MCP server based on user input and meeting context. Please create issues with proper description and mermaid diagrams, do not create any issue without proper description. Repo name is sanskaraggarwal2025/Blogging, and please don't ask too much just directly create/update/close issue. Must use listed tools to create/update/close issue.`,
-		// Instruction: `You are a helpful agent that reads meeting transcripts, summarizes key points, and performs GitHub issue actions (create, update, close) for the sanskaraggarwal2025/Blogging repository based on meeting context. If there is a clear action item, create the issue directly, even if the description is brief.`,
-		Tools: []tool.Tool{transcriptTool, githubTool},
+		Instruction: `You are a helpful agent that processes meeting transcripts and manages GitHub issues for the sanskaraggarwal2025/Blogging repository.
+1. **Always** start by using **GenerateSystemPromptFromTranscript** to get the meeting content.
+2. **Next**, use **GitHubMCPServerListIssues** to retrieve a list of existing **open** issues in 'sanskaraggarwal2025/Blogging'.
+3. Analyze the transcript summary and the list of existing issues.
+4. **Crucially**: If a key point already corresponds to an open issue (check issue titles/bodies for similarity), use **GitHubMCPServerAction** with the **'update'** action to add more context or a mermaid diagram to the existing issue.
+5. If a key point is entirely new and does not have an open issue, use **GitHubMCPServerAction** with the **'create'** action. Always create issues with a proper description and mermaid diagrams when applicable.
+6. The repository name is always 'sanskaraggarwal2025/Blogging'. Do not ask for confirmation; directly perform the necessary action.`,
+		Tools: []tool.Tool{transcriptTool, githubActionTool, githubListTool},
 	})
 	if err != nil {
 		log.Fatalf("Failed to create agent: %v", err)
@@ -105,7 +117,7 @@ func main() {
 	}
 
 	// Create message to process the transcript file
-	userMessage := fmt.Sprintf("Please read the meeting transcript from file '%s', generate a system prompt with key points, and create appropriate GitHub issues for the sanskaraggarwal2025/Blogging repository based on the discussion. Include proper descriptions and mermaid diagrams where applicable.", transcriptFilePath)
+	userMessage := fmt.Sprintf("Please process the meeting transcript from file '%s'. Follow your instructions to check for existing issues before creating any new ones in the sanskaraggarwal2025/Blogging repository.", transcriptFilePath)
 
 	// Run agent
 	msg := &genai.Content{
@@ -151,8 +163,6 @@ func GenerateSystemPromptFromTranscript(ctx tool.Context, args GenerateSystemPro
 			ErrorMessage: fmt.Sprintf("File not found: %s", args.FilePath),
 		}
 	}
-
-	// Read the transcript file
 	transcript, err := os.ReadFile(args.FilePath)
 	if err != nil {
 		return GenerateSystemPromptResult{
@@ -160,8 +170,6 @@ func GenerateSystemPromptFromTranscript(ctx tool.Context, args GenerateSystemPro
 			ErrorMessage: err.Error(),
 		}
 	}
-
-	// Generate the system prompt
 	prompt := fmt.Sprintf("System prompt generated from meeting transcript:\n%s\nSummarize the key points and suggest relevant GitHub actions (create/update/close issues) based on the discussion.", string(transcript))
 
 	fmt.Println("Prompt generated sanskar: ", prompt)
@@ -172,7 +180,7 @@ func GenerateSystemPromptFromTranscript(ctx tool.Context, args GenerateSystemPro
 	}
 }
 
-// GitHubMCPServerAction tool structs and function
+// GitHubMCPServerAction tool structs and function (Unchanged, but now used conditionally by LLM)
 type GitHubActionParams struct {
 	Action    string                 `json:"action" jsonschema:"The action to perform: create, update, or close"`
 	IssueData map[string]interface{} `json:"issueData" jsonschema:"Issue data containing repo, title, body, number, etc."`
@@ -190,27 +198,16 @@ func GitHubMCPServerAction(ctx tool.Context, args GitHubActionParams) GitHubActi
 	fmt.Println("Getting GitHub token sanskar: ")
 	token := os.Getenv("GITHUB_TOKEN")
 	if token == "" {
-		return GitHubActionResult{
-			Status:       "error",
-			ErrorMessage: "GitHub token not found in environment variable GITHUB_TOKEN.",
-		}
+		return GitHubActionResult{Status: "error", ErrorMessage: "GitHub token not found in environment variable GITHUB_TOKEN."}
 	}
-
-	// Extract repo from issue data
 	repo, ok := args.IssueData["repo"].(string)
 	if !ok || repo == "" {
-		return GitHubActionResult{
-			Status:       "error",
-			ErrorMessage: "Missing 'repo' in issue_data.",
-		}
+		return GitHubActionResult{Status: "error", ErrorMessage: "Missing 'repo' in issue_data."}
 	}
 
 	var url string
 	var payload map[string]interface{}
 	var method string
-
-	fmt.Println("Action: ", args.Action)
-	fmt.Println("Repo: ", repo)
 
 	switch args.Action {
 	case "create":
@@ -220,14 +217,10 @@ func GitHubMCPServerAction(ctx tool.Context, args GitHubActionParams) GitHubActi
 			"title": getStringFromMap(args.IssueData, "title", "No title"),
 			"body":  getStringFromMap(args.IssueData, "body", ""),
 		}
-
 	case "update":
 		issueNumber := getStringFromMap(args.IssueData, "number", "")
 		if issueNumber == "" {
-			return GitHubActionResult{
-				Status:       "error",
-				ErrorMessage: "Missing 'number' for update action.",
-			}
+			return GitHubActionResult{Status: "error", ErrorMessage: "Missing 'number' for update action."}
 		}
 		url = fmt.Sprintf("https://api.github.com/repos/%s/issues/%s", repo, issueNumber)
 		method = "PATCH"
@@ -238,90 +231,114 @@ func GitHubMCPServerAction(ctx tool.Context, args GitHubActionParams) GitHubActi
 		if body, exists := args.IssueData["body"]; exists {
 			payload["body"] = body
 		}
-
 	case "close":
 		issueNumber := getStringFromMap(args.IssueData, "number", "")
 		if issueNumber == "" {
-			return GitHubActionResult{
-				Status:       "error",
-				ErrorMessage: "Missing 'number' for close action.",
-			}
+			return GitHubActionResult{Status: "error", ErrorMessage: "Missing 'number' for close action."}
 		}
 		url = fmt.Sprintf("https://api.github.com/repos/%s/issues/%s", repo, issueNumber)
 		method = "PATCH"
-		payload = map[string]interface{}{
-			"state": "closed",
-		}
-
+		payload = map[string]interface{}{"state": "closed"}
 	default:
-		return GitHubActionResult{
-			Status:       "error",
-			ErrorMessage: fmt.Sprintf("Unknown action: %s", args.Action),
-		}
+		return GitHubActionResult{Status: "error", ErrorMessage: fmt.Sprintf("Unknown action: %s", args.Action)}
 	}
 
-	// Marshal payload to JSON
 	payloadBytes, err := json.Marshal(payload)
 	if err != nil {
+		return GitHubActionResult{Status: "error", ErrorMessage: fmt.Sprintf("Failed to marshal payload: %v", err)}
+	}
+
+	req, err := http.NewRequest(method, url, bytes.NewBuffer(payloadBytes))
+	if err != nil {
+		return GitHubActionResult{Status: "error", ErrorMessage: fmt.Sprintf("Failed to create request: %v", err)}
+	}
+
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", token))
+	req.Header.Set("Accept", "application/vnd.github+json")
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return GitHubActionResult{Status: "error", ErrorMessage: fmt.Sprintf("Request failed: %v", err)}
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return GitHubActionResult{Status: "error", ErrorMessage: fmt.Sprintf("Failed to read response: %v", err)}
+	}
+
+	if resp.StatusCode == 200 || resp.StatusCode == 201 {
+		var result map[string]interface{}
+		if err := json.Unmarshal(body, &result); err != nil {
+			return GitHubActionResult{Status: "error", ErrorMessage: fmt.Sprintf("Failed to parse response: %v", err)}
+		}
+		return GitHubActionResult{Status: "success", Result: result}
+	} else {
+		return GitHubActionResult{Status: "error", ErrorMessage: string(body), Code: resp.StatusCode}
+	}
+}
+
+// NEW: GitHubMCPServerListIssues tool structs and function
+type GitHubListIssuesParams struct {
+	Repo  string `json:"repo" jsonschema:"The repository name (e.g., owner/repo), use sanskaraggarwal2025/Blogging"`
+	State string `json:"state,omitempty" jsonschema:"The state of the issues (open, closed, or all). Use 'open' to check for duplicates."`
+}
+
+func GitHubMCPServerListIssues(ctx tool.Context, args GitHubListIssuesParams) GitHubActionResult {
+	fmt.Println("Getting GitHub token sanskar for listing issues: ")
+	token := os.Getenv("GITHUB_TOKEN")
+	if token == "" {
 		return GitHubActionResult{
 			Status:       "error",
-			ErrorMessage: fmt.Sprintf("Failed to marshal payload: %v", err),
+			ErrorMessage: "GitHub token not found in environment variable GITHUB_TOKEN.",
 		}
 	}
 
-	// Create HTTP request
-	req, err := http.NewRequest(method, url, bytes.NewBuffer(payloadBytes))
+	state := args.State
+	if state == "" {
+		state = "open"
+	}
+
+	// Build the URL for listing issues
+	url := fmt.Sprintf("https://api.github.com/repos/%s/issues?state=%s", args.Repo, state)
+
+	// Create HTTP GET request
+	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		fmt.Println("Failed to create request sanskar: ", err)
-		return GitHubActionResult{
-			Status:       "error",
-			ErrorMessage: fmt.Sprintf("Failed to create request: %v", err),
-		}
+		return GitHubActionResult{Status: "error", ErrorMessage: fmt.Sprintf("Failed to create request: %v", err)}
 	}
 
 	// Set headers
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", token))
 	req.Header.Set("Accept", "application/vnd.github+json")
-	req.Header.Set("Content-Type", "application/json")
 
-	// Make HTTP request
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		fmt.Println("Failed to do request sanskar: ", err)
-		return GitHubActionResult{
-			Status:       "error",
-			ErrorMessage: fmt.Sprintf("Request failed: %v", err),
-		}
+		return GitHubActionResult{Status: "error", ErrorMessage: fmt.Sprintf("Request failed: %v", err)}
 	}
 	defer resp.Body.Close()
 
 	// Read response body
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		fmt.Println("Failed to read response body sanskar: ", err)
-		return GitHubActionResult{
-			Status:       "error",
-			ErrorMessage: fmt.Sprintf("Failed to read response: %v", err),
-		}
+		return GitHubActionResult{Status: "error", ErrorMessage: fmt.Sprintf("Failed to read response body: %v", err)}
 	}
 
 	// Check response status
-	if resp.StatusCode == 200 || resp.StatusCode == 201 {
-		var result map[string]interface{}
-		if err := json.Unmarshal(body, &result); err != nil {
-			fmt.Println("Failed to parse response sanskar: ", err)
-			return GitHubActionResult{
-				Status:       "error",
-				ErrorMessage: fmt.Sprintf("Failed to parse response: %v", err),
-			}
+	if resp.StatusCode == 200 {
+		var issues []map[string]interface{}
+		if err := json.Unmarshal(body, &issues); err != nil {
+			return GitHubActionResult{Status: "error", ErrorMessage: fmt.Sprintf("Failed to parse response body: %v", err)}
 		}
+
 		return GitHubActionResult{
 			Status: "success",
-			Result: result,
+			Result: map[string]interface{}{"issues": issues},
 		}
 	} else {
-		fmt.Println("Failed to check response status sanskar: ", resp.StatusCode)
 		return GitHubActionResult{
 			Status:       "error",
 			ErrorMessage: string(body),
@@ -330,9 +347,8 @@ func GitHubMCPServerAction(ctx tool.Context, args GitHubActionParams) GitHubActi
 	}
 }
 
-// Helper function to safely get string values from map
+// Helper function to safely get string values from map (Unchanged)
 func getStringFromMap(m map[string]interface{}, key, defaultValue string) string {
-	fmt.Println("Getting string from map sanskar: ", m, key, defaultValue)
 	if val, ok := m[key]; ok {
 		if str, ok := val.(string); ok {
 			return str
