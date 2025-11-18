@@ -1,0 +1,27 @@
+
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js"></script>
+
+  </head>
+  <body>
+    <div class="flex justify-center items-center border border-black-100 h-screen w-screen">
+        <form hx-post="/generate-component" hx-target="#llm-response" hx-swap="innerHTML">
+            <input name="user_input" type="text" class="border border-black-100 p-4">
+            <button type="submit" class="border border-black-100 p-4">Send</button>
+        </form>
+
+        <div id="llm-response" class="w-full h-full" flex  items-center justify-center>
+          <!-- COMPONENT_VARIANTS_START -->
+             <!-- The generated HTML for Variant 1, 2, and 3 will be placed here -->
+           <!-- COMPONENT_VARIANTS_END -->
+
+        </div>
+        
+    </div>
+  </body>
+</html>
