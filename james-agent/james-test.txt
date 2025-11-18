@@ -1,0 +1,4 @@
+Deepak: The next major task is to implement a rich content editor for blog posts. This should allow for a better user experience when writing.
+Sanskar: What are the minimum features we need?
+Deepak: We definitely need support for **bold text**, *italic text*, and a way to insert **code blocks**. We also need to ensure the workflow for saving is updated to handle the new format.
+Sanskar: So, the process is: User navigates to Edit Post -> Editor loads -> User writes with rich content features -> Save button updates the post. I'll mock up a quick flow for the issue body.
