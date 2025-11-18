@@ -31,6 +31,18 @@ func main() {
 		log.Println("WARNING: GITHUB_TOKEN environment variable not set. GitHub operations will fail.")
 	}
 
+	if len(os.Args) < 3 {
+		log.Fatalf("Usage: %s <transcript-file-path> <repository-name>", os.Args[0])
+	}
+	transcriptFilePath := os.Args[1]
+	// NEW: Get repository name from command line
+	repoName := os.Args[2]
+
+	// Verify file exists
+	if _, err := os.Stat(transcriptFilePath); os.IsNotExist(err) {
+		log.Fatalf("File not found: %s", transcriptFilePath)
+	}
+
 	// Create model
 	model, err := gemini.NewModel(ctx, "gemini-2.0-flash", &genai.ClientConfig{
 		APIKey: os.Getenv("GOOGLE_API_KEY"),
@@ -63,20 +75,22 @@ func main() {
 		log.Fatalf("Failed to create GitHubMCPServerListIssues tool: %v", err)
 	}
 
+	agentInstruction := fmt.Sprintf(`You are a helpful agent that processes meeting transcripts and manages GitHub issues for the **%s** repository.
+1. **Always** start by using **GenerateSystemPromptFromTranscript** to get the meeting content.
+2. **Pre-check for updates**: Analyze the summary from the transcript. If the summary contains mentions of specific, existing tasks, issues, or ticket numbers (e.g., "Issue #12 discussed," "We need to clarify the scope of the dashboard ticket"), or if the discussion is clearly an elaboration on a prior topic, then proceed to step 3. Otherwise, if the points are entirely new, skip to step 5 (create new issues).
+3. **If an update is suspected**: Use **GitHubMCPServerListIssues** to retrieve a list of existing **open** issues in '%s'.
+4. Analyze the transcript summary and the list of existing issues.
+5. **Crucially**: If a key point already corresponds to an open issue (check issue titles/bodies for similarity), use **GitHubMCPServerAction** with the **'update'** action to add more context or a mermaid diagram to the existing issue.
+6. If a key point is entirely new and does not have an open issue, use **GitHubMCPServerAction** with the **'create'** action. Always create issues with a proper description and mermaid diagrams when applicable.
+7. The repository name is always '%s'. Do not ask for confirmation; directly perform the necessary action.`, repoName, repoName, repoName)
+
 	// Create agent
 	agent, err := llmagent.New(llmagent.Config{
 		Name:        "james_agent",
 		Model:       model,
 		Description: "Agent that processes meeting transcripts, generates actionable prompts, and interacts with GitHub MCP server to manage issues based on meeting discussions.",
-		Instruction: `You are a helpful agent that processes meeting transcripts and manages GitHub issues for the sanskaraggarwal2025/Blogging repository.
-1. **Always** start by using **GenerateSystemPromptFromTranscript** to get the meeting content.
-2. **Pre-check for updates**: Analyze the summary from the transcript. If the summary contains mentions of specific, existing tasks, issues, or ticket numbers (e.g., "Issue #12 discussed," "We need to clarify the scope of the dashboard ticket"), or if the discussion is clearly an elaboration on a prior topic, then proceed to step 3. Otherwise, if the points are entirely new, skip to step 5 (create new issues).
-3. **If an update is suspected**: Use **GitHubMCPServerListIssues** to retrieve a list of existing **open** issues in 'sanskaraggarwal2025/Blogging'.
-4. Analyze the transcript summary and the list of existing issues.
-5. **Crucially**: If a key point already corresponds to an open issue (check issue titles/bodies for similarity), use **GitHubMCPServerAction** with the **'update'** action to add more context or a mermaid diagram to the existing issue.
-6. If a key point is entirely new and does not have an open issue, use **GitHubMCPServerAction** with the **'create'** action. Always create issues with a proper description and mermaid diagrams when applicable.
-7. The repository name is always 'sanskaraggarwal2025/Blogging'. Do not ask for confirmation; directly perform the necessary action.`,
-		Tools: []tool.Tool{transcriptTool, githubActionTool, githubListTool},
+		Instruction: agentInstruction,
+		Tools:       []tool.Tool{transcriptTool, githubActionTool, githubListTool},
 	})
 	if err != nil {
 		log.Fatalf("Failed to create agent: %v", err)
@@ -96,15 +110,7 @@ func main() {
 	}
 
 	// Get file path from command line arguments
-	if len(os.Args) < 2 {
-		log.Fatalf("Usage: %s <transcript-file-path>", os.Args[0])
-	}
-	transcriptFilePath := os.Args[1]
 
-	// Verify file exists
-	if _, err := os.Stat(transcriptFilePath); os.IsNotExist(err) {
-		log.Fatalf("File not found: %s", transcriptFilePath)
-	}
 	// Create session
 	userID := "user123"
 	appName := "james_agent"
@@ -118,7 +124,7 @@ func main() {
 	}
 
 	// Create message to process the transcript file
-	userMessage := fmt.Sprintf("Please process the meeting transcript from file '%s'. Follow your instructions to check for existing issues before creating any new ones in the sanskaraggarwal2025/Blogging repository.", transcriptFilePath)
+	userMessage := fmt.Sprintf("Please process the meeting transcript from file '%s'. Follow your instructions to check for existing issues before creating any new ones in the %s repository.", transcriptFilePath, repoName)
 
 	// Run agent
 	msg := &genai.Content{
@@ -157,7 +163,7 @@ type GenerateSystemPromptResult struct {
 
 func GenerateSystemPromptFromTranscript(ctx tool.Context, args GenerateSystemPromptParams) GenerateSystemPromptResult {
 	// Check if file exists
-	fmt.Println("Checking if file exists sanskar: ", args.FilePath)
+	fmt.Println("Checking if file exists : ", args.FilePath)
 	if _, err := os.Stat(args.FilePath); os.IsNotExist(err) {
 		return GenerateSystemPromptResult{
 			Status:       "error",
@@ -173,7 +179,7 @@ func GenerateSystemPromptFromTranscript(ctx tool.Context, args GenerateSystemPro
 	}
 	prompt := fmt.Sprintf("System prompt generated from meeting transcript:\n%s\nSummarize the key points and suggest relevant GitHub actions (create/update/close issues) based on the discussion.", string(transcript))
 
-	fmt.Println("Prompt generated sanskar: ", prompt)
+	fmt.Println("Prompt generated: ", prompt)
 
 	return GenerateSystemPromptResult{
 		Status: "success",
@@ -196,7 +202,7 @@ type GitHubActionResult struct {
 
 func GitHubMCPServerAction(ctx tool.Context, args GitHubActionParams) GitHubActionResult {
 	// Get GitHub token from environment
-	fmt.Println("Getting GitHub token sanskar: ")
+	fmt.Println("Getting GitHub token : ")
 	token := os.Getenv("GITHUB_TOKEN")
 	if token == "" {
 		return GitHubActionResult{Status: "error", ErrorMessage: "GitHub token not found in environment variable GITHUB_TOKEN."}
@@ -283,12 +289,12 @@ func GitHubMCPServerAction(ctx tool.Context, args GitHubActionParams) GitHubActi
 
 // NEW: GitHubMCPServerListIssues tool structs and function
 type GitHubListIssuesParams struct {
-	Repo  string `json:"repo" jsonschema:"The repository name (e.g., owner/repo), use sanskaraggarwal2025/Blogging"`
+	Repo  string `json:"repo" jsonschema:"The repository name (e.g., owner/repo)"`
 	State string `json:"state,omitempty" jsonschema:"The state of the issues (open, closed, or all). Use 'open' to check for duplicates."`
 }
 
 func GitHubMCPServerListIssues(ctx tool.Context, args GitHubListIssuesParams) GitHubActionResult {
-	fmt.Println("Getting GitHub token sanskar for listing issues: ")
+	fmt.Println("Getting GitHub token for listing issues: ")
 	token := os.Getenv("GITHUB_TOKEN")
 	if token == "" {
 		return GitHubActionResult{
