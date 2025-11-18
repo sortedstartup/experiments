@@ -10,7 +10,7 @@
   </head>
   <body>
     <div class="flex justify-center items-center border border-black-100 h-screen w-screen">
-        <form hx-post="http://localhost:8000/generate-component" hx-target="#llm-response" hx-swap="innerHTML">
+        <form hx-post="/generate-component" hx-target="#llm-response" hx-swap="innerHTML">
             <input name="user_input" type="text" class="border border-black-100 p-4">
             <button type="submit" class="border border-black-100 p-4">Send</button>
         </form>
