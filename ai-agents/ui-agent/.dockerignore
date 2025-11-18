@@ -1,0 +1,24 @@
+# Ignore Git files
+.git
+.gitignore
+
+# Ignore documentation
+README.md
+
+# Ignore build artifacts
+main
+
+# Ignore demo.html (will be generated)
+demo.html
+
+# Ignore IDE files
+.vscode/
+.idea/
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+
+# Ignore temporary files
+*.tmp
+*.log
