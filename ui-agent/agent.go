@@ -125,6 +125,7 @@ func main() {
 				{Text: input},
 			},
 		}
+		fmt.Printf("Running agent with input: %s\n", input)
 		events := agentRunner.Run(ctx, userID, sessResp.Session.ID(), msg, adkagent.RunConfig{})
 
 		// Process events and log any errors
@@ -145,14 +146,13 @@ func main() {
 			return
 		}
 
-		fmt.Println("HTML Content: ", string(htmlContent))
+		fmt.Println("HTML Content successfully read, sending response.")
 
 		// Set content type to HTML
 		w.Header().Set("Content-Type", "text/html")
 		w.Write(htmlContent)
 	})
 
-	fmt.Println("Server running on http://localhost:8000")
 	fmt.Println("Open http://localhost:8000 in your browser")
 	log.Fatal(http.ListenAndServe(":8000", nil))
 }
@@ -166,6 +166,7 @@ type AddVariantsResult struct {
 }
 
 func AddVariants(ctx tool.Context, args AddVariantsParams) AddVariantsResult {
+	fmt.Println("AddVariants tool called with args: ", args)
 	llmContent := args.ComponentDescription
 	fmt.Println("LLM Content: ", llmContent)
 
