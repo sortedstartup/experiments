@@ -32,7 +32,7 @@ func main() {
 	}
 
 	// Create model
-	model, err := gemini.NewModel(ctx, "gemini-2.5-flash", &genai.ClientConfig{
+	model, err := gemini.NewModel(ctx, "gemini-2.0-flash", &genai.ClientConfig{
 		APIKey: os.Getenv("GOOGLE_API_KEY"),
 	})
 	if err != nil {
@@ -70,11 +70,12 @@ func main() {
 		Description: "Agent that processes meeting transcripts, generates actionable prompts, and interacts with GitHub MCP server to manage issues based on meeting discussions.",
 		Instruction: `You are a helpful agent that processes meeting transcripts and manages GitHub issues for the sanskaraggarwal2025/Blogging repository.
 1. **Always** start by using **GenerateSystemPromptFromTranscript** to get the meeting content.
-2. **Next**, use **GitHubMCPServerListIssues** to retrieve a list of existing **open** issues in 'sanskaraggarwal2025/Blogging'.
-3. Analyze the transcript summary and the list of existing issues.
-4. **Crucially**: If a key point already corresponds to an open issue (check issue titles/bodies for similarity), use **GitHubMCPServerAction** with the **'update'** action to add more context or a mermaid diagram to the existing issue.
-5. If a key point is entirely new and does not have an open issue, use **GitHubMCPServerAction** with the **'create'** action. Always create issues with a proper description and mermaid diagrams when applicable.
-6. The repository name is always 'sanskaraggarwal2025/Blogging'. Do not ask for confirmation; directly perform the necessary action.`,
+2. **Pre-check for updates**: Analyze the summary from the transcript. If the summary contains mentions of specific, existing tasks, issues, or ticket numbers (e.g., "Issue #12 discussed," "We need to clarify the scope of the dashboard ticket"), or if the discussion is clearly an elaboration on a prior topic, then proceed to step 3. Otherwise, if the points are entirely new, skip to step 5 (create new issues).
+3. **If an update is suspected**: Use **GitHubMCPServerListIssues** to retrieve a list of existing **open** issues in 'sanskaraggarwal2025/Blogging'.
+4. Analyze the transcript summary and the list of existing issues.
+5. **Crucially**: If a key point already corresponds to an open issue (check issue titles/bodies for similarity), use **GitHubMCPServerAction** with the **'update'** action to add more context or a mermaid diagram to the existing issue.
+6. If a key point is entirely new and does not have an open issue, use **GitHubMCPServerAction** with the **'create'** action. Always create issues with a proper description and mermaid diagrams when applicable.
+7. The repository name is always 'sanskaraggarwal2025/Blogging'. Do not ask for confirmation; directly perform the necessary action.`,
 		Tools: []tool.Tool{transcriptTool, githubActionTool, githubListTool},
 	})
 	if err != nil {
@@ -334,9 +335,27 @@ func GitHubMCPServerListIssues(ctx tool.Context, args GitHubListIssuesParams) Gi
 			return GitHubActionResult{Status: "error", ErrorMessage: fmt.Sprintf("Failed to parse response body: %v", err)}
 		}
 
+		// Prepare lightweight issue list with only title and number
+		var lightweightIssues []map[string]interface{}
+
+		for _, issue := range issues {
+			title, titleOk := issue["title"].(string)
+			numberFloat, numberOk := issue["number"].(float64)
+
+			if titleOk && numberOk {
+				lightweightIssues = append(lightweightIssues, map[string]interface{}{
+					"title":  title,
+					"number": int(numberFloat),
+				})
+			}
+		}
+
 		return GitHubActionResult{
 			Status: "success",
-			Result: map[string]interface{}{"issues": issues},
+			Result: map[string]interface{}{
+				"message": "List of open issue titles and numbers for duplicate checking:",
+				"issues":  lightweightIssues,
+			},
 		}
 	} else {
 		return GitHubActionResult{
