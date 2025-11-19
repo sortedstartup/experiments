@@ -33,45 +33,6 @@
             <div id="logs" class="bg-gray-100 p-4 rounded-lg max-h-64 overflow-y-auto hidden"></div>
         </div>
 
-        <!-- <script>
-            document.getElementById('mvp-form').addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                const userInput = document.getElementById('user_input').value;
-                if (!userInput.trim()) return;
-                
-                const logsDiv = document.getElementById('logs');
-                const btn = document.getElementById('generate-btn');
-                
-                // Show logs div and reset content
-                logsDiv.classList.remove('hidden');
-                logsDiv.innerHTML = '';
-                
-                // Disable button
-                btn.disabled = true;
-                btn.textContent = 'Generating...';
-                
-                // Start SSE connection
-                const eventSource = new EventSource('/generate-mvp?user_input=' + encodeURIComponent(userInput));
-                
-                eventSource.onmessage = function(event) {
-                    logsDiv.innerHTML += event.data + '<br>';
-                    logsDiv.scrollTop = logsDiv.scrollHeight;
-                };
-                
-                eventSource.onerror = function() {
-                    eventSource.close();
-                    btn.disabled = false;
-                    btn.textContent = 'Generate MVP';
-                };
-                
-                eventSource.addEventListener('close', function() {
-                    eventSource.close();
-                    btn.disabled = false;
-                    btn.textContent = 'Generate MVP';
-                });
-            });
-        </script> -->
         <script>
             document.getElementById('mvp-form').addEventListener('submit', function(e) {
                 e.preventDefault();
