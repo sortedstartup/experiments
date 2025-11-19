@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"os/exec"
+	"path/filepath"
 
 	"github.com/labstack/echo/v4"
 )
@@ -80,6 +82,13 @@ func generateMVP(c echo.Context) error {
 		// Clean up
 		os.Remove(requirementsFile)
 		logChannel <- "MVP generation completed successfully!"
+
+		// Build the MVP
+		if err := buildMVP(outputDir, logChannel); err != nil {
+			fmt.Println("Error building MVP: %w", err)
+			return
+		}
+		logChannel <- "MVP built successfully!"
 	}()
 
 	// Stream logs to client
@@ -107,4 +116,66 @@ func createRequirementsFile(userInput string) (string, error) {
 	}
 
 	return tmpFile.Name(), nil
+}
+
+func buildMVP(outputDir string, logChannel chan<- string) error {
+	// Build directory
+	logChannel <- fmt.Sprintf("Building MVP for all platforms")
+
+	buildDir := filepath.Join(outputDir, "builds")
+	if err := os.MkdirAll(buildDir, 0755); err != nil {
+		return fmt.Errorf("failed to create builds directory: %v", err)
+	}
+
+	// Platforms to build for
+	platforms := []struct {
+		GOOS   string
+		GOARCH string
+	}{
+		{"linux", "amd64"},
+		{"darwin", "amd64"},
+		{"windows", "amd64"},
+	}
+
+	var buildErrors []string
+
+	// Build for each platform
+	for _, platform := range platforms {
+		logChannel <- fmt.Sprintf("Building for %s/%s...", platform.GOOS, platform.GOARCH)
+
+		// Output filename
+		output := fmt.Sprintf("mvp-%s-%s", platform.GOOS, platform.GOARCH)
+		if platform.GOOS == "windows" {
+			output += ".exe"
+		}
+
+		backendDir := filepath.Join(outputDir, "backend")
+		absoluteBuildDir, _ := filepath.Abs(buildDir)
+		outputPath := filepath.Join(absoluteBuildDir, output)
+
+		// Build command
+		cmd := exec.Command("go", "build", "-o", outputPath, ".")
+		cmd.Dir = backendDir // Build from backend folder
+		cmd.Env = append(os.Environ(),
+			"GOOS="+platform.GOOS,
+			"GOARCH="+platform.GOARCH,
+		)
+
+		// Log the command being run
+		logChannel <- fmt.Sprintf("Running: go build -o %s . (from %s)", outputPath, backendDir)
+
+		// Run build and capture output
+		output_bytes, err := cmd.CombinedOutput()
+		if err != nil {
+			errorMsg := fmt.Sprintf(" Failed to build for %s/%s: %v\nOutput: %s", platform.GOOS, platform.GOARCH, err, string(output_bytes))
+			logChannel <- errorMsg
+			buildErrors = append(buildErrors, errorMsg)
+			continue
+		}
+
+		logChannel <- fmt.Sprintf("Built: %s", output)
+	}
+
+	logChannel <- " All builds completed!"
+	return nil
 }
