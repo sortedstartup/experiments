@@ -19,10 +19,11 @@ func setupRoutes(e *echo.Echo) {
 	// Serve the index.html file at root
 	e.GET("/", serveIndex)
 
-	// Handle MVP generation
-
-	// SSE endpoint for streaming logs
 	e.GET("/generate-mvp", generateMVP)
+
+	// SSE endpoint for downloading builds
+	e.GET("/download/:outputDir/:filename", downloadMVP)
+
 }
 
 // serveIndex serves the index.html file
@@ -137,7 +138,7 @@ func buildMVP(outputDir string, logChannel chan<- string) error {
 		{"windows", "amd64"},
 	}
 
-	var buildErrors []string
+	var builtFiles []string
 
 	// Build for each platform
 	for _, platform := range platforms {
@@ -167,15 +168,50 @@ func buildMVP(outputDir string, logChannel chan<- string) error {
 		// Run build and capture output
 		output_bytes, err := cmd.CombinedOutput()
 		if err != nil {
-			errorMsg := fmt.Sprintf(" Failed to build for %s/%s: %v\nOutput: %s", platform.GOOS, platform.GOARCH, err, string(output_bytes))
+			errorMsg := fmt.Sprintf("❌ Failed to build for %s/%s: %v\nOutput: %s", platform.GOOS, platform.GOARCH, err, string(output_bytes))
 			logChannel <- errorMsg
-			buildErrors = append(buildErrors, errorMsg)
 			continue
 		}
 
-		logChannel <- fmt.Sprintf("Built: %s", output)
+		logChannel <- fmt.Sprintf("✅ Built: %s", output)
+		builtFiles = append(builtFiles, output)
 	}
 
-	logChannel <- " All builds completed!"
+	// Send download links via SSE
+	if len(builtFiles) > 0 {
+		logChannel <- "🎉 All builds completed!"
+		logChannel <- "📥 **DOWNLOAD_LINKS_START**"
+
+		for _, filename := range builtFiles {
+			// Extract the output directory name for the download URL
+			outputDirName := filepath.Base(outputDir)
+			downloadURL := fmt.Sprintf("/download/%s/%s", outputDirName, filename)
+			logChannel <- fmt.Sprintf("DOWNLOAD_LINK|%s|%s", filename, downloadURL)
+		}
+
+		logChannel <- "📥 **DOWNLOAD_LINKS_END**"
+	}
+
 	return nil
+}
+
+func downloadMVP(c echo.Context) error {
+	outputDir := c.Param("outputDir")
+	filename := c.Param("filename")
+	fmt.Println("downloadMVP called", outputDir, filename)
+
+	// Construct the file path
+	filePath := filepath.Join("data/outputs", outputDir, "builds", filename)
+
+	// Check if file exists
+	if _, err := os.Stat(filePath); os.IsNotExist(err) {
+		return c.String(http.StatusNotFound, "File not found")
+	}
+
+	// Set headers for download
+	c.Response().Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=\"%s\"", filename))
+	c.Response().Header().Set("Content-Type", "application/octet-stream")
+
+	// Serve the file
+	return c.File(filePath)
 }

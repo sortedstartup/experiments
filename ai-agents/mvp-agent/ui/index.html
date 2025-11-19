@@ -33,7 +33,7 @@
             <div id="logs" class="bg-gray-100 p-4 rounded-lg max-h-64 overflow-y-auto hidden"></div>
         </div>
 
-        <script>
+        <!-- <script>
             document.getElementById('mvp-form').addEventListener('submit', function(e) {
                 e.preventDefault();
                 
@@ -71,7 +71,83 @@
                     btn.textContent = 'Generate MVP';
                 });
             });
-        </script>
+        </script> -->
+        <script>
+            document.getElementById('mvp-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const userInput = document.getElementById('user_input').value;
+                if (!userInput.trim()) return;
+                
+                const logsDiv = document.getElementById('logs');
+                const btn = document.getElementById('generate-btn');
+                
+                // Show logs div and reset content
+                logsDiv.classList.remove('hidden');
+                logsDiv.innerHTML = '';
+                
+                // Disable button
+                btn.disabled = true;
+                btn.textContent = 'Generating...';
+                
+                let inDownloadSection = false;
+                
+                // Start SSE connection
+                const eventSource = new EventSource('/generate-mvp?user_input=' + encodeURIComponent(userInput));
+                
+                eventSource.onmessage = function(event) {
+                    const message = event.data;
+                    
+                    // Check for download links section
+                    if (message === '📥 **DOWNLOAD_LINKS_START**') {
+                        inDownloadSection = true;
+                        logsDiv.innerHTML += '<div class="mt-4 p-4 bg-green-100 border border-green-300 rounded-lg"><h3 class="font-bold text-green-800 mb-2">🎉 MVP Built Successfully! Download your executables:</h3><div id="download-links"></div></div>';
+                        return;
+                    }
+                    
+                    if (message === '📥 **DOWNLOAD_LINKS_END**') {
+                        inDownloadSection = false;
+                        return;
+                    }
+                    
+                    // Handle download links
+                    if (inDownloadSection && message.startsWith('DOWNLOAD_LINK|')) {
+                        const parts = message.split('|');
+                        const filename = parts[1];
+                        const downloadURL = parts[2];
+                        
+                        const downloadLinksDiv = document.getElementById('download-links');
+                        const linkElement = document.createElement('div');
+                        linkElement.className = 'mb-2';
+                        linkElement.innerHTML = `
+                            <a href="${downloadURL}" 
+                               class="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                               download="${filename}">
+                                📦 ${filename}
+                            </a>
+                        `;
+                        downloadLinksDiv.appendChild(linkElement);
+                        return;
+                    }
+                    
+                    // Regular log messages
+                    logsDiv.innerHTML += event.data + '<br>';
+                    logsDiv.scrollTop = logsDiv.scrollHeight;
+                };
+                
+                eventSource.onerror = function() {
+                    eventSource.close();
+                    btn.disabled = false;
+                    btn.textContent = 'Generate MVP';
+                };
+                
+                eventSource.addEventListener('close', function() {
+                    eventSource.close();
+                    btn.disabled = false;
+                    btn.textContent = 'Generate MVP';
+                });
+            });
+            </script>
     </div>
   </body>
 </html>
