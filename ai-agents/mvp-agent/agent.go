@@ -69,39 +69,19 @@ Steps to follow for creating a working MVP from the users requirements
 </coding_guidelines>
 `
 
-func main() {
-	ctx := context.Background()
-
+// RunMVPAgentInDirectory runs the MVP agent in the specified output directory
+func RunMVPAgentInDirectory(ctx context.Context, outputDir string) error {
 	// Check required environment variables
 	if os.Getenv("GOOGLE_API_KEY") == "" {
-		log.Fatalf("GOOGLE_API_KEY environment variable is required")
+		return fmt.Errorf("GOOGLE_API_KEY environment variable is required")
 	}
-
-	// Treat the command line argument as the MVP Request
-	if len(os.Args) < 2 {
-		log.Fatalf("Usage: %s <MVP-Request-Description>", os.Args[0])
-	}
-	mvpRequest := os.Args[1]
-
-	// Copy starter template to timestamped output directory
-	outputDir, err := copyStarterTemplate()
-	if err != nil {
-		log.Fatalf("Failed to copy starter template: %v", err)
-	}
-	fmt.Printf("✅ Copied starter template to: %s\n", outputDir)
-
-	// Copy PRD file to output directory
-	if err := copyPRDToOutput(mvpRequest, outputDir); err != nil {
-		log.Fatalf("Failed to copy PRD file: %v", err)
-	}
-	fmt.Printf("Copied PRD file to output directory\n")
 
 	// Create model
 	model, err := gemini.NewModel(ctx, "gemini-2.5-flash", &genai.ClientConfig{
 		APIKey: os.Getenv("GOOGLE_API_KEY"),
 	})
 	if err != nil {
-		log.Fatalf("Failed to create model: %v", err)
+		return fmt.Errorf("failed to create model: %v", err)
 	}
 
 	// --- Tool Definitions ---
@@ -111,7 +91,7 @@ func main() {
 		Description: "Reads the entire content of a specified file.",
 	}, ReadFile)
 	if err != nil {
-		log.Fatalf("Failed to create ReadFile tool: %v", err)
+		return fmt.Errorf("failed to create ReadFile tool: %v", err)
 	}
 
 	writeTool, err := functiontool.New(functiontool.Config{
@@ -119,7 +99,7 @@ func main() {
 		Description: "Overwrites a file with new content. Use this primarily for NEW files. Prefer SedTool for modifications.",
 	}, WriteFile)
 	if err != nil {
-		log.Fatalf("Failed to create WriteFile tool: %v", err)
+		return fmt.Errorf("failed to create WriteFile tool: %v", err)
 	}
 
 	grepTool, err := functiontool.New(functiontool.Config{
@@ -127,7 +107,7 @@ func main() {
 		Description: "Searches for lines matching a regular expression pattern within a file. Useful for finding the exact location of code to modify.",
 	}, GrepFile)
 	if err != nil {
-		log.Fatalf("Failed to create GrepFile tool: %v", err)
+		return fmt.Errorf("failed to create GrepFile tool: %v", err)
 	}
 
 	sedTool, err := functiontool.New(functiontool.Config{
@@ -135,7 +115,7 @@ func main() {
 		Description: "Performs surgical, line-based modification (replacement or insertion) in a file. Use this for code modifications to save tokens.",
 	}, SedTool)
 	if err != nil {
-		log.Fatalf("Failed to create SedTool tool: %v", err)
+		return fmt.Errorf("failed to create SedTool tool: %v", err)
 	}
 
 	goBuildTool, err := functiontool.New(functiontool.Config{
@@ -143,7 +123,7 @@ func main() {
 		Description: "Executes 'go build ./...' in the specified working directory and returns build logs and status. Use this to verify that your Go code compiles successfully.",
 	}, GoBuild)
 	if err != nil {
-		log.Fatalf("Failed to create GoBuild tool: %v", err)
+		return fmt.Errorf("failed to create GoBuild tool: %v", err)
 	}
 
 	insertInFileAtLineTool, err := functiontool.New(functiontool.Config{
@@ -151,7 +131,7 @@ func main() {
 		Description: "Inserts content at a specific line number in a file (1-based indexing). The content is inserted before the specified line number. Useful for adding new code at precise locations.",
 	}, InsertInFileAtLine)
 	if err != nil {
-		log.Fatalf("Failed to create InsertInFileAtLine tool: %v", err)
+		return fmt.Errorf("failed to create InsertInFileAtLine tool: %v", err)
 	}
 
 	appendToFileTool, err := functiontool.New(functiontool.Config{
@@ -159,7 +139,7 @@ func main() {
 		Description: "Appends content to the end of a file. Automatically handles newlines. Creates the file if it doesn't exist. Useful for adding new functions or code blocks to the end of files.",
 	}, AppendToFile)
 	if err != nil {
-		log.Fatalf("Failed to create AppendToFile tool: %v", err)
+		return fmt.Errorf("failed to create AppendToFile tool: %v", err)
 	}
 
 	renameFileTool, err := functiontool.New(functiontool.Config{
@@ -167,7 +147,7 @@ func main() {
 		Description: "Renames or moves a file. Provide the current file path (oldPath) and the desired new path (newPath). Works for both simple renames and moving to different directories.",
 	}, RenameFile)
 	if err != nil {
-		log.Fatalf("Failed to create RenameFile tool: %v", err)
+		return fmt.Errorf("failed to create RenameFile tool: %v", err)
 	}
 
 	moveFileTool, err := functiontool.New(functiontool.Config{
@@ -175,7 +155,7 @@ func main() {
 		Description: "Moves a file from one location to another. Creates parent directories if needed. Use this to relocate files to different directories.",
 	}, MoveFile)
 	if err != nil {
-		log.Fatalf("Failed to create MoveFile tool: %v", err)
+		return fmt.Errorf("failed to create MoveFile tool: %v", err)
 	}
 
 	listFilesTool, err := functiontool.New(functiontool.Config{
@@ -183,7 +163,7 @@ func main() {
 		Description: "Lists all files and directories in a specified directory. Supports recursive listing to explore entire directory trees. Directories are marked with a trailing slash.",
 	}, ListFiles)
 	if err != nil {
-		log.Fatalf("Failed to create ListFiles tool: %v", err)
+		return fmt.Errorf("failed to create ListFiles tool: %v", err)
 	}
 	// --- End Tool Definitions ---
 
@@ -196,7 +176,7 @@ func main() {
 		Tools:       []tool.Tool{readTool, writeTool, grepTool, sedTool, goBuildTool, insertInFileAtLineTool, appendToFileTool, renameFileTool, moveFileTool, listFilesTool},
 	})
 	if err != nil {
-		log.Fatalf("Failed to create agent: %v", err)
+		return fmt.Errorf("failed to create agent: %v", err)
 	}
 
 	// Create session service
@@ -209,28 +189,26 @@ func main() {
 		SessionService: sessionService,
 	})
 	if err != nil {
-		log.Fatalf("Failed to create runner: %v", err)
+		return fmt.Errorf("failed to create runner: %v", err)
 	}
 
 	// Create session
-	userID := "user123"
+	userID := "web_user"
 	appName := "mvp_agent"
 	sessResp, err := sessionService.Create(ctx, &session.CreateRequest{
 		AppName: appName,
 		UserID:  userID,
 	})
 	if err != nil {
-		fmt.Printf("Error creating session: %v\n", err)
-		return
+		return fmt.Errorf("error creating session: %v", err)
 	}
 
-	// Pass the outputDir and MVP request directly in the userMessage
-	fmt.Println("Output Directory: ", outputDir)
-	fmt.Println("MVP Request: ", mvpRequest)
+	// Create user message
 	userMessage := fmt.Sprintf(
 		`Create an MVP based on the requirements document in the code working directory: %s. This is also your working directory.`,
 		outputDir,
 	)
+
 	// Run agent
 	msg := &genai.Content{
 		Role: "user",
@@ -240,7 +218,7 @@ func main() {
 	}
 	events := agentRunner.Run(ctx, userID, sessResp.Session.ID(), msg, adkagent.RunConfig{})
 
-	fmt.Println("Agent is working...")
+	log.Printf("Agent is working on directory: %s", outputDir)
 
 	for _, err := range events {
 		if err != nil {
@@ -250,6 +228,7 @@ func main() {
 	}
 
 	fmt.Println("Agent processing completed!")
+	return nil
 }
 
 // --- Tool Structs ---

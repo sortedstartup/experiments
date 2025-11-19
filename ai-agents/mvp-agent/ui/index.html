@@ -1,0 +1,37 @@
+
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js"></script>
+
+  </head>
+  <body>
+    <div class="flex flex-col justify-center items-center h-screen w-screen p-8">
+        <div class="w-full max-w-2xl">
+            <form hx-post="/generate-mvp" hx-target="#llm-response" hx-swap="innerHTML" class="flex flex-col items-center space-y-4">
+                <textarea 
+                    name="user_input" 
+                    placeholder="Describe your MVP requirements here..."
+                    class="w-full h-32 border border-gray-300 rounded-lg p-4 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    required
+                ></textarea>
+                <button 
+                    type="submit" 
+                    class="px-8 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+                >
+                    Generate MVP
+                </button>
+            </form>
+        </div>
+
+        <div id="llm-response" class="w-full max-w-4xl mt-8 flex items-center justify-center">
+          <!-- COMPONENT_VARIANTS_START -->
+             <!-- The generated HTML for Variant 1, 2, and 3 will be placed here -->
+           <!-- COMPONENT_VARIANTS_END -->
+        </div>
+    </div>
+  </body>
+</html>
