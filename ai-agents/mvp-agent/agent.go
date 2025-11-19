@@ -45,18 +45,23 @@ It is a go lang web app with ui in index.html + tailwind + htmx
 </starter_template>
 
 Steps to follow for creating a working MVP from the users requirements
-1. **Understand:** Use GrepFile to locate relevant code sections
+1. **Understand:** 
+ - List all files in the working directory
  - First think and come up with a list of changes required to implement the users requirement for creating a working MVP
  - for the changes think what REST, APIs and UI components are needed.
 
 2. **Modify:** Use SedTool for line-level changes or WriteFile for complete rewrites
  - Determine which files need to be modified in the Go backend (Echo framework) and HTML/HTMX frontend.
+ - Use RenameFile or MoveFile if you need to reorganize files
  - Make sure your go code and ui code compiles
 
 3. do a go build to verify your code builds and works
 
 <coding_guidelines>
 - Go backend uses echo framework
+- We dont have a delete file tool, use rename file to soft delete a file
+- NEVER create, write or edit go.sum, its NOT needed the build process will generate it
+- You should never need to make changes to main.go, changes should be in webapp.go
 - All go code that you generate must be in webapp.go
 - Feel free to use go templates for returning direct html via APIs
 - use HTMX to directly rendered html from the backend and display it as required
@@ -155,6 +160,30 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to create AppendToFile tool: %v", err)
 	}
+
+	renameFileTool, err := functiontool.New(functiontool.Config{
+		Name:        "RenameFile",
+		Description: "Renames or moves a file. Provide the current file path (oldPath) and the desired new path (newPath). Works for both simple renames and moving to different directories.",
+	}, RenameFile)
+	if err != nil {
+		log.Fatalf("Failed to create RenameFile tool: %v", err)
+	}
+
+	moveFileTool, err := functiontool.New(functiontool.Config{
+		Name:        "MoveFile",
+		Description: "Moves a file from one location to another. Creates parent directories if needed. Use this to relocate files to different directories.",
+	}, MoveFile)
+	if err != nil {
+		log.Fatalf("Failed to create MoveFile tool: %v", err)
+	}
+
+	listFilesTool, err := functiontool.New(functiontool.Config{
+		Name:        "ListFiles",
+		Description: "Lists all files and directories in a specified directory. Supports recursive listing to explore entire directory trees. Directories are marked with a trailing slash.",
+	}, ListFiles)
+	if err != nil {
+		log.Fatalf("Failed to create ListFiles tool: %v", err)
+	}
 	// --- End Tool Definitions ---
 
 	// Create agent
@@ -163,7 +192,7 @@ func main() {
 		Model:       model,
 		Description: "Agent that modifies a Go/HTMX starter template based on a user's MVP request.",
 		Instruction: agentInstruction,
-		Tools:       []tool.Tool{readTool, writeTool, grepTool, sedTool, goBuildTool, insertInFileAtLineTool, appendToFileTool},
+		Tools:       []tool.Tool{readTool, writeTool, grepTool, sedTool, goBuildTool, insertInFileAtLineTool, appendToFileTool, renameFileTool, moveFileTool, listFilesTool},
 	})
 	if err != nil {
 		log.Fatalf("Failed to create agent: %v", err)
@@ -196,9 +225,9 @@ func main() {
 
 	// Pass the outputDir and MVP request directly in the userMessage
 	userMessage := fmt.Sprintf(
-		`Working Directory: [%s], Create a MVP based on this requirements documents: %s`,
-		outputDir,
+		`Create a MVP based on this requirements documents: %s, Code Working Directory: %s, `,
 		mvpRequest,
+		outputDir,
 	)
 
 	// Run agent
@@ -298,6 +327,37 @@ type AppendToFileParams struct {
 type AppendToFileResult struct {
 	Status  string `json:"status"`
 	Message string `json:"message"`
+}
+
+type RenameFileParams struct {
+	OldPath string `json:"oldPath" jsonschema:"The current path of the file to rename."`
+	NewPath string `json:"newPath" jsonschema:"The new path/name for the file."`
+}
+
+type RenameFileResult struct {
+	Status  string `json:"status"`
+	Message string `json:"message"`
+}
+
+type MoveFileParams struct {
+	SourcePath      string `json:"sourcePath" jsonschema:"The path to the file to move."`
+	DestinationPath string `json:"destinationPath" jsonschema:"The destination path where the file should be moved."`
+}
+
+type MoveFileResult struct {
+	Status  string `json:"status"`
+	Message string `json:"message"`
+}
+
+type ListFilesParams struct {
+	Directory string `json:"directory" jsonschema:"The directory path to list files from."`
+	Recursive bool   `json:"recursive" jsonschema:"If true, recursively lists all files in subdirectories. If false, only lists files in the specified directory."`
+}
+
+type ListFilesResult struct {
+	Status  string   `json:"status"`
+	Files   []string `json:"files"`
+	Message string   `json:"message"`
 }
 
 // --- Tool Implementations ---
@@ -577,6 +637,164 @@ func AppendToFile(ctx tool.Context, args AppendToFileParams) AppendToFileResult 
 	return AppendToFileResult{
 		Status:  "success",
 		Message: fmt.Sprintf("Successfully appended content to %s", args.FilePath),
+	}
+}
+
+func RenameFile(ctx tool.Context, args RenameFileParams) RenameFileResult {
+	fmt.Printf("Renaming file from %s to %s\n", args.OldPath, args.NewPath)
+
+	// Ensure destination directory exists if the path contains a directory
+	destDir := filepath.Dir(args.NewPath)
+	if destDir != "." && destDir != "" {
+		if err := os.MkdirAll(destDir, 0755); err != nil {
+			return RenameFileResult{
+				Status:  "error",
+				Message: fmt.Sprintf("Failed to create directory: %v", err),
+			}
+		}
+	}
+
+	// Rename/move the file
+	err := os.Rename(args.OldPath, args.NewPath)
+	if err != nil {
+		return RenameFileResult{
+			Status:  "error",
+			Message: fmt.Sprintf("Failed to rename: %v", err),
+		}
+	}
+
+	return RenameFileResult{
+		Status:  "success",
+		Message: fmt.Sprintf("Renamed %s to %s", args.OldPath, args.NewPath),
+	}
+}
+
+func MoveFile(ctx tool.Context, args MoveFileParams) MoveFileResult {
+	fmt.Printf("Moving file from %s to %s\n", args.SourcePath, args.DestinationPath)
+
+	// Check if source file exists
+	if _, err := os.Stat(args.SourcePath); os.IsNotExist(err) {
+		return MoveFileResult{
+			Status:  "error",
+			Message: fmt.Sprintf("Source file does not exist: %s", args.SourcePath),
+		}
+	}
+
+	// Check if destination already exists
+	if _, err := os.Stat(args.DestinationPath); err == nil {
+		return MoveFileResult{
+			Status:  "error",
+			Message: fmt.Sprintf("Destination file already exists: %s", args.DestinationPath),
+		}
+	}
+
+	// Ensure destination directory exists
+	destDir := filepath.Dir(args.DestinationPath)
+	if err := os.MkdirAll(destDir, 0755); err != nil {
+		return MoveFileResult{
+			Status:  "error",
+			Message: fmt.Sprintf("Failed to create destination directory: %v", err),
+		}
+	}
+
+	// Move the file (os.Rename works for both rename and move)
+	if err := os.Rename(args.SourcePath, args.DestinationPath); err != nil {
+		return MoveFileResult{
+			Status:  "error",
+			Message: fmt.Sprintf("Error moving file: %v", err),
+		}
+	}
+
+	return MoveFileResult{
+		Status:  "success",
+		Message: fmt.Sprintf("Successfully moved %s to %s", args.SourcePath, args.DestinationPath),
+	}
+}
+
+func ListFiles(ctx tool.Context, args ListFilesParams) ListFilesResult {
+	fmt.Printf("Listing files in directory: %s (recursive: %t)\n", args.Directory, args.Recursive)
+
+	// Check if directory exists
+	dirInfo, err := os.Stat(args.Directory)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return ListFilesResult{
+				Status:  "error",
+				Files:   []string{},
+				Message: fmt.Sprintf("Directory does not exist: %s", args.Directory),
+			}
+		}
+		return ListFilesResult{
+			Status:  "error",
+			Files:   []string{},
+			Message: fmt.Sprintf("Error accessing directory: %v", err),
+		}
+	}
+
+	// Check if it's actually a directory
+	if !dirInfo.IsDir() {
+		return ListFilesResult{
+			Status:  "error",
+			Files:   []string{},
+			Message: fmt.Sprintf("Path is not a directory: %s", args.Directory),
+		}
+	}
+
+	var files []string
+
+	if args.Recursive {
+		// Recursively walk the directory tree
+		err := filepath.Walk(args.Directory, func(path string, info os.FileInfo, err error) error {
+			if err != nil {
+				return err
+			}
+			// Include both files and directories in the listing
+			// Use relative path from the base directory for cleaner output
+			relPath, err := filepath.Rel(args.Directory, path)
+			if err != nil {
+				relPath = path
+			}
+			// Skip the root directory itself
+			if relPath != "." {
+				if info.IsDir() {
+					files = append(files, relPath+"/")
+				} else {
+					files = append(files, relPath)
+				}
+			}
+			return nil
+		})
+		if err != nil {
+			return ListFilesResult{
+				Status:  "error",
+				Files:   []string{},
+				Message: fmt.Sprintf("Error walking directory tree: %v", err),
+			}
+		}
+	} else {
+		// List only the immediate directory contents
+		entries, err := os.ReadDir(args.Directory)
+		if err != nil {
+			return ListFilesResult{
+				Status:  "error",
+				Files:   []string{},
+				Message: fmt.Sprintf("Error reading directory: %v", err),
+			}
+		}
+
+		for _, entry := range entries {
+			if entry.IsDir() {
+				files = append(files, entry.Name()+"/")
+			} else {
+				files = append(files, entry.Name())
+			}
+		}
+	}
+
+	return ListFilesResult{
+		Status:  "success",
+		Files:   files,
+		Message: fmt.Sprintf("Found %d items in %s", len(files), args.Directory),
 	}
 }
 
