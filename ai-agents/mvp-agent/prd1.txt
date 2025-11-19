@@ -1,0 +1,29 @@
+Build a Simple Inventory App
+
+Features:
+
+Add Item: Users can add a new item with name + stock count.
+
+View Inventory: Show all items in a clear, scrollable list.
+
+Edit Item: Users can modify item name or stock quantity.
+
+Adjust Stock: Quick actions to increment/decrement stock.
+
+Delete Item: Users can permanently remove an item.
+
+Low Stock Indicator: Highlight items with low quantity (e.g., ≤ 5).
+
+UI:
+
+Clean, minimal interface focused on readability
+
+Responsive layout (mobile + desktop)
+
+Neutral backgrounds with accent colors for actions
+
+Clear hierarchy (add item → inventory list → item details/edit)
+
+Inline feedback/loading indicators for all actions
+
+Note: No database — everything must live in backend variables/data structures.

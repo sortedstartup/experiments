@@ -67,8 +67,6 @@ Steps to follow for creating a working MVP from the users requirements
 - Keep UI simple and minimal
 - use simple colors in UI
 </coding_guidelines>
-
-
 `
 
 func main() {
