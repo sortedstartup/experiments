@@ -96,7 +96,7 @@ func main() {
 	fmt.Printf("✅ Copied starter template to: %s\n", outputDir)
 
 	// Create model
-	model, err := gemini.NewModel(ctx, "gemini-2.5-pro", &genai.ClientConfig{
+	model, err := gemini.NewModel(ctx, "gemini-2.5-flash", &genai.ClientConfig{
 		APIKey: os.Getenv("GOOGLE_API_KEY"),
 	})
 	if err != nil {
