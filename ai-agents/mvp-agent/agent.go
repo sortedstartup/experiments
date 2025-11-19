@@ -224,8 +224,10 @@ func main() {
 	}
 
 	// Pass the outputDir and MVP request directly in the userMessage
+	fmt.Println("Output Directory: ", outputDir)
+	fmt.Println("MVP Request: ", mvpRequest)
 	userMessage := fmt.Sprintf(
-		`Create a MVP based on this requirements documents: %s, Code Working Directory: %s, `,
+		`Create a MVP based on this requirements documents: ./%s, Code Working Directory: %s, `,
 		mvpRequest,
 		outputDir,
 	)
