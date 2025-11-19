@@ -11,8 +11,9 @@
   <body>
     <div class="flex flex-col justify-center items-center h-screen w-screen p-8">
         <div class="w-full max-w-2xl">
-            <form hx-post="/generate-mvp" hx-target="#llm-response" hx-swap="innerHTML" class="flex flex-col items-center space-y-4">
+            <form id="mvp-form" class="flex flex-col items-center space-y-4">
                 <textarea 
+                    id="user_input"
                     name="user_input" 
                     placeholder="Describe your MVP requirements here..."
                     class="w-full h-32 border border-gray-300 rounded-lg p-4 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -20,6 +21,7 @@
                 ></textarea>
                 <button 
                     type="submit" 
+                    id="generate-btn"
                     class="px-8 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
                 >
                     Generate MVP
@@ -27,11 +29,49 @@
             </form>
         </div>
 
-        <div id="llm-response" class="w-full max-w-4xl mt-8 flex items-center justify-center">
-          <!-- COMPONENT_VARIANTS_START -->
-             <!-- The generated HTML for Variant 1, 2, and 3 will be placed here -->
-           <!-- COMPONENT_VARIANTS_END -->
+        <div id="llm-response" class="w-full max-w-4xl mt-8">
+            <div id="logs" class="bg-gray-100 p-4 rounded-lg max-h-64 overflow-y-auto hidden"></div>
         </div>
+
+        <script>
+            document.getElementById('mvp-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const userInput = document.getElementById('user_input').value;
+                if (!userInput.trim()) return;
+                
+                const logsDiv = document.getElementById('logs');
+                const btn = document.getElementById('generate-btn');
+                
+                // Show logs div and reset content
+                logsDiv.classList.remove('hidden');
+                logsDiv.innerHTML = '';
+                
+                // Disable button
+                btn.disabled = true;
+                btn.textContent = 'Generating...';
+                
+                // Start SSE connection
+                const eventSource = new EventSource('/generate-mvp?user_input=' + encodeURIComponent(userInput));
+                
+                eventSource.onmessage = function(event) {
+                    logsDiv.innerHTML += event.data + '<br>';
+                    logsDiv.scrollTop = logsDiv.scrollHeight;
+                };
+                
+                eventSource.onerror = function() {
+                    eventSource.close();
+                    btn.disabled = false;
+                    btn.textContent = 'Generate MVP';
+                };
+                
+                eventSource.addEventListener('close', function() {
+                    eventSource.close();
+                    btn.disabled = false;
+                    btn.textContent = 'Generate MVP';
+                });
+            });
+        </script>
     </div>
   </body>
 </html>

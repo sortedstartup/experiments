@@ -13,8 +13,22 @@ import (
 	"google.golang.org/adk/tool"
 )
 
+// Global log channel for tools
+var toolLogChannel chan<- string
+
+// Helper function to send logs
+func toolLog(msg string) {
+	if toolLogChannel != nil {
+		select {
+		case toolLogChannel <- msg:
+		default: // Don't block if channel is full
+		}
+	}
+	fmt.Println(msg) // Still print to console
+}
+
 func ReadFile(ctx tool.Context, args ReadFileParams) ReadFileResult {
-	fmt.Println("Reading file: ", args.FilePath)
+	toolLog("Reading file: " + args.FilePath)
 	content, err := os.ReadFile(args.FilePath)
 	if err != nil {
 		return ReadFileResult{Status: "error", Message: fmt.Sprintf("Error reading file %s: %v", args.FilePath, err)}
@@ -23,7 +37,7 @@ func ReadFile(ctx tool.Context, args ReadFileParams) ReadFileResult {
 }
 
 func GrepFile(ctx tool.Context, args GrepFileParams) GrepFileResult {
-	fmt.Println("Grepping file: ", args.FilePath)
+	toolLog("Grepping file: " + args.FilePath)
 	file, err := os.Open(args.FilePath)
 	if err != nil {
 		return GrepFileResult{Status: "error", Message: fmt.Sprintf("Error opening file %s: %v", args.FilePath, err)}
@@ -55,7 +69,7 @@ func GrepFile(ctx tool.Context, args GrepFileParams) GrepFileResult {
 }
 
 func SedTool(ctx tool.Context, args SedToolParams) SedToolResult {
-	fmt.Println("SedTool: ", args)
+	toolLog(fmt.Sprintf("SedTool: %+v", args))
 	// 1. Read all lines from the file
 	input, err := os.ReadFile(args.FilePath)
 	if err != nil {
@@ -114,7 +128,7 @@ func SedTool(ctx tool.Context, args SedToolParams) SedToolResult {
 }
 
 func WriteFile(ctx tool.Context, args WriteFileParams) WriteFileResult {
-	fmt.Println("Writing file: ", args.FilePath)
+	toolLog("Writing file: " + args.FilePath)
 	// Ensure the output folder exists before writing
 	dir := filepath.Dir(args.FilePath)
 	if err := os.MkdirAll(dir, 0755); err != nil {
@@ -129,7 +143,7 @@ func WriteFile(ctx tool.Context, args WriteFileParams) WriteFileResult {
 }
 
 func GoBuild(ctx tool.Context, args GoBuildParams) GoBuildResult {
-	fmt.Println("Running go build in: ", args.WorkingDir)
+	toolLog("Running go build in: " + args.WorkingDir)
 
 	// Check if the working directory exists
 	if _, err := os.Stat(args.WorkingDir); os.IsNotExist(err) {
@@ -144,7 +158,7 @@ func GoBuild(ctx tool.Context, args GoBuildParams) GoBuildResult {
 	// Create the go build command
 	cmd := exec.Command("go", "build", "./...")
 	cmd.Dir = args.WorkingDir
-	fmt.Printf("Executing command: %s (in directory: %s)\n", cmd.String(), args.WorkingDir)
+	toolLog(fmt.Sprintf("Executing command: %s (in directory: %s)", cmd.String(), args.WorkingDir))
 
 	// Capture stdout and stderr
 	var stdout, stderr bytes.Buffer
@@ -181,7 +195,7 @@ func GoBuild(ctx tool.Context, args GoBuildParams) GoBuildResult {
 }
 
 func InsertInFileAtLine(ctx tool.Context, args InsertInFileAtLineParams) InsertInFileAtLineResult {
-	fmt.Printf("Inserting content at line %d in file: %s\n", args.LineNumber, args.FilePath)
+	toolLog(fmt.Sprintf("Inserting content at line %d in file: %s", args.LineNumber, args.FilePath))
 
 	// Read the file
 	content, err := os.ReadFile(args.FilePath)
@@ -231,7 +245,7 @@ func InsertInFileAtLine(ctx tool.Context, args InsertInFileAtLineParams) InsertI
 }
 
 func AppendToFile(ctx tool.Context, args AppendToFileParams) AppendToFileResult {
-	fmt.Println("Appending to file: ", args.FilePath)
+	toolLog("Appending to file: " + args.FilePath)
 
 	// Open file in append mode, create if doesn't exist
 	file, err := os.OpenFile(args.FilePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
@@ -292,7 +306,7 @@ func AppendToFile(ctx tool.Context, args AppendToFileParams) AppendToFileResult 
 }
 
 func RenameFile(ctx tool.Context, args RenameFileParams) RenameFileResult {
-	fmt.Printf("Renaming file from %s to %s\n", args.OldPath, args.NewPath)
+	toolLog(fmt.Sprintf("Renaming file from %s to %s", args.OldPath, args.NewPath))
 
 	// Ensure destination directory exists if the path contains a directory
 	destDir := filepath.Dir(args.NewPath)
@@ -321,7 +335,7 @@ func RenameFile(ctx tool.Context, args RenameFileParams) RenameFileResult {
 }
 
 func MoveFile(ctx tool.Context, args MoveFileParams) MoveFileResult {
-	fmt.Printf("Moving file from %s to %s\n", args.SourcePath, args.DestinationPath)
+	toolLog(fmt.Sprintf("Moving file from %s to %s", args.SourcePath, args.DestinationPath))
 
 	// Check if source file exists
 	if _, err := os.Stat(args.SourcePath); os.IsNotExist(err) {
@@ -363,7 +377,7 @@ func MoveFile(ctx tool.Context, args MoveFileParams) MoveFileResult {
 }
 
 func ListFiles(ctx tool.Context, args ListFilesParams) ListFilesResult {
-	fmt.Printf("Listing files in directory: %s (recursive: %t)\n", args.Directory, args.Recursive)
+	toolLog(fmt.Sprintf("Listing files in directory: %s (recursive: %t)", args.Directory, args.Recursive))
 
 	// Check if directory exists
 	dirInfo, err := os.Stat(args.Directory)

@@ -3,12 +3,14 @@ package main
 import (
 	"context"
 	"fmt"
-	"log"
 	"net/http"
 	"os"
 
 	"github.com/labstack/echo/v4"
 )
+
+// Global channel for streaming logs
+var logChannel chan string
 
 // setupRoutes configures all the routes for the application
 func setupRoutes(e *echo.Echo) {
@@ -16,7 +18,9 @@ func setupRoutes(e *echo.Echo) {
 	e.GET("/", serveIndex)
 
 	// Handle MVP generation
-	e.POST("/generate-mvp", generateMVP)
+
+	// SSE endpoint for streaming logs
+	e.GET("/generate-mvp", generateMVP)
 }
 
 // serveIndex serves the index.html file
@@ -24,52 +28,67 @@ func serveIndex(c echo.Context) error {
 	return c.File("ui/index.html")
 }
 
-// generateMVP handles the MVP generation request
 func generateMVP(c echo.Context) error {
-	// Get user input from form
-	userInput := c.FormValue("user_input")
+	// Get user input from query params
+	userInput := c.QueryParam("user_input")
 	if userInput == "" {
-		return c.HTML(http.StatusBadRequest, `<div class="text-red-500 p-4">Please provide a valid input</div>`)
+		return c.String(http.StatusBadRequest, "Please provide user_input parameter")
 	}
 
-	// Create a temporary requirements file
-	requirementsFile, err := createRequirementsFile(userInput)
-	if err != nil {
-		log.Printf("Error creating requirements file: %v", err)
-		return c.HTML(http.StatusInternalServerError, `<div class="text-red-500 p-4">Error creating requirements file</div>`)
+	// Set SSE headers
+	c.Response().Header().Set("Content-Type", "text/event-stream")
+	c.Response().Header().Set("Cache-Control", "no-cache")
+	c.Response().Header().Set("Connection", "keep-alive")
+	c.Response().Header().Set("Access-Control-Allow-Origin", "*")
+
+	// Initialize log channel
+	logChannel = make(chan string, 100)
+
+	// Start MVP generation in goroutine
+	go func() {
+		defer close(logChannel)
+
+		// Create requirements file
+		requirementsFile, err := createRequirementsFile(userInput)
+		if err != nil {
+			fmt.Println("Error creating requirements file: %w", err)
+			return
+		}
+
+		// Copy starter template
+		outputDir, err := copyStarterTemplate()
+		if err != nil {
+			fmt.Println("Error copying starter template: %w", err)
+			return
+		}
+		logChannel <- fmt.Sprintf("✅ Copied starter template to: %s", outputDir)
+
+		// Copy requirements file
+		if err := copyPRDToOutput(requirementsFile, outputDir); err != nil {
+			fmt.Println("Error copying requirements file: %w", err)
+			return
+		}
+		logChannel <- "Copied requirements file to output directory"
+
+		// Run agent
+		ctx := context.Background()
+		if err := RunMVPAgent(ctx, outputDir, logChannel); err != nil {
+			logChannel <- fmt.Sprintf("Error running MVP agent: %v", err)
+			return
+		}
+
+		// Clean up
+		os.Remove(requirementsFile)
+		logChannel <- "MVP generation completed successfully!"
+	}()
+
+	// Stream logs to client
+	for logMsg := range logChannel {
+		fmt.Fprintf(c.Response(), "data: %s\n\n", logMsg)
+		c.Response().Flush()
 	}
 
-	// Copy starter template to timestamped output directory
-	outputDir, err := copyStarterTemplate()
-	if err != nil {
-		log.Printf("Error copying starter template: %v", err)
-		return c.HTML(http.StatusInternalServerError, `<div class="text-red-500 p-4">Error copying starter template</div>`)
-	}
-
-	// Copy requirements file to output directory
-	if err := copyPRDToOutput(requirementsFile, outputDir); err != nil {
-		log.Printf("Error copying requirements file: %v", err)
-		return c.HTML(http.StatusInternalServerError, `<div class="text-red-500 p-4">Error copying requirements file</div>`)
-	}
-
-	// Run the MVP generation agent
-	result, err := runMVPAgent(outputDir)
-	if err != nil {
-		log.Printf("Error running MVP agent: %v", err)
-		return c.HTML(http.StatusInternalServerError, fmt.Sprintf(`<div class="text-red-500 p-4">Error generating MVP: %v</div>`, err))
-	}
-
-	// Clean up temporary requirements file
-	os.Remove(requirementsFile)
-
-	// Return success response with output directory
-	return c.HTML(http.StatusOK, fmt.Sprintf(`
-		<div class="p-4 bg-green-100 border border-green-400 rounded">
-			<h3 class="text-lg font-bold text-green-800">MVP Generated Successfully!</h3>
-			<p class="text-green-700 mt-2">Output Directory: %s</p>
-			<p class="text-green-700">Status: %s</p>
-		</div>
-	`, outputDir, result))
+	return nil
 }
 
 // createRequirementsFile creates a temporary file with user requirements
@@ -88,16 +107,4 @@ func createRequirementsFile(userInput string) (string, error) {
 	}
 
 	return tmpFile.Name(), nil
-}
-
-// runMVPAgent runs the MVP generation agent using the refactored function from agent.go
-func runMVPAgent(outputDir string) (string, error) {
-	ctx := context.Background()
-
-	// Use the refactored function from agent.go
-	if err := RunMVPAgentInDirectory(ctx, outputDir); err != nil {
-		return "", err
-	}
-
-	return "Agent processing completed successfully", nil
 }

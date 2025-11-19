@@ -5,7 +5,6 @@ import (
 
 	"context"
 	"fmt"
-	"log"
 	"os"
 
 	// For GrepFile and SedTool
@@ -69,8 +68,11 @@ Steps to follow for creating a working MVP from the users requirements
 </coding_guidelines>
 `
 
-// RunMVPAgentInDirectory runs the MVP agent in the specified output directory
-func RunMVPAgentInDirectory(ctx context.Context, outputDir string) error {
+func RunMVPAgent(ctx context.Context, outputDir string, logChan chan<- string) error {
+
+	// Set the global tool log channel
+	toolLogChannel = logChan
+
 	// Check required environment variables
 	if os.Getenv("GOOGLE_API_KEY") == "" {
 		return fmt.Errorf("GOOGLE_API_KEY environment variable is required")
@@ -218,16 +220,16 @@ func RunMVPAgentInDirectory(ctx context.Context, outputDir string) error {
 	}
 	events := agentRunner.Run(ctx, userID, sessResp.Session.ID(), msg, adkagent.RunConfig{})
 
-	log.Printf("Agent is working on directory: %s", outputDir)
+	logChan <- fmt.Sprintf("Agent is working on directory: %s", outputDir)
 
 	for _, err := range events {
 		if err != nil {
 			// These are actually normal events, not errors
-			fmt.Printf("Error in event stream: %+v\n", err)
+			logChan <- fmt.Sprintf("Error in event stream: %+v", err)
 		}
 	}
 
-	fmt.Println("Agent processing completed!")
+	logChan <- "Agent processing completed!"
 	return nil
 }
 
