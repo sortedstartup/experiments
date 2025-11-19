@@ -1,0 +1,14 @@
+Lets Create a Basic Todo App
+
+features:
+Add Task: Users must be able to input and save a new task (text) to the list.
+
+View List: The app must display all saved tasks in a clear, scrollable list format.
+
+Edit Task: Users must be able to modify the text content of an existing task.
+
+Mark Complete: Users must be able to change a task's status from active to complete (e.g., via a checkbox/toggle).
+
+Delete Task: Users must be able to permanently remove a task from the list.
+
+Note: No Database everything Must in backend variable/data-structure
