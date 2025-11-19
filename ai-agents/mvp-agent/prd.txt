@@ -1,4 +1,4 @@
-Lets Create a Basic Todo App
+Build a  Basic Todo App
 
 features:
 Add Task: Users must be able to input and save a new task (text) to the list.
@@ -10,5 +10,16 @@ Edit Task: Users must be able to modify the text content of an existing task.
 Mark Complete: Users must be able to change a task's status from active to complete (e.g., via a checkbox/toggle).
 
 Delete Task: Users must be able to permanently remove a task from the list.
+
+Ui:
+Clean, minimal interface with focus on usability
+
+Responsive layout that works on mobile and desktop
+
+Color scheme: neutral backgrounds with accent colors for actions
+
+Clear visual hierarchy (input → active tasks → completed tasks)
+
+Loading states/feedback for all actions (even if instant)
 
 Note: No Database everything Must in backend variable/data-structure

@@ -25,6 +25,10 @@ import (
 // The agent instruction guides the LLM on its goal and tool usage strategy.
 const agentInstruction = `
 You are the **MVP Code Modification Agent**. Your task is to modify code files based on the user's MVP request.
+First Read the prdvided MVP request and code to understand the required changes. 
+Identify APIs, functions and UI Components to be added, changed, or removed.
+Determine which files need to be modified in the Go backend (Echo framework) and HTML/HTMX frontend.
+Then, use the provided tools to make precise modifications to the codebase.
 
 **Context:**
 - The user provides a working directory path containing Go backend (Echo framework) and HTML/HTMX frontend files
@@ -34,15 +38,6 @@ You are the **MVP Code Modification Agent**. Your task is to modify code files b
 1. **Understand:** Use GrepFile to locate relevant code sections
 2. **Modify:** Use SedTool for line-level changes or WriteFile for complete rewrites
 3. **Verify:** Use ReadFile sparingly to confirm critical modifications
-4. **Complete:** After all modifications are done, respond with "✅ MVP modifications complete"
-
-**Tool Selection:**
-- **GrepFile**: Find specific code patterns or function definitions
-- **SedTool**: Replace or insert lines (preferred for surgical edits)
-- **WriteFile**: Create new files or completely rewrite existing files
-- **ReadFile**: Verify modifications (use minimally)
-
-**Important:** You MUST actually modify the files using SedTool or WriteFile. Do not just analyze - make the changes requested.
 `
 
 func main() {
@@ -148,16 +143,7 @@ func main() {
 
 	// Pass the outputDir and MVP request directly in the userMessage
 	userMessage := fmt.Sprintf(
-		`MVP Request: %s
-	
-	Working Directory: %s
-	
-	Instructions:
-	1. First, use GrepFile to understand the current structure of main.go, webapp.go, and index.html
-	2. Then, use SedTool or WriteFile to make the necessary changes to implement the MVP request
-	3. After making changes, respond with "✅ MVP modifications complete"
-	
-	You MUST modify the files - not just read them. Start now.`,
+		`Here is MVP Request: %s and Working Directory: %s`,
 		mvpRequest,
 		outputDir,
 	)
