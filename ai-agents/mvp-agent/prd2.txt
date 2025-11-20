@@ -1,0 +1,31 @@
+Build a Simple Flashcard App
+
+Features:
+
+Add Flashcard: Users can create a card with a question and an answer.
+
+View Flashcards: Display all flashcards in a scrollable list (question side visible).
+
+Flip Card: Users can tap/click to reveal the answer.
+
+Edit Flashcard: Users can modify the question or answer.
+
+Delete Flashcard: Users can permanently remove a card.
+
+Study Mode: Sequentially show cards one-by-one with flip interaction.
+
+UI:
+
+Clean, minimal, card-style interface
+
+Responsive layout (mobile + desktop)
+
+Neutral background, accent color for card borders/actions
+
+Clear hierarchy (add → list → study mode)
+
+Smooth transitions + simple flip animation
+
+Basic loading/feedback states for all actions
+
+Note: No database — all data must be stored only in backend memory/data structures.

@@ -1,0 +1,30 @@
+# Ignore Git files
+.git
+.gitignore
+
+# Ignore documentation
+README.md
+*.md
+
+# Ignore build artifacts
+main
+mvp-*
+
+# Ignore generated outputs (they'll be created fresh)
+data/outputs/*/builds/
+*.exe
+
+# Ignore IDE files
+.vscode/
+.idea/
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+
+# Ignore temporary files
+*.tmp
+*.log
+
+# Ignore PRD files (requirements)
+prd*.txt
