@@ -1,4 +1,4 @@
-from agents import Agent, Runner, function_tool
+from agents import Agent, Runner, function_tool, AgentHooks
 from agents.mcp import MCPServerSse, MCPServerStdio
 import asyncio
 import os
@@ -17,35 +17,30 @@ def write_file(file_path: str, content: str) -> str:
         A status message indicating success or failure
     """
     try:
-        # Create directory if it doesn't exist
         os.makedirs(os.path.dirname(file_path) if os.path.dirname(file_path) else ".", exist_ok=True)
-        
-        # Write the file
         with open(file_path, 'w', encoding='utf-8') as f:
             f.write(content)
-        
         return f"✅ Successfully wrote {len(content)} characters to {file_path}"
     except Exception as e:
         return f"❌ Error writing file: {str(e)}"
 
 
+class CustomAgentHooks(AgentHooks):
+    async def on_tool_start(self, context, agent, tool):
+        print(" Tool: " + tool.name)
+
+
 async def main():
-    # Playwright MCP Server (SSE connection to running container)
     async with MCPServerSse(
         name="Playwright Server",
-        params={
-            "url": "http://localhost:8931/sse",
-        },
+        params={"url": "http://localhost:8931/sse"},
     ) as playwright_server:
-        # Brave Search MCP Server (stdio)
         async with MCPServerStdio(
             name="Brave Search",
             params={
                 "command": "npx",
                 "args": ["-y", "@brave/brave-search-mcp-server"],
-                "env": {
-                    "BRAVE_API_KEY": os.getenv("BRAVE_API_KEY")
-                },
+                "env": {"BRAVE_API_KEY": os.getenv("BRAVE_API_KEY")},
             },
         ) as brave_server:
             agent = Agent(
@@ -69,12 +64,10 @@ async def main():
                 mcp_servers=[playwright_server, brave_server],
                 tools=[write_file],
                 model="gpt-5-mini-2025-08-07",
+                hooks=CustomAgentHooks(),
             )
             
-            result = await Runner.run(
-                agent,
-                "Latest news in india"
-            )
+            result = await Runner.run(agent, "Latest news in india")
             print(result.final_output)
 
 
