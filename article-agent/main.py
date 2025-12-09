@@ -1,7 +1,32 @@
-from agents import Agent, Runner
+from agents import Agent, Runner, function_tool
 from agents.mcp import MCPServerSse, MCPServerStdio
 import asyncio
 import os
+
+
+@function_tool
+def write_file(file_path: str, content: str) -> str:
+    """
+    Write content to a file at the specified path.
+    
+    Args:
+        file_path: The path where the file should be written
+        content: The content to write to the file
+    
+    Returns:
+        A status message indicating success or failure
+    """
+    try:
+        # Create directory if it doesn't exist
+        os.makedirs(os.path.dirname(file_path) if os.path.dirname(file_path) else ".", exist_ok=True)
+        
+        # Write the file
+        with open(file_path, 'w', encoding='utf-8') as f:
+            f.write(content)
+        
+        return f"✅ Successfully wrote {len(content)} characters to {file_path}"
+    except Exception as e:
+        return f"❌ Error writing file: {str(e)}"
 
 
 async def main():
@@ -31,6 +56,7 @@ async def main():
                 You can use the following tools:
                 - Brave Search: To search for information on the web.
                 - Playwright: To scrape the web.
+                - write_file: To save the article to a file.
 
                 Steps to follow for creating an article from the users requirements:
                 1. **Search:**
@@ -38,9 +64,10 @@ async def main():
                 2. **Scrape:**
                     - Use Playwright to scrape the web.
                 3. **Write:**
-                    - Use the information from the web to write an article.
+                    - Use write_file to save the article to a file (e.g., 'article.md').
                 """,
                 mcp_servers=[playwright_server, brave_server],
+                tools=[write_file],
                 model="gpt-5-mini-2025-08-07",
             )
             
