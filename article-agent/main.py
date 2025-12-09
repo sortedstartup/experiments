@@ -17,7 +17,7 @@ async def main():
             name="Brave Search",
             params={
                 "command": "npx",
-                "args": ["-y", "@brave/brave-search-mcp-server", "--transport", "http"],
+                "args": ["-y", "@brave/brave-search-mcp-server"],
                 "env": {
                     "BRAVE_API_KEY": os.getenv("BRAVE_API_KEY")
                 },
