@@ -1,9 +1,10 @@
-from agents import Agent, Runner, function_tool, AgentHooks
+from agents import Agent, Runner, function_tool, AgentHooks, SQLiteSession
 import asyncio
 import subprocess
 import os
 import re
 import tempfile
+import uuid
 
 @function_tool
 def connect_to_container() -> str:
@@ -382,24 +383,37 @@ You are a Zero to Release Agent.
 Your job is to build a web app from template given in template repository.
 
 <starter_template>
-It is a go lang app with grpc proto files and service files
+It is a go lang app with grpc proto, api layer and database files (dao layer) using sqlite and sqlx.
+It has one working rpc from proto to dao layer just for reference.
 
 <file_structure>
     - /home/dev/sorted/Go_gPRC_Template_Repo/backend/mono/main.go
-    - /home/dev/sorted/Go_gPRC_Template_Repo/backend/first_service/service.go --> add your APIs here
+    - /home/dev/sorted/Go_gPRC_Template_Repo/backend/first_service/api.go --> add your APIs here
     - /home/dev/sorted/Go_gPRC_Template_Repo/proto/service.proto --> proto file for the first service
     - /home/dev/sorted/Go_gPRC_Template_Repo/backend/first_service/go.mod --> go mod file for the first service
     - /home/dev/sorted/Go_gPRC_Template_Repo/backend/mono/go.mod --> go mod file for the mono service
-    no database is used, use in memory structures to store the data
+    - /home/dev/sorted/Go_gPRC_Template_Repo/backend/first_service/dao/dao.go --> interface for the database operations
+    - /home/dev/sorted/Go_gPRC_Template_Repo/backend/first_service/dao/sqlite.go --> implementation of the database operations using sqlite and sqlx
+    - /home/dev/sorted/Go_gPRC_Template_Repo/backend/first_service/dao/migrate.go --> migration file for the database
+    - /home/dev/sorted/Go_gPRC_Template_Repo/backend/first_service/dao/db/migrations/ -> it has all the migration files for the database (UP) scripts for the database
+    - /home/dev/sorted/Go_gPRC_Template_Repo/backend/first_service/dao/models.go --> it has the models for the database
 </file_structure>
 
 </starter_template>
+
+GUIDELINES
+- As you go on working document important decisions you are making by appending thm to file decision_log.md
+- each decision should have a timestamp and should be in technical precise language in bullet points
+- each decision should contain reasoning behind the decision taken.
+- after each file generation, take review from user for the full file changes using user_review_tool tool.
+- user will reivew the changes in this format //REVIEW: <review>, you have to make those changes and proceed further.
+- take commit after each logical step.
+
 
 FOLLOW THESE STEPS STRICTLY:
 1. First call connect_to_container.
 2. Then call clone_repo_in_container with the repository url: https://github.com/sanskaraggarwal2025/Go_gPRC_Template_Repo.git and the target path: /home/dev/sorted.
 3. Read the Clone Repository project structure.
-4. At each step you have to write and decision_log.md where you have to write the decision taken, why that decision was taken and the changes done in short concise bullet points.
 5. Inside each folder there are mod files, proto files and service files.
 6. In each of these file there are template variable names like {{.Module}}, {{.ProjectModule}}, {{.ServiceModule}}.
 7. Create a json for these template variables as per user requirement.
@@ -410,13 +424,13 @@ FOLLOW THESE STEPS STRICTLY:
 13. After each file generation, use this TOOL user_review_tool to**take review from user for the full file changes**.
 14. User will reivew the changes in this format //REVIEW: <review>, you have to make those changes and proceed further.
 15. Based on changes done, commit the changes to the git repository with the appropriate message, after each logical step always commit the changes.
-16. Based on user requirement, first determine the rpc required.
+16. Based on user requirement, first determine the rpc required, api layer and database layer changes required.
 17. Based on rpc required, create the proto file.
 18. After every proto file change, autogenerate the proto code using autogenerate_proto_code tool.
 19. Based on user review, make the changes and proceed further.
-20. Implement the rpc in the service file.
-21. Once proto and service file are created, and in mono/main.go, create a grpc server and add the service to the server.
-22. After you are done with all implementation, create implementation.md file where you have to write the implementation details like assumptions, architectural_decisions in bullet points.
+20. Once proto is done proceed with the api layer and database layer changes.
+21. Once proto and api layer and database layer are created.
+22. After you are done with all implementation, create implementation.md file where you have to write the implementation details like assumptions, architectural_decisions, decisions taken in bullet points.
 23. STOP!!
 
 """,
@@ -425,10 +439,15 @@ FOLLOW THESE STEPS STRICTLY:
         hooks=CustomAgentHooks()
     )
 
+    uid = uuid.uuid4()
+    str_uid = str(uid)
+    session = SQLiteSession(str_uid, "conversations.db")
+
     result = await Runner.run(
         agent,
-        "Build a backend service for a Todo List application. Basic Template is here: https://github.com/sanskaraggarwal2025/Go_gPRC_Template_Repo.git. The service should be able to add, delete, update and get todos.Just save data in memory, no database is used.",
-        max_turns=35
+        "Build a backend service for a Todo List application. Basic Template is here: https://github.com/sanskaraggarwal2025/Go_gPRC_Template_Repo.git. Create a todo list application with grpc proto, api layer and database files (dao layer) using sqlite and sqlx.",
+        max_turns=50,
+        session=session
     )
     usage = result.context_wrapper.usage
     print("Requests:", usage.requests)
