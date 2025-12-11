@@ -30,7 +30,7 @@ def clone_repo_in_container(repo_url: str, target_path: str) -> str:
         cmd = [
             "docker", "exec", "work-dev-1",
             "bash", "-c",
-            f"mkdir -p {target_path} && cd {target_path} && sudo git clone {repo_url}"
+            f"mkdir -p {target_path} && cd {target_path} && sudo git clone --depth 1 {repo_url} && cd Go_gPRC_Template_Repo/ && sudo rm -rf .git"
         ]
 
         result = subprocess.run(
@@ -213,6 +213,80 @@ def run_template_runner(json_data: str, directory: str) -> dict:
             "message": f"Error running template runner: {str(e)}"
         }
 
+@function_tool
+def init_git_repo(directory: str) -> dict:
+    """Initialize a git repository inside the Docker container."""
+    print("Tool: Init git repo -> " + directory)
+    try:
+        cmd = [
+            "docker", "exec", "work-dev-1",
+            "bash", "-c",
+            f"cd {directory} && sudo git init"
+        ]
+        result = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            timeout=10
+        )
+        if result.returncode == 0:
+            return {
+                "status": "success",
+                "message": "Git repository initialized successfully."
+            }
+        else:
+            return {
+                "status": "error",
+                "message": result.stderr
+            }
+    except Exception as e:
+        return {
+            "status": "error",
+            "message": f"Error initializing git repository: {str(e)}"
+        }
+
+@function_tool
+def commit_git_repo(directory: str, message: str, user_email: str="sanskaraggarwal2025@gmail.com", user_name: str="sanskaraggarwal") -> dict:
+    """Commit a git repository inside the Docker container."""
+    print("Tool: Commit git repo -> " + directory + " " + message)
+    try:
+        subprocess.run([
+            "docker", "exec", "work-dev-1",
+            "sudo", "git", "-C", directory, "config", "user.email", user_email
+        ], check=True)
+
+        subprocess.run([
+            "docker", "exec", "work-dev-1",
+            "sudo", "git", "-C", directory, "config", "user.name", user_name
+        ], check=True)
+
+        cmd = [
+            "docker", "exec", "work-dev-1",
+            "bash", "-c",
+            f"cd {directory} && sudo git add . && sudo git commit -m '{message}'"
+        ]
+        result = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            timeout=10
+        )
+        if result.returncode == 0:
+            return {
+                "status": "success",
+                "message": "Git repository committed successfully."
+            }
+        else:
+            return {
+                "status": "error",
+                "message": result.stderr
+            }
+    except Exception as e:
+        return {
+            "status": "error",
+            "message": f"Error committing git repository: {str(e)}"
+        }
+
 class CustomAgentHooks(AgentHooks):
     async def on_tool_start(self, tool_context, agent, tool):
         print(f"Tool: {tool.name} started")
@@ -253,9 +327,12 @@ FOLLOW THESE STEPS STRICTLY:
 9. First call the /sorted/template-runner with appropriate json_data for proto/.
 10. Then call the /sorted/template-runner with appropriate json_data for backend/.
 11. After this call, the template files will be updated with the user requirement.
-12. Once the template files are updated, STOP!!
+12. Initialize a git repository inside the /sorted/Go_gPRC_Template_Repo/ directory.
+13. Based on changes done, commit the changes to the git repository with the appropriate message.
+14. Once the changes are committed, STOP!!
+
 """,
-        tools=[connect_to_container, clone_repo_in_container, read_file, write_file, grep_file, run_template_runner],
+        tools=[connect_to_container, clone_repo_in_container, read_file, write_file, grep_file, run_template_runner, init_git_repo, commit_git_repo],
         model="gpt-5-mini-2025-08-07",
         hooks=CustomAgentHooks()
     )
