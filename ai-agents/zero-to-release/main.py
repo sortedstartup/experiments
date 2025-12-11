@@ -60,7 +60,7 @@ def read_file(file_path: str) -> dict:
         cmd = [
             "docker", "exec", "work-dev-1",
             "bash", "-c",
-            f"cat {file_path}"
+            f"sudo cat {file_path}"
         ]
 
         result = subprocess.run(
@@ -92,21 +92,22 @@ def read_file(file_path: str) -> dict:
 
 @function_tool
 def write_file(file_path: str, content: str) -> dict:
-    """Write a file inside the Docker container."""
+    """Write a file inside the Docker container with proper permissions."""
     print("Tool: Write file (container) -> " + file_path)
 
     try:
-        # Escape single quotes in content so it can be injected safely
+        # Escape single quotes for shell
         escaped = content.replace("'", "'\"'\"'")
 
-        cmd = [
-            "docker", "exec", "work-dev-1",
-            "bash", "-c",
-            f"mkdir -p $(dirname {file_path}) && echo '{escaped}' > {file_path}"
-        ]
+        # Build command: create dir as root, write file with sudo tee
+        cmd = (
+            f"sudo mkdir -p $(dirname {file_path}) && "
+            f"echo '{escaped}' | sudo tee {file_path} > /dev/null && "
+            f"sudo chmod 664 {file_path}"
+        )
 
         result = subprocess.run(
-            cmd,
+            ["docker", "exec", "work-dev-1", "bash", "-c", cmd],
             capture_output=True,
             text=True,
             timeout=10
@@ -131,6 +132,7 @@ def write_file(file_path: str, content: str) -> dict:
 
 
 
+
 @function_tool
 def grep_file(file_path: str, pattern: str) -> dict:
     """Search for a regex pattern inside a file inside the Docker container."""
@@ -143,7 +145,7 @@ def grep_file(file_path: str, pattern: str) -> dict:
         cmd = [
             "docker", "exec", "work-dev-1",
             "bash", "-c",
-            f"grep -E '{safe_pattern}' {file_path} || true"
+            f"sudo grep -E '{safe_pattern}' {file_path} || true"
         ]
 
         result = subprocess.run(
@@ -214,15 +216,17 @@ def run_template_runner(json_data: str, directory: str) -> dict:
         }
 
 @function_tool
-def init_git_repo(directory: str) -> dict:
-    """Initialize a git repository inside the Docker container."""
+def init_git_repo(directory: str, user_email: str="sanskaraggarwal2025@gmail.com", user_name: str="sanskaraggarwal") -> dict:
+    """Initialize a git repository inside the Docker container with the given user email and user name."""
     print("Tool: Init git repo -> " + directory)
     try:
+
         cmd = [
             "docker", "exec", "work-dev-1",
             "bash", "-c",
             f"cd {directory} && sudo git init"
         ]
+
         result = subprocess.run(
             cmd,
             capture_output=True,
@@ -230,6 +234,16 @@ def init_git_repo(directory: str) -> dict:
             timeout=10
         )
         if result.returncode == 0:
+            subprocess.run([
+                "docker", "exec", "work-dev-1",
+                "sudo", "git", "-C", directory, "config", "user.email", user_email
+            ], check=True)
+
+            subprocess.run([
+                "docker", "exec", "work-dev-1",
+                "sudo", "git", "-C", directory, "config", "user.name", user_name
+            ], check=True)
+
             return {
                 "status": "success",
                 "message": "Git repository initialized successfully."
@@ -246,20 +260,10 @@ def init_git_repo(directory: str) -> dict:
         }
 
 @function_tool
-def commit_git_repo(directory: str, message: str, user_email: str="sanskaraggarwal2025@gmail.com", user_name: str="sanskaraggarwal") -> dict:
+def commit_git_repo(directory: str, message: str) -> dict:
     """Commit a git repository inside the Docker container."""
     print("Tool: Commit git repo -> " + directory + " " + message)
     try:
-        subprocess.run([
-            "docker", "exec", "work-dev-1",
-            "sudo", "git", "-C", directory, "config", "user.email", user_email
-        ], check=True)
-
-        subprocess.run([
-            "docker", "exec", "work-dev-1",
-            "sudo", "git", "-C", directory, "config", "user.name", user_name
-        ], check=True)
-
         cmd = [
             "docker", "exec", "work-dev-1",
             "bash", "-c",
@@ -285,6 +289,39 @@ def commit_git_repo(directory: str, message: str, user_email: str="sanskaraggarw
         return {
             "status": "error",
             "message": f"Error committing git repository: {str(e)}"
+        }
+
+
+@function_tool
+def autogenerate_proto_code(service_directory: str) -> dict:
+    """Autogenerate the proto code for the given service directory inside the Docker container."""
+    print("Tool: Autogenerate proto code -> " + service_directory)
+    try:
+        cmd = [
+            "docker", "exec", "work-dev-1",
+            "bash", "-c",
+            f"cd {service_directory} && sudo /home/dev/sw/go/bin/go generate"
+        ]
+        result = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            timeout=10
+        )
+        if result.returncode == 0:
+            return {
+                "status": "success",
+                "message": "Proto code autogenerated successfully."
+            }
+        else:
+            return {
+                "status": "error",
+                "message": result.stderr
+            }
+    except Exception as e:
+        return {
+            "status": "error",
+            "message": f"Error autogenerating proto code: {str(e)}"
         }
 
 class CustomAgentHooks(AgentHooks):
@@ -328,18 +365,23 @@ FOLLOW THESE STEPS STRICTLY:
 10. Then call the /sorted/template-runner with appropriate json_data for backend/.
 11. After this call, the template files will be updated with the user requirement.
 12. Initialize a git repository inside the /sorted/Go_gPRC_Template_Repo/ directory.
-13. Based on changes done, commit the changes to the git repository with the appropriate message.
-14. Once the changes are committed, STOP!!
+13. Based on changes done, commit the changes to the git repository with the appropriate message, after each logical step always commit the changes.
+14. Based on user requirement, first determine the rpc required.
+15. Based on rpc required, create the proto file.
+16. Autogenerate the proto code using the /sorted/Go_gPRC_Template_Repo/backend/first_service/  go generate command.
+16. Implement the rpc in the service file.
+17. Once proto and service file are created, and in mono/main.go, create a grpc server and add the service to the server.
+14. STOP!!
 
 """,
-        tools=[connect_to_container, clone_repo_in_container, read_file, write_file, grep_file, run_template_runner, init_git_repo, commit_git_repo],
+        tools=[connect_to_container, clone_repo_in_container, read_file, write_file, grep_file, run_template_runner, init_git_repo, commit_git_repo, autogenerate_proto_code],
         model="gpt-5-mini-2025-08-07",
         hooks=CustomAgentHooks()
     )
 
     result = await Runner.run(
         agent,
-        "Build a backend service for a chat application. Basic Template is here: https://github.com/sanskaraggarwal2025/Go_gPRC_Template_Repo.git",
+        "Build a backend service for a Todo List application. Basic Template is here: https://github.com/sanskaraggarwal2025/Go_gPRC_Template_Repo.git. The service should be able to add, delete, update and get todos.Just save data in memory, no database is used.",
         max_turns=25
     )
 
