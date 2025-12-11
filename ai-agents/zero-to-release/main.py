@@ -295,7 +295,12 @@ def commit_git_repo(directory: str, message: str) -> dict:
 
 @function_tool
 def autogenerate_proto_code(service_directory: str) -> dict:
-    """Autogenerate the proto code for the given service directory inside the Docker container."""
+    """Autogenerate the proto code for the given service directory inside the Docker container.
+    Args:
+        service_directory (str): Directory of the service where autogenerate.go is present.
+    Returns:
+        dict: Result of the autogeneration.
+    """
     print("Tool: Autogenerate proto code -> " + service_directory)
     try:
         cmd = [
@@ -394,21 +399,25 @@ FOLLOW THESE STEPS STRICTLY:
 1. First call connect_to_container.
 2. Then call clone_repo_in_container with the repository url: https://github.com/sanskaraggarwal2025/Go_gPRC_Template_Repo.git and the target path: /home/dev/sorted.
 3. Read the Clone Repository project structure.
-4. Inside each folder there are mod files, proto files and service files.
-5. In each of these file there are template variable names like {{.Module}}, {{.ProjectModule}}, {{.ServiceModule}}.
-6. Create a json for these template variables as per user requirement.
-9. First call the /home/dev/sorted/template-runner with appropriate json_data for proto/.
-10. Then call the /home/dev/sorted/template-runner with appropriate json_data for backend/.
-11. After this call, the template files will be updated with the user requirement.
+4. At each step you have to write and decision_log.md where you have to write the decision taken, why that decision was taken and the changes done in short concise bullet points.
+5. Inside each folder there are mod files, proto files and service files.
+6. In each of these file there are template variable names like {{.Module}}, {{.ProjectModule}}, {{.ServiceModule}}.
+7. Create a json for these template variables as per user requirement.
+8. First call the /home/dev/sorted/template-runner with appropriate json_data for proto/.
+9. Then call the /home/dev/sorted/template-runner with appropriate json_data for backend/.
+10. After this call, the template files will be updated with the user requirement.
 12. Initialize a git repository inside the /home/dev/sorted/Go_gPRC_Template_Repo/ directory.
-13. Based on changes done, commit the changes to the git repository with the appropriate message, after each logical step always commit the changes.
-14. Based on user requirement, first determine the rpc required.
-15. Based on rpc required, create the proto file.
-16. Implement the rpc in the service file.
-17. After each file generation, use this TOOL user_review_tool to**take review from user for the full file changes**.
-18. User will reivew the changes in this format //REVIEW: <review>, you have to make those changes and proceed further.
-19. Once proto and service file are created, and in mono/main.go, create a grpc server and add the service to the server.
-20. STOP!!
+13. After each file generation, use this TOOL user_review_tool to**take review from user for the full file changes**.
+14. User will reivew the changes in this format //REVIEW: <review>, you have to make those changes and proceed further.
+15. Based on changes done, commit the changes to the git repository with the appropriate message, after each logical step always commit the changes.
+16. Based on user requirement, first determine the rpc required.
+17. Based on rpc required, create the proto file.
+18. After every proto file change, autogenerate the proto code using autogenerate_proto_code tool.
+19. Based on user review, make the changes and proceed further.
+20. Implement the rpc in the service file.
+21. Once proto and service file are created, and in mono/main.go, create a grpc server and add the service to the server.
+22. After you are done with all implementation, create implementation.md file where you have to write the implementation details like assumptions, architectural_decisions in bullet points.
+23. STOP!!
 
 """,
         tools=[connect_to_container, clone_repo_in_container, read_file, write_file, grep_file, run_template_runner, init_git_repo, commit_git_repo, autogenerate_proto_code, user_review_tool],
