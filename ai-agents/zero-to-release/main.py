@@ -380,7 +380,7 @@ def build_app_tool(directory: str) -> str:
         cmd = [
             "docker", "exec", "work-dev-1",
             "bash", "-c",
-            f"cd {directory} && go build"
+            f"cd {directory} && go build -o main main.go"
         ]
         result = subprocess.run(
             cmd,
@@ -418,7 +418,7 @@ async def main():
     agent = Agent(
         name="Zero to Release Agent",
         instructions="""
-You are a Zero to Release Agent.
+You are a zero to release agent.
 Your job is to build a web app from template given in template repository.
 
 <starter_template>
@@ -440,41 +440,71 @@ It has one working rpc from proto to dao layer just for reference, take Referenc
 
 </starter_template>
 
-GUIDELINES
-- As you go on working document important decisions you are making by appending them to file decision_log.md
-- each decision should have a timestamp and should be in technical precise language in bullet points
-- each decision should contain reasoning behind the decision taken.
-- after each file generation, take review from user for the full file changes using user_review_tool tool.
+
+Guidelines:
+- As you go on working document important decisions you are making and their reasoning by appending them to file decision_log.md with timestamps
+- Each decision should be in technical precise language in bullet points
+- After each code file change, take review from user and ask for changes if any using by showing full code of the file
 - user will reivew the changes in this format //REVIEW: <review>, you have to make those changes and proceed further.
 - take commit after each logical step.
+- After you done with commits, build the app and run it to check if it is working or not.
+- If it is not working, ask for changes and make those changes.
+- If it is working, ask for next set of requirements.
 
+Implementation steps to follow strictly:
 
-FOLLOW THESE STEPS STRICTLY:
-1. First call connect_to_container.
-2. Then call clone_repo_in_container with the repository url: https://github.com/sanskaraggarwal2025/Go_gPRC_Template_Repo.git and the target path: /home/dev/sorted.
-3. Read the Clone Repository project structure.
-5. Inside each folder there are mod files, proto files, api files and dao files.
-6. In each of these file there are template variable names like {{.Module}}, {{.ProjectModule}}, {{.ServiceModule}}.
-7. Create a json for these template variables as per user requirement.
-8. First call the /home/dev/sorted/template-runner with appropriate json_data for proto/.
-9. Then call the /home/dev/sorted/template-runner with appropriate json_data for backend/.
-10. After this call, the template files will be updated with the user requirement.
-12. Initialize a git repository inside the /home/dev/sorted/Go_gPRC_Template_Repo/ directory.
-13. After each file generation, use this TOOL user_review_tool to**take review from user for the full file changes**.
-14. User will reivew the changes in this format //REVIEW: <review>, you have to make those changes and proceed further.
-15. Based on changes done, commit the changes to the git repository with the appropriate message, after each logical step always commit the changes.
-16. Based on **user requirement**, first determine the **rpc required, api layer and database layer changes required**.
-17. Based on rpc required, create the proto file.
-18. After every proto file change, autogenerate the proto code using autogenerate_proto_code tool.
-19. Based on user review, make the changes and proceed further.
-20. Edit proto file, first_service/api/api.go for api changes, first_service/dao/dao.go for dao interfaces changes first_service/dao/dao_sqlite.go for database implementation changes.
-20. Once proto is done proceed with the api layer and database layer changes.
-21. Once proto and api layer and database layer are created.
-22. **Build the application using **build_app_tool** tool and see if it is working or not**.
-23. If it is not working, make the changes and proceed further.
-24. If it is working, create implementation_proto.md file where you have to write the implementation details at proto level like assumptions, architectural_decisions, decisions taken in bullet points.
-25. After you are done with all implementation, create implementation_dao.md file where you have to write the implementation details at DAO level like assumptions, architectural_decisions, decisions taken in bullet points.
-26. STOP!!
+Phase 0: 
+- First call connect_to_container.
+- Then call clone_repo_in_container with the repository url: https://github.com/sanskaraggarwal2025/Go_gPRC_Template_Repo.git and the target path: /home/dev/sorted.
+
+Phase 1:
+- Read the Clone Repository project structure.
+- Inside each folder there are mod files, proto files, api files and dao files.
+- In some of these files(like go.mod, service.proto, api.go, autogenerate.go) there are template variable names like {{.Module}}, {{.ProjectModule}}, {{.ServiceModule}}.
+- Create a json for these template variables as per user requirement.
+- Call run_template_runner with the json and directory.
+- In this Phase,the template files will be updated with appropriate modules names as the user requirement.
+
+Phase 2:
+- Initialize a git repository in the container.
+- Add all the files (/home/dev/sorted/Go_gPRC_Template_Repo) to the git repository.
+- Commit the changes.
+
+Phase 3: 
+- Based on the user requirements, determine rpcs to be added to the proto file.
+- Based on the user requirements, determine api functions to be added to the api file.
+- Based on the user requirements, determine the table and columns for the database.
+- Based on the user requirements, determine dao functions to be added to the dao file (Interface).
+- Based on the user requirements, determine dao functions to be added to the dao file (Implementation).
+- Based on the user requirements, determine the interface implementation for the dao file in (dao_sqlite.go).
+
+Phase 4:
+- Start with the proto changes and write the rpcs you decided in Phase 3 in the proto file.
+- Take Review from user using **user_review_tool** and ask for changes if any using by showing full code of the file.
+- Then autogenerate proto code using  autogenerate_proto_code tool.
+- Once that is done, take a commit and proceed to api and dao changes.
+
+Phase 5:
+- Start with the api changes and write the api functions you decided in Phase 3 in the api file.
+- Take Review from user using **user_review_tool** and ask for changes if any using by showing full code of the file.
+- Once that is done, take a commit and proceed to dao changes.
+
+Phase 6:
+- Start with the dao changes and write the dao functions you decided in Phase 3 in the dao file.
+- Add migration files for the database.
+- Create Dao interface in dao.go file.
+- Create Dao implementation in dao_sqlite.go file.
+- Take Review from user using **user_review_tool** and ask for changes if any using by showing full code of the file.
+- Once that is done, take a commit.
+
+Phase 7:
+- Once all the changes are done, build the app using **build_app_tool** and run it to check if it is working or not.
+- If there is any error, inspect the error and fix them and take a commit.
+
+Phase 8:
+- Once the app is working, Create implementation_proto.md which explains the implementation of the proto file.
+- Create implementation_dao.md which explains the implementation of the dao file.
+- After all this, take a final commit.
 
 """,
         tools=[connect_to_container, clone_repo_in_container, read_file, write_file, grep_file, run_template_runner, init_git_repo, commit_git_repo, autogenerate_proto_code, user_review_tool, build_app_tool],

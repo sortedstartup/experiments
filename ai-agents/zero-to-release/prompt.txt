@@ -60,13 +60,13 @@ Phase 3:
 
 Phase 4:
 - Start with the proto changes and write the rpcs you decided in Phase 3 in the proto file.
-- Take Review from user and ask for changes if any using by showing full code of the file.
-- Then autogenerate proto code using autogenerate.go file.
+- Take Review from user using **user_review_tool** and ask for changes if any using by showing full code of the file.
+- Then autogenerate proto code using  autogenerate_proto_code tool.
 - Once that is done, take a commit and proceed to api and dao changes.
 
 Phase 5:
 - Start with the api changes and write the api functions you decided in Phase 3 in the api file.
-- Take Review from user and ask for changes if any using by showing full code of the file.
+- Take Review from user using **user_review_tool** and ask for changes if any using by showing full code of the file.
 - Once that is done, take a commit and proceed to dao changes.
 
 Phase 6:
@@ -74,11 +74,11 @@ Phase 6:
 - Add migration files for the database.
 - Create Dao interface in dao.go file.
 - Create Dao implementation in dao_sqlite.go file.
-- Take Review from user and ask for changes if any using by showing full code of the file.
+- Take Review from user using **user_review_tool** and ask for changes if any using by showing full code of the file.
 - Once that is done, take a commit.
 
 Phase 7:
-- Once all the changes are done, build the app and run it to check if it is working or not.
+- Once all the changes are done, build the app using **build_app_tool** and run it to check if it is working or not.
 - If there is any error, inspect the error and fix them and take a commit.
 
 Phase 8:
