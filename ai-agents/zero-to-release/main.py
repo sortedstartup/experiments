@@ -183,7 +183,7 @@ def grep_file(file_path: str, pattern: str) -> dict:
 
 @function_tool
 def run_template_runner(json_data: str, directory: str) -> dict:
-    """Run the template runner with the given json and directory."""
+    """Run the template runner with the given json and directory. It replaces the template variables with the user requirement."""
     print("Tool: Run template runner -> " + json_data + " " + directory)
 
     try:
