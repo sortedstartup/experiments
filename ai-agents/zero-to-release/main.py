@@ -366,6 +366,45 @@ def user_review_tool(content: str) -> str:
         return f"Error during user review: {e}"
 
 
+@function_tool
+def build_app_tool(directory: str) -> str:
+    """ 
+    Tool to build application and see if there is any error
+    Args:
+        directory (str): directory where we run go build
+    Returns:
+        str: build output success/failure
+    """
+
+    try:
+        cmd = [
+            "docker", "exec", "work-dev-1",
+            "bash", "-c",
+            f"cd {directory} && go build"
+        ]
+        result = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            timeout=10
+        )
+        if result.returncode == 0:
+            return {
+                "status": "success",
+                "message": "Application built successfully."
+            }
+        else:
+            return {
+                "status": "error",
+                "message": result.stderr
+            }
+    except Exception as e:
+        return {
+            "status": "error",
+            "message": f"Error building application: {str(e)}"
+        }
+
+
 class CustomAgentHooks(AgentHooks):
     async def on_tool_start(self, tool_context, agent, tool):
         print(f"Tool: {tool.name} started")
@@ -384,25 +423,25 @@ Your job is to build a web app from template given in template repository.
 
 <starter_template>
 It is a go lang app with grpc proto, api layer and database files (dao layer) using sqlite and sqlx.
-It has one working rpc from proto to dao layer just for reference.
+It has one working rpc from proto to dao layer just for reference, take Reference from it and start building user required application by editing following files.
 
 <file_structure>
     - /home/dev/sorted/Go_gPRC_Template_Repo/backend/mono/main.go
-    - /home/dev/sorted/Go_gPRC_Template_Repo/backend/first_service/api.go --> add your APIs here
+    - /home/dev/sorted/Go_gPRC_Template_Repo/backend/first_service/api/api.go --> add your APIs here
     - /home/dev/sorted/Go_gPRC_Template_Repo/proto/service.proto --> proto file for the first service
     - /home/dev/sorted/Go_gPRC_Template_Repo/backend/first_service/go.mod --> go mod file for the first service
     - /home/dev/sorted/Go_gPRC_Template_Repo/backend/mono/go.mod --> go mod file for the mono service
     - /home/dev/sorted/Go_gPRC_Template_Repo/backend/first_service/dao/dao.go --> interface for the database operations
-    - /home/dev/sorted/Go_gPRC_Template_Repo/backend/first_service/dao/sqlite.go --> implementation of the database operations using sqlite and sqlx
+    - /home/dev/sorted/Go_gPRC_Template_Repo/backend/first_service/dao/dao_sqlite.go --> implementation of the database operations using sqlite and sqlx
     - /home/dev/sorted/Go_gPRC_Template_Repo/backend/first_service/dao/migrate.go --> migration file for the database
-    - /home/dev/sorted/Go_gPRC_Template_Repo/backend/first_service/dao/db/migrations/ -> it has all the migration files for the database (UP) scripts for the database
+    - /home/dev/sorted/Go_gPRC_Template_Repo/backend/first_service/dao/db/migrations/1_init.up.sql -> it has all the migration files for the database (UP) scripts for the database
     - /home/dev/sorted/Go_gPRC_Template_Repo/backend/first_service/dao/models.go --> it has the models for the database
 </file_structure>
 
 </starter_template>
 
 GUIDELINES
-- As you go on working document important decisions you are making by appending thm to file decision_log.md
+- As you go on working document important decisions you are making by appending them to file decision_log.md
 - each decision should have a timestamp and should be in technical precise language in bullet points
 - each decision should contain reasoning behind the decision taken.
 - after each file generation, take review from user for the full file changes using user_review_tool tool.
@@ -414,7 +453,7 @@ FOLLOW THESE STEPS STRICTLY:
 1. First call connect_to_container.
 2. Then call clone_repo_in_container with the repository url: https://github.com/sanskaraggarwal2025/Go_gPRC_Template_Repo.git and the target path: /home/dev/sorted.
 3. Read the Clone Repository project structure.
-5. Inside each folder there are mod files, proto files and service files.
+5. Inside each folder there are mod files, proto files, api files and dao files.
 6. In each of these file there are template variable names like {{.Module}}, {{.ProjectModule}}, {{.ServiceModule}}.
 7. Create a json for these template variables as per user requirement.
 8. First call the /home/dev/sorted/template-runner with appropriate json_data for proto/.
@@ -424,17 +463,21 @@ FOLLOW THESE STEPS STRICTLY:
 13. After each file generation, use this TOOL user_review_tool to**take review from user for the full file changes**.
 14. User will reivew the changes in this format //REVIEW: <review>, you have to make those changes and proceed further.
 15. Based on changes done, commit the changes to the git repository with the appropriate message, after each logical step always commit the changes.
-16. Based on user requirement, first determine the rpc required, api layer and database layer changes required.
+16. Based on **user requirement**, first determine the **rpc required, api layer and database layer changes required**.
 17. Based on rpc required, create the proto file.
 18. After every proto file change, autogenerate the proto code using autogenerate_proto_code tool.
 19. Based on user review, make the changes and proceed further.
+20. Edit proto file, first_service/api/api.go for api changes, first_service/dao/dao.go for dao interfaces changes first_service/dao/dao_sqlite.go for database implementation changes.
 20. Once proto is done proceed with the api layer and database layer changes.
 21. Once proto and api layer and database layer are created.
-22. After you are done with all implementation, create implementation.md file where you have to write the implementation details like assumptions, architectural_decisions, decisions taken in bullet points.
-23. STOP!!
+22. **Build the application using **build_app_tool** tool and see if it is working or not**.
+23. If it is not working, make the changes and proceed further.
+24. If it is working, create implementation_proto.md file where you have to write the implementation details at proto level like assumptions, architectural_decisions, decisions taken in bullet points.
+25. After you are done with all implementation, create implementation_dao.md file where you have to write the implementation details at DAO level like assumptions, architectural_decisions, decisions taken in bullet points.
+26. STOP!!
 
 """,
-        tools=[connect_to_container, clone_repo_in_container, read_file, write_file, grep_file, run_template_runner, init_git_repo, commit_git_repo, autogenerate_proto_code, user_review_tool],
+        tools=[connect_to_container, clone_repo_in_container, read_file, write_file, grep_file, run_template_runner, init_git_repo, commit_git_repo, autogenerate_proto_code, user_review_tool, build_app_tool],
         model="gpt-5-mini-2025-08-07",
         hooks=CustomAgentHooks()
     )
@@ -446,8 +489,8 @@ FOLLOW THESE STEPS STRICTLY:
     result = await Runner.run(
         agent,
         "Build a backend service for a Todo List application. Basic Template is here: https://github.com/sanskaraggarwal2025/Go_gPRC_Template_Repo.git. Create a todo list application with grpc proto, api layer and database files (dao layer) using sqlite and sqlx.",
-        max_turns=50,
-        session=session
+        max_turns=75,
+        # session=session
     )
     usage = result.context_wrapper.usage
     print("Requests:", usage.requests)
