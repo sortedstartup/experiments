@@ -22,13 +22,44 @@ enum Interval {
 }
 
 service PaymentService {
-    rpc CreateProduct(CreateProductRequest) returns (CreateProductResponse);
+    // rpc CreateProduct(CreateProductRequest) returns (CreateProductResponse);
     rpc ListProducts(ListProductsRequest) returns (ListProductsResponse);
     rpc CreateStripeCheckoutSession(CreateStripeCheckoutSessionRequest) returns (CreateStripeCheckoutSessionResponse);
     rpc CreateRazorpayCheckoutSession(CreateRazorpayCheckoutSessionRequest) returns (CreateRazorpayCheckoutSessionResponse);
     rpc CreateStripeSubscriptionCheckoutSession(CreateStripeSubscriptionCheckoutSessionRequest) returns (CreateStripeSubscriptionCheckoutSessionResponse);
     rpc CreateRazorpaySubscriptionCheckoutSession(CreateRazorpaySubscriptionCheckoutSessionRequest) returns (CreateRazorpaySubscriptionCheckoutSessionResponse);
     rpc CheckUserProductAccess(CheckUserProductAccessRequest) returns (CheckUserProductAccessResponse);
+}
+
+service PaymentAdminService {
+    rpc CreateProduct(CreateProductRequest) returns (CreateProductResponse);
+    rpc GetTransactions(GetTransactionsRequest) returns (GetTransactionsResponse);
+    rpc GetDashboardData(GetDashboardDataRequest) returns (GetDashboardDataResponse);
+}
+message GetDashboardDataRequest {
+    
+}
+message GetDashboardDataResponse {
+    double todaySales = 1;
+    double weeklySales = 2;
+    double monthlySales = 3;
+}
+message GetTransactionsRequest {
+    string pageNumber = 1;
+}
+message GetTransactionsResponse {
+    repeated Transaction transactions = 1;
+}
+message Transaction {
+    string id = 1;
+    string userId = 2;
+    string productId = 3;
+    string productName = 4;
+    int64 amount = 5;
+    string currency = 6;
+    string status = 7;
+    string createdAt = 8;
+    string updatedAt = 9;
 }
 
 message CreateProductRequest {
@@ -69,6 +100,8 @@ message Product {
 
 message CreateStripeCheckoutSessionRequest {
     string product_id = 1;
+    string success_url = 2;
+    string cancel_url = 3;
 }
 
 message CreateStripeCheckoutSessionResponse {
@@ -87,6 +120,8 @@ message CreateRazorpayCheckoutSessionResponse {
 
 message CreateStripeSubscriptionCheckoutSessionRequest {
     string product_id = 1;
+    string success_url = 2;
+    string cancel_url = 3;
 }
 
 message CreateStripeSubscriptionCheckoutSessionResponse {

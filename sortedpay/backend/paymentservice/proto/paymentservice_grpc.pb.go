@@ -19,7 +19,6 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	PaymentService_CreateProduct_FullMethodName                             = "/sortedchat.PaymentService/CreateProduct"
 	PaymentService_ListProducts_FullMethodName                              = "/sortedchat.PaymentService/ListProducts"
 	PaymentService_CreateStripeCheckoutSession_FullMethodName               = "/sortedchat.PaymentService/CreateStripeCheckoutSession"
 	PaymentService_CreateRazorpayCheckoutSession_FullMethodName             = "/sortedchat.PaymentService/CreateRazorpayCheckoutSession"
@@ -32,7 +31,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type PaymentServiceClient interface {
-	CreateProduct(ctx context.Context, in *CreateProductRequest, opts ...grpc.CallOption) (*CreateProductResponse, error)
+	// rpc CreateProduct(CreateProductRequest) returns (CreateProductResponse);
 	ListProducts(ctx context.Context, in *ListProductsRequest, opts ...grpc.CallOption) (*ListProductsResponse, error)
 	CreateStripeCheckoutSession(ctx context.Context, in *CreateStripeCheckoutSessionRequest, opts ...grpc.CallOption) (*CreateStripeCheckoutSessionResponse, error)
 	CreateRazorpayCheckoutSession(ctx context.Context, in *CreateRazorpayCheckoutSessionRequest, opts ...grpc.CallOption) (*CreateRazorpayCheckoutSessionResponse, error)
@@ -47,16 +46,6 @@ type paymentServiceClient struct {
 
 func NewPaymentServiceClient(cc grpc.ClientConnInterface) PaymentServiceClient {
 	return &paymentServiceClient{cc}
-}
-
-func (c *paymentServiceClient) CreateProduct(ctx context.Context, in *CreateProductRequest, opts ...grpc.CallOption) (*CreateProductResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(CreateProductResponse)
-	err := c.cc.Invoke(ctx, PaymentService_CreateProduct_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
 }
 
 func (c *paymentServiceClient) ListProducts(ctx context.Context, in *ListProductsRequest, opts ...grpc.CallOption) (*ListProductsResponse, error) {
@@ -123,7 +112,7 @@ func (c *paymentServiceClient) CheckUserProductAccess(ctx context.Context, in *C
 // All implementations must embed UnimplementedPaymentServiceServer
 // for forward compatibility.
 type PaymentServiceServer interface {
-	CreateProduct(context.Context, *CreateProductRequest) (*CreateProductResponse, error)
+	// rpc CreateProduct(CreateProductRequest) returns (CreateProductResponse);
 	ListProducts(context.Context, *ListProductsRequest) (*ListProductsResponse, error)
 	CreateStripeCheckoutSession(context.Context, *CreateStripeCheckoutSessionRequest) (*CreateStripeCheckoutSessionResponse, error)
 	CreateRazorpayCheckoutSession(context.Context, *CreateRazorpayCheckoutSessionRequest) (*CreateRazorpayCheckoutSessionResponse, error)
@@ -140,9 +129,6 @@ type PaymentServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedPaymentServiceServer struct{}
 
-func (UnimplementedPaymentServiceServer) CreateProduct(context.Context, *CreateProductRequest) (*CreateProductResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateProduct not implemented")
-}
 func (UnimplementedPaymentServiceServer) ListProducts(context.Context, *ListProductsRequest) (*ListProductsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListProducts not implemented")
 }
@@ -180,24 +166,6 @@ func RegisterPaymentServiceServer(s grpc.ServiceRegistrar, srv PaymentServiceSer
 		t.testEmbeddedByValue()
 	}
 	s.RegisterService(&PaymentService_ServiceDesc, srv)
-}
-
-func _PaymentService_CreateProduct_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateProductRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(PaymentServiceServer).CreateProduct(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: PaymentService_CreateProduct_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PaymentServiceServer).CreateProduct(ctx, req.(*CreateProductRequest))
-	}
-	return interceptor(ctx, in, info, handler)
 }
 
 func _PaymentService_ListProducts_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -316,10 +284,6 @@ var PaymentService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*PaymentServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "CreateProduct",
-			Handler:    _PaymentService_CreateProduct_Handler,
-		},
-		{
 			MethodName: "ListProducts",
 			Handler:    _PaymentService_ListProducts_Handler,
 		},
@@ -342,6 +306,184 @@ var PaymentService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CheckUserProductAccess",
 			Handler:    _PaymentService_CheckUserProductAccess_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "paymentservice.proto",
+}
+
+const (
+	PaymentAdminService_CreateProduct_FullMethodName    = "/sortedchat.PaymentAdminService/CreateProduct"
+	PaymentAdminService_GetTransactions_FullMethodName  = "/sortedchat.PaymentAdminService/GetTransactions"
+	PaymentAdminService_GetDashboardData_FullMethodName = "/sortedchat.PaymentAdminService/GetDashboardData"
+)
+
+// PaymentAdminServiceClient is the client API for PaymentAdminService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type PaymentAdminServiceClient interface {
+	CreateProduct(ctx context.Context, in *CreateProductRequest, opts ...grpc.CallOption) (*CreateProductResponse, error)
+	GetTransactions(ctx context.Context, in *GetTransactionsRequest, opts ...grpc.CallOption) (*GetTransactionsResponse, error)
+	GetDashboardData(ctx context.Context, in *GetDashboardDataRequest, opts ...grpc.CallOption) (*GetDashboardDataResponse, error)
+}
+
+type paymentAdminServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewPaymentAdminServiceClient(cc grpc.ClientConnInterface) PaymentAdminServiceClient {
+	return &paymentAdminServiceClient{cc}
+}
+
+func (c *paymentAdminServiceClient) CreateProduct(ctx context.Context, in *CreateProductRequest, opts ...grpc.CallOption) (*CreateProductResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CreateProductResponse)
+	err := c.cc.Invoke(ctx, PaymentAdminService_CreateProduct_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *paymentAdminServiceClient) GetTransactions(ctx context.Context, in *GetTransactionsRequest, opts ...grpc.CallOption) (*GetTransactionsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetTransactionsResponse)
+	err := c.cc.Invoke(ctx, PaymentAdminService_GetTransactions_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *paymentAdminServiceClient) GetDashboardData(ctx context.Context, in *GetDashboardDataRequest, opts ...grpc.CallOption) (*GetDashboardDataResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetDashboardDataResponse)
+	err := c.cc.Invoke(ctx, PaymentAdminService_GetDashboardData_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// PaymentAdminServiceServer is the server API for PaymentAdminService service.
+// All implementations must embed UnimplementedPaymentAdminServiceServer
+// for forward compatibility.
+type PaymentAdminServiceServer interface {
+	CreateProduct(context.Context, *CreateProductRequest) (*CreateProductResponse, error)
+	GetTransactions(context.Context, *GetTransactionsRequest) (*GetTransactionsResponse, error)
+	GetDashboardData(context.Context, *GetDashboardDataRequest) (*GetDashboardDataResponse, error)
+	mustEmbedUnimplementedPaymentAdminServiceServer()
+}
+
+// UnimplementedPaymentAdminServiceServer must be embedded to have
+// forward compatible implementations.
+//
+// NOTE: this should be embedded by value instead of pointer to avoid a nil
+// pointer dereference when methods are called.
+type UnimplementedPaymentAdminServiceServer struct{}
+
+func (UnimplementedPaymentAdminServiceServer) CreateProduct(context.Context, *CreateProductRequest) (*CreateProductResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateProduct not implemented")
+}
+func (UnimplementedPaymentAdminServiceServer) GetTransactions(context.Context, *GetTransactionsRequest) (*GetTransactionsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTransactions not implemented")
+}
+func (UnimplementedPaymentAdminServiceServer) GetDashboardData(context.Context, *GetDashboardDataRequest) (*GetDashboardDataResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetDashboardData not implemented")
+}
+func (UnimplementedPaymentAdminServiceServer) mustEmbedUnimplementedPaymentAdminServiceServer() {}
+func (UnimplementedPaymentAdminServiceServer) testEmbeddedByValue()                             {}
+
+// UnsafePaymentAdminServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to PaymentAdminServiceServer will
+// result in compilation errors.
+type UnsafePaymentAdminServiceServer interface {
+	mustEmbedUnimplementedPaymentAdminServiceServer()
+}
+
+func RegisterPaymentAdminServiceServer(s grpc.ServiceRegistrar, srv PaymentAdminServiceServer) {
+	// If the following call pancis, it indicates UnimplementedPaymentAdminServiceServer was
+	// embedded by pointer and is nil.  This will cause panics if an
+	// unimplemented method is ever invoked, so we test this at initialization
+	// time to prevent it from happening at runtime later due to I/O.
+	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
+		t.testEmbeddedByValue()
+	}
+	s.RegisterService(&PaymentAdminService_ServiceDesc, srv)
+}
+
+func _PaymentAdminService_CreateProduct_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateProductRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PaymentAdminServiceServer).CreateProduct(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PaymentAdminService_CreateProduct_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PaymentAdminServiceServer).CreateProduct(ctx, req.(*CreateProductRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PaymentAdminService_GetTransactions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetTransactionsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PaymentAdminServiceServer).GetTransactions(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PaymentAdminService_GetTransactions_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PaymentAdminServiceServer).GetTransactions(ctx, req.(*GetTransactionsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PaymentAdminService_GetDashboardData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetDashboardDataRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PaymentAdminServiceServer).GetDashboardData(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PaymentAdminService_GetDashboardData_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PaymentAdminServiceServer).GetDashboardData(ctx, req.(*GetDashboardDataRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// PaymentAdminService_ServiceDesc is the grpc.ServiceDesc for PaymentAdminService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var PaymentAdminService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "sortedchat.PaymentAdminService",
+	HandlerType: (*PaymentAdminServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "CreateProduct",
+			Handler:    _PaymentAdminService_CreateProduct_Handler,
+		},
+		{
+			MethodName: "GetTransactions",
+			Handler:    _PaymentAdminService_GetTransactions_Handler,
+		},
+		{
+			MethodName: "GetDashboardData",
+			Handler:    _PaymentAdminService_GetDashboardData_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

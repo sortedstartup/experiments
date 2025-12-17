@@ -21,6 +21,544 @@ export enum Interval {
     QUARTER = 2,
     YEAR = 3
 }
+export class GetDashboardDataRequest extends pb_1.Message {
+    #one_of_decls: number[][] = [];
+    constructor(data?: any[] | {}) {
+        super();
+        pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+        if (!Array.isArray(data) && typeof data == "object") { }
+    }
+    static fromObject(data: {}): GetDashboardDataRequest {
+        const message = new GetDashboardDataRequest({});
+        return message;
+    }
+    toObject() {
+        const data: {} = {};
+        return data;
+    }
+    serialize(): Uint8Array;
+    serialize(w: pb_1.BinaryWriter): void;
+    serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+        const writer = w || new pb_1.BinaryWriter();
+        if (!w)
+            return writer.getResultBuffer();
+    }
+    static deserialize(bytes: Uint8Array | pb_1.BinaryReader): GetDashboardDataRequest {
+        const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new GetDashboardDataRequest();
+        while (reader.nextField()) {
+            if (reader.isEndGroup())
+                break;
+            switch (reader.getFieldNumber()) {
+                default: reader.skipField();
+            }
+        }
+        return message;
+    }
+    serializeBinary(): Uint8Array {
+        return this.serialize();
+    }
+    static deserializeBinary(bytes: Uint8Array): GetDashboardDataRequest {
+        return GetDashboardDataRequest.deserialize(bytes);
+    }
+}
+export class GetDashboardDataResponse extends pb_1.Message {
+    #one_of_decls: number[][] = [];
+    constructor(data?: any[] | {
+        todaySales?: number;
+        weeklySales?: number;
+        monthlySales?: number;
+    }) {
+        super();
+        pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+        if (!Array.isArray(data) && typeof data == "object") {
+            if ("todaySales" in data && data.todaySales != undefined) {
+                this.todaySales = data.todaySales;
+            }
+            if ("weeklySales" in data && data.weeklySales != undefined) {
+                this.weeklySales = data.weeklySales;
+            }
+            if ("monthlySales" in data && data.monthlySales != undefined) {
+                this.monthlySales = data.monthlySales;
+            }
+        }
+    }
+    get todaySales() {
+        return pb_1.Message.getFieldWithDefault(this, 1, 0) as number;
+    }
+    set todaySales(value: number) {
+        pb_1.Message.setField(this, 1, value);
+    }
+    get weeklySales() {
+        return pb_1.Message.getFieldWithDefault(this, 2, 0) as number;
+    }
+    set weeklySales(value: number) {
+        pb_1.Message.setField(this, 2, value);
+    }
+    get monthlySales() {
+        return pb_1.Message.getFieldWithDefault(this, 3, 0) as number;
+    }
+    set monthlySales(value: number) {
+        pb_1.Message.setField(this, 3, value);
+    }
+    static fromObject(data: {
+        todaySales?: number;
+        weeklySales?: number;
+        monthlySales?: number;
+    }): GetDashboardDataResponse {
+        const message = new GetDashboardDataResponse({});
+        if (data.todaySales != null) {
+            message.todaySales = data.todaySales;
+        }
+        if (data.weeklySales != null) {
+            message.weeklySales = data.weeklySales;
+        }
+        if (data.monthlySales != null) {
+            message.monthlySales = data.monthlySales;
+        }
+        return message;
+    }
+    toObject() {
+        const data: {
+            todaySales?: number;
+            weeklySales?: number;
+            monthlySales?: number;
+        } = {};
+        if (this.todaySales != null) {
+            data.todaySales = this.todaySales;
+        }
+        if (this.weeklySales != null) {
+            data.weeklySales = this.weeklySales;
+        }
+        if (this.monthlySales != null) {
+            data.monthlySales = this.monthlySales;
+        }
+        return data;
+    }
+    serialize(): Uint8Array;
+    serialize(w: pb_1.BinaryWriter): void;
+    serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+        const writer = w || new pb_1.BinaryWriter();
+        if (this.todaySales != 0)
+            writer.writeDouble(1, this.todaySales);
+        if (this.weeklySales != 0)
+            writer.writeDouble(2, this.weeklySales);
+        if (this.monthlySales != 0)
+            writer.writeDouble(3, this.monthlySales);
+        if (!w)
+            return writer.getResultBuffer();
+    }
+    static deserialize(bytes: Uint8Array | pb_1.BinaryReader): GetDashboardDataResponse {
+        const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new GetDashboardDataResponse();
+        while (reader.nextField()) {
+            if (reader.isEndGroup())
+                break;
+            switch (reader.getFieldNumber()) {
+                case 1:
+                    message.todaySales = reader.readDouble();
+                    break;
+                case 2:
+                    message.weeklySales = reader.readDouble();
+                    break;
+                case 3:
+                    message.monthlySales = reader.readDouble();
+                    break;
+                default: reader.skipField();
+            }
+        }
+        return message;
+    }
+    serializeBinary(): Uint8Array {
+        return this.serialize();
+    }
+    static deserializeBinary(bytes: Uint8Array): GetDashboardDataResponse {
+        return GetDashboardDataResponse.deserialize(bytes);
+    }
+}
+export class GetTransactionsRequest extends pb_1.Message {
+    #one_of_decls: number[][] = [];
+    constructor(data?: any[] | {
+        pageNumber?: string;
+    }) {
+        super();
+        pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+        if (!Array.isArray(data) && typeof data == "object") {
+            if ("pageNumber" in data && data.pageNumber != undefined) {
+                this.pageNumber = data.pageNumber;
+            }
+        }
+    }
+    get pageNumber() {
+        return pb_1.Message.getFieldWithDefault(this, 1, "") as string;
+    }
+    set pageNumber(value: string) {
+        pb_1.Message.setField(this, 1, value);
+    }
+    static fromObject(data: {
+        pageNumber?: string;
+    }): GetTransactionsRequest {
+        const message = new GetTransactionsRequest({});
+        if (data.pageNumber != null) {
+            message.pageNumber = data.pageNumber;
+        }
+        return message;
+    }
+    toObject() {
+        const data: {
+            pageNumber?: string;
+        } = {};
+        if (this.pageNumber != null) {
+            data.pageNumber = this.pageNumber;
+        }
+        return data;
+    }
+    serialize(): Uint8Array;
+    serialize(w: pb_1.BinaryWriter): void;
+    serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+        const writer = w || new pb_1.BinaryWriter();
+        if (this.pageNumber.length)
+            writer.writeString(1, this.pageNumber);
+        if (!w)
+            return writer.getResultBuffer();
+    }
+    static deserialize(bytes: Uint8Array | pb_1.BinaryReader): GetTransactionsRequest {
+        const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new GetTransactionsRequest();
+        while (reader.nextField()) {
+            if (reader.isEndGroup())
+                break;
+            switch (reader.getFieldNumber()) {
+                case 1:
+                    message.pageNumber = reader.readString();
+                    break;
+                default: reader.skipField();
+            }
+        }
+        return message;
+    }
+    serializeBinary(): Uint8Array {
+        return this.serialize();
+    }
+    static deserializeBinary(bytes: Uint8Array): GetTransactionsRequest {
+        return GetTransactionsRequest.deserialize(bytes);
+    }
+}
+export class GetTransactionsResponse extends pb_1.Message {
+    #one_of_decls: number[][] = [];
+    constructor(data?: any[] | {
+        transactions?: Transaction[];
+    }) {
+        super();
+        pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [1], this.#one_of_decls);
+        if (!Array.isArray(data) && typeof data == "object") {
+            if ("transactions" in data && data.transactions != undefined) {
+                this.transactions = data.transactions;
+            }
+        }
+    }
+    get transactions() {
+        return pb_1.Message.getRepeatedWrapperField(this, Transaction, 1) as Transaction[];
+    }
+    set transactions(value: Transaction[]) {
+        pb_1.Message.setRepeatedWrapperField(this, 1, value);
+    }
+    static fromObject(data: {
+        transactions?: ReturnType<typeof Transaction.prototype.toObject>[];
+    }): GetTransactionsResponse {
+        const message = new GetTransactionsResponse({});
+        if (data.transactions != null) {
+            message.transactions = data.transactions.map(item => Transaction.fromObject(item));
+        }
+        return message;
+    }
+    toObject() {
+        const data: {
+            transactions?: ReturnType<typeof Transaction.prototype.toObject>[];
+        } = {};
+        if (this.transactions != null) {
+            data.transactions = this.transactions.map((item: Transaction) => item.toObject());
+        }
+        return data;
+    }
+    serialize(): Uint8Array;
+    serialize(w: pb_1.BinaryWriter): void;
+    serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+        const writer = w || new pb_1.BinaryWriter();
+        if (this.transactions.length)
+            writer.writeRepeatedMessage(1, this.transactions, (item: Transaction) => item.serialize(writer));
+        if (!w)
+            return writer.getResultBuffer();
+    }
+    static deserialize(bytes: Uint8Array | pb_1.BinaryReader): GetTransactionsResponse {
+        const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new GetTransactionsResponse();
+        while (reader.nextField()) {
+            if (reader.isEndGroup())
+                break;
+            switch (reader.getFieldNumber()) {
+                case 1:
+                    reader.readMessage(message.transactions, () => pb_1.Message.addToRepeatedWrapperField(message, 1, Transaction.deserialize(reader), Transaction));
+                    break;
+                default: reader.skipField();
+            }
+        }
+        return message;
+    }
+    serializeBinary(): Uint8Array {
+        return this.serialize();
+    }
+    static deserializeBinary(bytes: Uint8Array): GetTransactionsResponse {
+        return GetTransactionsResponse.deserialize(bytes);
+    }
+}
+export class Transaction extends pb_1.Message {
+    #one_of_decls: number[][] = [];
+    constructor(data?: any[] | {
+        id?: string;
+        userId?: string;
+        productId?: string;
+        productName?: string;
+        amount?: number;
+        currency?: string;
+        status?: string;
+        createdAt?: string;
+        updatedAt?: string;
+    }) {
+        super();
+        pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+        if (!Array.isArray(data) && typeof data == "object") {
+            if ("id" in data && data.id != undefined) {
+                this.id = data.id;
+            }
+            if ("userId" in data && data.userId != undefined) {
+                this.userId = data.userId;
+            }
+            if ("productId" in data && data.productId != undefined) {
+                this.productId = data.productId;
+            }
+            if ("productName" in data && data.productName != undefined) {
+                this.productName = data.productName;
+            }
+            if ("amount" in data && data.amount != undefined) {
+                this.amount = data.amount;
+            }
+            if ("currency" in data && data.currency != undefined) {
+                this.currency = data.currency;
+            }
+            if ("status" in data && data.status != undefined) {
+                this.status = data.status;
+            }
+            if ("createdAt" in data && data.createdAt != undefined) {
+                this.createdAt = data.createdAt;
+            }
+            if ("updatedAt" in data && data.updatedAt != undefined) {
+                this.updatedAt = data.updatedAt;
+            }
+        }
+    }
+    get id() {
+        return pb_1.Message.getFieldWithDefault(this, 1, "") as string;
+    }
+    set id(value: string) {
+        pb_1.Message.setField(this, 1, value);
+    }
+    get userId() {
+        return pb_1.Message.getFieldWithDefault(this, 2, "") as string;
+    }
+    set userId(value: string) {
+        pb_1.Message.setField(this, 2, value);
+    }
+    get productId() {
+        return pb_1.Message.getFieldWithDefault(this, 3, "") as string;
+    }
+    set productId(value: string) {
+        pb_1.Message.setField(this, 3, value);
+    }
+    get productName() {
+        return pb_1.Message.getFieldWithDefault(this, 4, "") as string;
+    }
+    set productName(value: string) {
+        pb_1.Message.setField(this, 4, value);
+    }
+    get amount() {
+        return pb_1.Message.getFieldWithDefault(this, 5, 0) as number;
+    }
+    set amount(value: number) {
+        pb_1.Message.setField(this, 5, value);
+    }
+    get currency() {
+        return pb_1.Message.getFieldWithDefault(this, 6, "") as string;
+    }
+    set currency(value: string) {
+        pb_1.Message.setField(this, 6, value);
+    }
+    get status() {
+        return pb_1.Message.getFieldWithDefault(this, 7, "") as string;
+    }
+    set status(value: string) {
+        pb_1.Message.setField(this, 7, value);
+    }
+    get createdAt() {
+        return pb_1.Message.getFieldWithDefault(this, 8, "") as string;
+    }
+    set createdAt(value: string) {
+        pb_1.Message.setField(this, 8, value);
+    }
+    get updatedAt() {
+        return pb_1.Message.getFieldWithDefault(this, 9, "") as string;
+    }
+    set updatedAt(value: string) {
+        pb_1.Message.setField(this, 9, value);
+    }
+    static fromObject(data: {
+        id?: string;
+        userId?: string;
+        productId?: string;
+        productName?: string;
+        amount?: number;
+        currency?: string;
+        status?: string;
+        createdAt?: string;
+        updatedAt?: string;
+    }): Transaction {
+        const message = new Transaction({});
+        if (data.id != null) {
+            message.id = data.id;
+        }
+        if (data.userId != null) {
+            message.userId = data.userId;
+        }
+        if (data.productId != null) {
+            message.productId = data.productId;
+        }
+        if (data.productName != null) {
+            message.productName = data.productName;
+        }
+        if (data.amount != null) {
+            message.amount = data.amount;
+        }
+        if (data.currency != null) {
+            message.currency = data.currency;
+        }
+        if (data.status != null) {
+            message.status = data.status;
+        }
+        if (data.createdAt != null) {
+            message.createdAt = data.createdAt;
+        }
+        if (data.updatedAt != null) {
+            message.updatedAt = data.updatedAt;
+        }
+        return message;
+    }
+    toObject() {
+        const data: {
+            id?: string;
+            userId?: string;
+            productId?: string;
+            productName?: string;
+            amount?: number;
+            currency?: string;
+            status?: string;
+            createdAt?: string;
+            updatedAt?: string;
+        } = {};
+        if (this.id != null) {
+            data.id = this.id;
+        }
+        if (this.userId != null) {
+            data.userId = this.userId;
+        }
+        if (this.productId != null) {
+            data.productId = this.productId;
+        }
+        if (this.productName != null) {
+            data.productName = this.productName;
+        }
+        if (this.amount != null) {
+            data.amount = this.amount;
+        }
+        if (this.currency != null) {
+            data.currency = this.currency;
+        }
+        if (this.status != null) {
+            data.status = this.status;
+        }
+        if (this.createdAt != null) {
+            data.createdAt = this.createdAt;
+        }
+        if (this.updatedAt != null) {
+            data.updatedAt = this.updatedAt;
+        }
+        return data;
+    }
+    serialize(): Uint8Array;
+    serialize(w: pb_1.BinaryWriter): void;
+    serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+        const writer = w || new pb_1.BinaryWriter();
+        if (this.id.length)
+            writer.writeString(1, this.id);
+        if (this.userId.length)
+            writer.writeString(2, this.userId);
+        if (this.productId.length)
+            writer.writeString(3, this.productId);
+        if (this.productName.length)
+            writer.writeString(4, this.productName);
+        if (this.amount != 0)
+            writer.writeInt64(5, this.amount);
+        if (this.currency.length)
+            writer.writeString(6, this.currency);
+        if (this.status.length)
+            writer.writeString(7, this.status);
+        if (this.createdAt.length)
+            writer.writeString(8, this.createdAt);
+        if (this.updatedAt.length)
+            writer.writeString(9, this.updatedAt);
+        if (!w)
+            return writer.getResultBuffer();
+    }
+    static deserialize(bytes: Uint8Array | pb_1.BinaryReader): Transaction {
+        const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new Transaction();
+        while (reader.nextField()) {
+            if (reader.isEndGroup())
+                break;
+            switch (reader.getFieldNumber()) {
+                case 1:
+                    message.id = reader.readString();
+                    break;
+                case 2:
+                    message.userId = reader.readString();
+                    break;
+                case 3:
+                    message.productId = reader.readString();
+                    break;
+                case 4:
+                    message.productName = reader.readString();
+                    break;
+                case 5:
+                    message.amount = reader.readInt64();
+                    break;
+                case 6:
+                    message.currency = reader.readString();
+                    break;
+                case 7:
+                    message.status = reader.readString();
+                    break;
+                case 8:
+                    message.createdAt = reader.readString();
+                    break;
+                case 9:
+                    message.updatedAt = reader.readString();
+                    break;
+                default: reader.skipField();
+            }
+        }
+        return message;
+    }
+    serializeBinary(): Uint8Array {
+        return this.serialize();
+    }
+    static deserializeBinary(bytes: Uint8Array): Transaction {
+        return Transaction.deserialize(bytes);
+    }
+}
 export class CreateProductRequest extends pb_1.Message {
     #one_of_decls: number[][] = [];
     constructor(data?: any[] | {
@@ -724,12 +1262,20 @@ export class CreateStripeCheckoutSessionRequest extends pb_1.Message {
     #one_of_decls: number[][] = [];
     constructor(data?: any[] | {
         product_id?: string;
+        success_url?: string;
+        cancel_url?: string;
     }) {
         super();
         pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
         if (!Array.isArray(data) && typeof data == "object") {
             if ("product_id" in data && data.product_id != undefined) {
                 this.product_id = data.product_id;
+            }
+            if ("success_url" in data && data.success_url != undefined) {
+                this.success_url = data.success_url;
+            }
+            if ("cancel_url" in data && data.cancel_url != undefined) {
+                this.cancel_url = data.cancel_url;
             }
         }
     }
@@ -739,21 +1285,49 @@ export class CreateStripeCheckoutSessionRequest extends pb_1.Message {
     set product_id(value: string) {
         pb_1.Message.setField(this, 1, value);
     }
+    get success_url() {
+        return pb_1.Message.getFieldWithDefault(this, 2, "") as string;
+    }
+    set success_url(value: string) {
+        pb_1.Message.setField(this, 2, value);
+    }
+    get cancel_url() {
+        return pb_1.Message.getFieldWithDefault(this, 3, "") as string;
+    }
+    set cancel_url(value: string) {
+        pb_1.Message.setField(this, 3, value);
+    }
     static fromObject(data: {
         product_id?: string;
+        success_url?: string;
+        cancel_url?: string;
     }): CreateStripeCheckoutSessionRequest {
         const message = new CreateStripeCheckoutSessionRequest({});
         if (data.product_id != null) {
             message.product_id = data.product_id;
+        }
+        if (data.success_url != null) {
+            message.success_url = data.success_url;
+        }
+        if (data.cancel_url != null) {
+            message.cancel_url = data.cancel_url;
         }
         return message;
     }
     toObject() {
         const data: {
             product_id?: string;
+            success_url?: string;
+            cancel_url?: string;
         } = {};
         if (this.product_id != null) {
             data.product_id = this.product_id;
+        }
+        if (this.success_url != null) {
+            data.success_url = this.success_url;
+        }
+        if (this.cancel_url != null) {
+            data.cancel_url = this.cancel_url;
         }
         return data;
     }
@@ -763,6 +1337,10 @@ export class CreateStripeCheckoutSessionRequest extends pb_1.Message {
         const writer = w || new pb_1.BinaryWriter();
         if (this.product_id.length)
             writer.writeString(1, this.product_id);
+        if (this.success_url.length)
+            writer.writeString(2, this.success_url);
+        if (this.cancel_url.length)
+            writer.writeString(3, this.cancel_url);
         if (!w)
             return writer.getResultBuffer();
     }
@@ -774,6 +1352,12 @@ export class CreateStripeCheckoutSessionRequest extends pb_1.Message {
             switch (reader.getFieldNumber()) {
                 case 1:
                     message.product_id = reader.readString();
+                    break;
+                case 2:
+                    message.success_url = reader.readString();
+                    break;
+                case 3:
+                    message.cancel_url = reader.readString();
                     break;
                 default: reader.skipField();
             }
@@ -1038,12 +1622,20 @@ export class CreateStripeSubscriptionCheckoutSessionRequest extends pb_1.Message
     #one_of_decls: number[][] = [];
     constructor(data?: any[] | {
         product_id?: string;
+        success_url?: string;
+        cancel_url?: string;
     }) {
         super();
         pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
         if (!Array.isArray(data) && typeof data == "object") {
             if ("product_id" in data && data.product_id != undefined) {
                 this.product_id = data.product_id;
+            }
+            if ("success_url" in data && data.success_url != undefined) {
+                this.success_url = data.success_url;
+            }
+            if ("cancel_url" in data && data.cancel_url != undefined) {
+                this.cancel_url = data.cancel_url;
             }
         }
     }
@@ -1053,21 +1645,49 @@ export class CreateStripeSubscriptionCheckoutSessionRequest extends pb_1.Message
     set product_id(value: string) {
         pb_1.Message.setField(this, 1, value);
     }
+    get success_url() {
+        return pb_1.Message.getFieldWithDefault(this, 2, "") as string;
+    }
+    set success_url(value: string) {
+        pb_1.Message.setField(this, 2, value);
+    }
+    get cancel_url() {
+        return pb_1.Message.getFieldWithDefault(this, 3, "") as string;
+    }
+    set cancel_url(value: string) {
+        pb_1.Message.setField(this, 3, value);
+    }
     static fromObject(data: {
         product_id?: string;
+        success_url?: string;
+        cancel_url?: string;
     }): CreateStripeSubscriptionCheckoutSessionRequest {
         const message = new CreateStripeSubscriptionCheckoutSessionRequest({});
         if (data.product_id != null) {
             message.product_id = data.product_id;
+        }
+        if (data.success_url != null) {
+            message.success_url = data.success_url;
+        }
+        if (data.cancel_url != null) {
+            message.cancel_url = data.cancel_url;
         }
         return message;
     }
     toObject() {
         const data: {
             product_id?: string;
+            success_url?: string;
+            cancel_url?: string;
         } = {};
         if (this.product_id != null) {
             data.product_id = this.product_id;
+        }
+        if (this.success_url != null) {
+            data.success_url = this.success_url;
+        }
+        if (this.cancel_url != null) {
+            data.cancel_url = this.cancel_url;
         }
         return data;
     }
@@ -1077,6 +1697,10 @@ export class CreateStripeSubscriptionCheckoutSessionRequest extends pb_1.Message
         const writer = w || new pb_1.BinaryWriter();
         if (this.product_id.length)
             writer.writeString(1, this.product_id);
+        if (this.success_url.length)
+            writer.writeString(2, this.success_url);
+        if (this.cancel_url.length)
+            writer.writeString(3, this.cancel_url);
         if (!w)
             return writer.getResultBuffer();
     }
@@ -1088,6 +1712,12 @@ export class CreateStripeSubscriptionCheckoutSessionRequest extends pb_1.Message
             switch (reader.getFieldNumber()) {
                 case 1:
                     message.product_id = reader.readString();
+                    break;
+                case 2:
+                    message.success_url = reader.readString();
+                    break;
+                case 3:
+                    message.cancel_url = reader.readString();
                     break;
                 default: reader.skipField();
             }
@@ -1493,10 +2123,6 @@ export class PaymentServiceClient {
         this._address = address;
         this._client = new grpc_web_1.GrpcWebClientBase(options);
     }
-    private static CreateProduct = new grpc_web_1.MethodDescriptor<CreateProductRequest, CreateProductResponse>("/sortedchat.PaymentService/CreateProduct", grpc_web_1.MethodType.UNARY, CreateProductRequest, CreateProductResponse, (message: CreateProductRequest) => message.serialize(), CreateProductResponse.deserialize);
-    CreateProduct(message: CreateProductRequest, metadata: grpc_web_1.Metadata | null) {
-        return this._client.thenableCall<CreateProductRequest, CreateProductResponse>(this._address + "/sortedchat.PaymentService/CreateProduct", message, metadata || {}, PaymentServiceClient.CreateProduct);
-    }
     private static ListProducts = new grpc_web_1.MethodDescriptor<ListProductsRequest, ListProductsResponse>("/sortedchat.PaymentService/ListProducts", grpc_web_1.MethodType.UNARY, ListProductsRequest, ListProductsResponse, (message: ListProductsRequest) => message.serialize(), ListProductsResponse.deserialize);
     ListProducts(message: ListProductsRequest, metadata: grpc_web_1.Metadata | null) {
         return this._client.thenableCall<ListProductsRequest, ListProductsResponse>(this._address + "/sortedchat.PaymentService/ListProducts", message, metadata || {}, PaymentServiceClient.ListProducts);
@@ -1520,5 +2146,29 @@ export class PaymentServiceClient {
     private static CheckUserProductAccess = new grpc_web_1.MethodDescriptor<CheckUserProductAccessRequest, CheckUserProductAccessResponse>("/sortedchat.PaymentService/CheckUserProductAccess", grpc_web_1.MethodType.UNARY, CheckUserProductAccessRequest, CheckUserProductAccessResponse, (message: CheckUserProductAccessRequest) => message.serialize(), CheckUserProductAccessResponse.deserialize);
     CheckUserProductAccess(message: CheckUserProductAccessRequest, metadata: grpc_web_1.Metadata | null) {
         return this._client.thenableCall<CheckUserProductAccessRequest, CheckUserProductAccessResponse>(this._address + "/sortedchat.PaymentService/CheckUserProductAccess", message, metadata || {}, PaymentServiceClient.CheckUserProductAccess);
+    }
+}
+// Server-side service class removed for client-side compatibility
+export class PaymentAdminServiceClient {
+    private _address: string;
+    private _client: grpc_web_1.GrpcWebClientBase;
+    constructor(address: string, credentials?: Object, options?: grpc_web_1.GrpcWebClientBaseOptions) {
+        if (!options)
+            options = {};
+        options.format = options.format || "text";
+        this._address = address;
+        this._client = new grpc_web_1.GrpcWebClientBase(options);
+    }
+    private static CreateProduct = new grpc_web_1.MethodDescriptor<CreateProductRequest, CreateProductResponse>("/sortedchat.PaymentAdminService/CreateProduct", grpc_web_1.MethodType.UNARY, CreateProductRequest, CreateProductResponse, (message: CreateProductRequest) => message.serialize(), CreateProductResponse.deserialize);
+    CreateProduct(message: CreateProductRequest, metadata: grpc_web_1.Metadata | null) {
+        return this._client.thenableCall<CreateProductRequest, CreateProductResponse>(this._address + "/sortedchat.PaymentAdminService/CreateProduct", message, metadata || {}, PaymentAdminServiceClient.CreateProduct);
+    }
+    private static GetTransactions = new grpc_web_1.MethodDescriptor<GetTransactionsRequest, GetTransactionsResponse>("/sortedchat.PaymentAdminService/GetTransactions", grpc_web_1.MethodType.UNARY, GetTransactionsRequest, GetTransactionsResponse, (message: GetTransactionsRequest) => message.serialize(), GetTransactionsResponse.deserialize);
+    GetTransactions(message: GetTransactionsRequest, metadata: grpc_web_1.Metadata | null) {
+        return this._client.thenableCall<GetTransactionsRequest, GetTransactionsResponse>(this._address + "/sortedchat.PaymentAdminService/GetTransactions", message, metadata || {}, PaymentAdminServiceClient.GetTransactions);
+    }
+    private static GetDashboardData = new grpc_web_1.MethodDescriptor<GetDashboardDataRequest, GetDashboardDataResponse>("/sortedchat.PaymentAdminService/GetDashboardData", grpc_web_1.MethodType.UNARY, GetDashboardDataRequest, GetDashboardDataResponse, (message: GetDashboardDataRequest) => message.serialize(), GetDashboardDataResponse.deserialize);
+    GetDashboardData(message: GetDashboardDataRequest, metadata: grpc_web_1.Metadata | null) {
+        return this._client.thenableCall<GetDashboardDataRequest, GetDashboardDataResponse>(this._address + "/sortedchat.PaymentAdminService/GetDashboardData", message, metadata || {}, PaymentAdminServiceClient.GetDashboardData);
     }
 }

@@ -52,3 +52,10 @@ type Subscription struct {
 	CanceledAt                 sql.NullInt64 `db:"canceled_at"`
 	IsRecurring                bool          `db:"is_recurring"`
 }
+
+type ProductSales struct {
+	ProductID    string `db:"product_id"`
+	ProductName  string `db:"product_name"`
+	TotalSales   int64  `db:"total_sales"`
+	TotalRevenue int64  `db:"total_revenue"`
+}

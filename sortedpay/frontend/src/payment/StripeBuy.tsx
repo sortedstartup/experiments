@@ -11,11 +11,14 @@ const Buy: React.FC<BuyProps> = ({ productId, className = "", children }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
 
+    const success_url = `${window.location.origin}/success`;
+    const cancel_url = `${window.location.origin}/cancel`;
+
     const handleBuyNow = async () => {
         try {
             setIsLoading(true);
             setError("");
-            const sessionUrl = await createStripeCheckoutSession(productId);
+            const sessionUrl = await createStripeCheckoutSession(productId, success_url, cancel_url);
             // Redirect to Stripe checkout
             window.location.href = sessionUrl;
         } catch (err: any) {

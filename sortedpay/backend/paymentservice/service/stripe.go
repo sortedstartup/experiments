@@ -65,7 +65,7 @@ func (s *PaymentService) CreateProductStripe(ctx context.Context, name string, d
 	return stripeProduct.ID, nil
 }
 
-func (s *PaymentService) CreateStripeCheckoutSession(ctx context.Context, userID string, productID string) (string, error) {
+func (s *PaymentService) CreateStripeCheckoutSession(ctx context.Context, userID string, productID string, success_url string, cancel_url string) (string, error) {
 	slog.Info("paymentservice:stripe:CreateStripeCheckoutSession", "userID", userID, "productID", productID)
 
 	hasAccess, err := s.dao.CheckUserProductAccess(userID, productID)
@@ -112,12 +112,6 @@ func (s *PaymentService) CreateStripeCheckoutSession(ctx context.Context, userID
 		return "", fmt.Errorf("failed to process the request")
 	}
 
-	frontendURL := os.Getenv("FRONTEND_URL")
-	if strings.TrimSpace(frontendURL) == "" {
-		slog.Error("paymentservice:stripe:CreateStripeCheckoutSession", "error", "FRONTEND_URL is not set")
-		return "", fmt.Errorf("configuration error")
-	}
-
 	//lets create session
 	sessionParams := &stripe.CheckoutSessionParams{
 		PaymentMethodTypes: stripe.StringSlice([]string{"card"}),
@@ -128,8 +122,8 @@ func (s *PaymentService) CreateStripeCheckoutSession(ctx context.Context, userID
 			},
 		},
 		Mode:       stripe.String("payment"),
-		SuccessURL: stripe.String(frontendURL + "/success"),
-		CancelURL:  stripe.String(frontendURL + "/cancel"),
+		SuccessURL: stripe.String(success_url),
+		CancelURL:  stripe.String(cancel_url),
 		Metadata:   map[string]string{"user_id": userID, "product_id": productID},
 		PaymentIntentData: &stripe.CheckoutSessionPaymentIntentDataParams{
 			Metadata: map[string]string{

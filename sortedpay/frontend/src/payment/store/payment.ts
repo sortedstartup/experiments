@@ -2,10 +2,13 @@ import { atom } from "nanostores";
 import {
     CreateProductRequest, PaymentServiceClient, ListProductsRequest, Product, CreateStripeCheckoutSessionRequest, CreateRazorpayCheckoutSessionRequest, Currency, PaymentType, Interval, CreateStripeSubscriptionCheckoutSessionRequest, CreateRazorpaySubscriptionCheckoutSessionRequest
 } from "../../../proto/paymentservice"
-import { createAuthenticatedClientOptions } from "../../lib/auth";
+// import { createAuthenticatedClientOptions } from "../../lib/auth";
 import { toast } from "sonner";
 
-const client = new PaymentServiceClient(import.meta.env.VITE_API_URL, {}, createAuthenticatedClientOptions());
+//take it from env or use /hack
+const client = new PaymentServiceClient("/hack", {}, {
+    format: "text"
+});
 
 
 export const createProduct = async (
@@ -71,9 +74,9 @@ export const listProducts = async () => {
     }
 }
 
-export const createStripeCheckoutSession = async (productId: string) => {
+export const createStripeCheckoutSession = async (productId: string, success_url: string, cancel_url: string) => {
     try {
-        const req = new CreateStripeCheckoutSessionRequest({ product_id: productId });
+        const req = new CreateStripeCheckoutSessionRequest({ product_id: productId, success_url: success_url, cancel_url: cancel_url });
         const res = await client.CreateStripeCheckoutSession(req, {});
         toast.success("Checkout session created successfully");
         return res.session_url;

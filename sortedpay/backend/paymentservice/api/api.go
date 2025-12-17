@@ -8,7 +8,7 @@ import (
 	"os"
 	"strings"
 
-	"sortedstartup/common/auth"
+	auth "sortedstartup/sortedpay/auth"
 	"sortedstartup/sortedpay/paymentservice/dao"
 	pb "sortedstartup/sortedpay/paymentservice/proto"
 	"sortedstartup/sortedpay/paymentservice/service"
@@ -106,13 +106,12 @@ func (s *PaymentServiceAPI) CreateProduct(ctx context.Context, req *pb.CreatePro
 }
 
 func (s *PaymentServiceAPI) ListProducts(ctx context.Context, req *pb.ListProductsRequest) (*pb.ListProductsResponse, error) {
-	// userID, err := auth.GetUserIDFromContext_WithError(ctx)
-	// if err != nil {
-	// 	slog.Error("paymentservice:api:ListProducts", "error", err)
-	// 	return nil, err
-	// }
-	// fmt.Println("userID", userID)
-	userID := "0"
+	userID, err := auth.GetUserIDFromContext_WithError(ctx)
+	if err != nil {
+		slog.Error("paymentservice:api:ListProducts", "error", err)
+		return nil, err
+	}
+	fmt.Println("userID", userID)
 
 	daoProducts, err := s.service.ListProducts(ctx, userID)
 	if err != nil {
@@ -153,18 +152,24 @@ func (s *PaymentServiceAPI) ListProducts(ctx context.Context, req *pb.ListProduc
 }
 
 func (s *PaymentServiceAPI) CreateStripeCheckoutSession(ctx context.Context, req *pb.CreateStripeCheckoutSessionRequest) (*pb.CreateStripeCheckoutSessionResponse, error) {
-	// userID, err := auth.GetUserIDFromContext_WithError(ctx)
-	// if err != nil {
-	// 	slog.Error("paymentservice:api:CreateStripeCheckoutSession", "error", err)
-	// 	return nil, err
-	// }
-	userID := "0"
+	userID, err := auth.GetUserIDFromContext_WithError(ctx)
+	if err != nil {
+		slog.Error("paymentservice:api:CreateStripeCheckoutSession", "error", err)
+		return nil, err
+	}
 
 	if strings.TrimSpace(req.ProductId) == "" {
 		return nil, status.Error(codes.InvalidArgument, "Product ID cannot be empty")
 	}
 
-	SessionUrl, err := s.service.CreateStripeCheckoutSession(ctx, userID, req.ProductId)
+	if strings.TrimSpace(req.SuccessUrl) == "" {
+		return nil, status.Error(codes.InvalidArgument, "Success URL cannot be empty")
+	}
+	if strings.TrimSpace(req.CancelUrl) == "" {
+		return nil, status.Error(codes.InvalidArgument, "Cancel URL cannot be empty")
+	}
+
+	SessionUrl, err := s.service.CreateStripeCheckoutSession(ctx, userID, req.ProductId, req.SuccessUrl, req.CancelUrl)
 	if err != nil {
 		slog.Error("paymentservice:api:CreateStripeCheckoutSession", "error", err)
 		return nil, status.Errorf(codes.Internal, "failed to create Stripe checkout session: %v", err)
@@ -284,12 +289,11 @@ func (s *PaymentServiceAPI) Init(config *dao.Config) error {
 }
 
 func (s *PaymentServiceAPI) CheckUserProductAccess(ctx context.Context, req *pb.CheckUserProductAccessRequest) (*pb.CheckUserProductAccessResponse, error) {
-	// userID, err := auth.GetUserIDFromContext_WithError(ctx)
-	// if err != nil {
-	// 	slog.Error("paymentservice:api:CheckUserProductAccess", "error", err)
-	// 	return nil, err
-	// }
-	userID := "0"
+	userID, err := auth.GetUserIDFromContext_WithError(ctx)
+	if err != nil {
+		slog.Error("paymentservice:api:CheckUserProductAccess", "error", err)
+		return nil, err
+	}
 	if strings.TrimSpace(req.ProductId) == "" {
 		return nil, status.Error(codes.InvalidArgument, "Product ID cannot be empty")
 	}

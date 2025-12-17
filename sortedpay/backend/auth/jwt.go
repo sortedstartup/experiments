@@ -149,9 +149,9 @@ func GetUserFromContext(ctx context.Context) (*UserClaims, bool) {
 // GetUserIDFromContext extracts user ID from context
 func GetUserIDFromContext(ctx context.Context) (string, bool) {
 	slog.Debug("common:jwt:GetUserIDFromContext")
-	userID, ok := ctx.Value(UserIDKey).(string)
-	fmt.Println("userID", userID)
-	return "0", ok
+	// userID, ok := ctx.Value(UserIDKey).(string)
+	// fmt.Println("userID", userID)
+	return "0", true
 }
 
 func GetUserIDFromContext_WithError(ctx context.Context) (string, error) {
@@ -194,4 +194,19 @@ func HasRole(ctx context.Context, role string) bool {
 		}
 	}
 	return false
+}
+
+func IsUserAdmin(ctx context.Context) bool {
+	// slog.Debug("common:jwt:IsUserAdmin")
+	// roles, ok := GetUserRolesFromContext(ctx)
+	// if !ok {
+	// 	slog.Error("common:jwt:IsUserAdmin", "error", "user roles not found")
+	// 	return false
+	// }
+	// for _, r := range roles {
+	// 	if r == "admin" {
+	// 		return true
+	// 	}
+	// }
+	return true //right now return true
 }

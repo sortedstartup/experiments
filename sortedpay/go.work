@@ -1,7 +1,6 @@
-go 1.24.5
+go 1.24.3
 
 use (
 	./backend
-	./backend/common
 	./backend/authservice
 )

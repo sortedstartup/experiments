@@ -13,11 +13,11 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 
-	"sortedstartup/common/auth"
-	"sortedstartup/common/util"
+	"sortedstartup/sortedpay/auth"
 	paymentApi "sortedstartup/sortedpay/paymentservice/api"
 	paymentDao "sortedstartup/sortedpay/paymentservice/dao"
 	paymentProto "sortedstartup/sortedpay/paymentservice/proto"
+	"sortedstartup/sortedpay/util"
 )
 
 const (

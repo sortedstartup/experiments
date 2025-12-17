@@ -21,6 +21,684 @@ export enum Interval {
     QUARTER = 2,
     YEAR = 3
 }
+export class GetProductSalesRequest extends pb_1.Message {
+    #one_of_decls: number[][] = [];
+    constructor(data?: any[] | {
+        product_id?: string;
+        start_date?: string;
+        end_date?: string;
+    }) {
+        super();
+        pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+        if (!Array.isArray(data) && typeof data == "object") {
+            if ("product_id" in data && data.product_id != undefined) {
+                this.product_id = data.product_id;
+            }
+            if ("start_date" in data && data.start_date != undefined) {
+                this.start_date = data.start_date;
+            }
+            if ("end_date" in data && data.end_date != undefined) {
+                this.end_date = data.end_date;
+            }
+        }
+    }
+    get product_id() {
+        return pb_1.Message.getFieldWithDefault(this, 1, "") as string;
+    }
+    set product_id(value: string) {
+        pb_1.Message.setField(this, 1, value);
+    }
+    get start_date() {
+        return pb_1.Message.getFieldWithDefault(this, 2, "") as string;
+    }
+    set start_date(value: string) {
+        pb_1.Message.setField(this, 2, value);
+    }
+    get end_date() {
+        return pb_1.Message.getFieldWithDefault(this, 3, "") as string;
+    }
+    set end_date(value: string) {
+        pb_1.Message.setField(this, 3, value);
+    }
+    static fromObject(data: {
+        product_id?: string;
+        start_date?: string;
+        end_date?: string;
+    }): GetProductSalesRequest {
+        const message = new GetProductSalesRequest({});
+        if (data.product_id != null) {
+            message.product_id = data.product_id;
+        }
+        if (data.start_date != null) {
+            message.start_date = data.start_date;
+        }
+        if (data.end_date != null) {
+            message.end_date = data.end_date;
+        }
+        return message;
+    }
+    toObject() {
+        const data: {
+            product_id?: string;
+            start_date?: string;
+            end_date?: string;
+        } = {};
+        if (this.product_id != null) {
+            data.product_id = this.product_id;
+        }
+        if (this.start_date != null) {
+            data.start_date = this.start_date;
+        }
+        if (this.end_date != null) {
+            data.end_date = this.end_date;
+        }
+        return data;
+    }
+    serialize(): Uint8Array;
+    serialize(w: pb_1.BinaryWriter): void;
+    serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+        const writer = w || new pb_1.BinaryWriter();
+        if (this.product_id.length)
+            writer.writeString(1, this.product_id);
+        if (this.start_date.length)
+            writer.writeString(2, this.start_date);
+        if (this.end_date.length)
+            writer.writeString(3, this.end_date);
+        if (!w)
+            return writer.getResultBuffer();
+    }
+    static deserialize(bytes: Uint8Array | pb_1.BinaryReader): GetProductSalesRequest {
+        const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new GetProductSalesRequest();
+        while (reader.nextField()) {
+            if (reader.isEndGroup())
+                break;
+            switch (reader.getFieldNumber()) {
+                case 1:
+                    message.product_id = reader.readString();
+                    break;
+                case 2:
+                    message.start_date = reader.readString();
+                    break;
+                case 3:
+                    message.end_date = reader.readString();
+                    break;
+                default: reader.skipField();
+            }
+        }
+        return message;
+    }
+    serializeBinary(): Uint8Array {
+        return this.serialize();
+    }
+    static deserializeBinary(bytes: Uint8Array): GetProductSalesRequest {
+        return GetProductSalesRequest.deserialize(bytes);
+    }
+}
+export class GetProductSalesResponse extends pb_1.Message {
+    #one_of_decls: number[][] = [];
+    constructor(data?: any[] | {
+        product_sales?: ProductSales[];
+    }) {
+        super();
+        pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [1], this.#one_of_decls);
+        if (!Array.isArray(data) && typeof data == "object") {
+            if ("product_sales" in data && data.product_sales != undefined) {
+                this.product_sales = data.product_sales;
+            }
+        }
+    }
+    get product_sales() {
+        return pb_1.Message.getRepeatedWrapperField(this, ProductSales, 1) as ProductSales[];
+    }
+    set product_sales(value: ProductSales[]) {
+        pb_1.Message.setRepeatedWrapperField(this, 1, value);
+    }
+    static fromObject(data: {
+        product_sales?: ReturnType<typeof ProductSales.prototype.toObject>[];
+    }): GetProductSalesResponse {
+        const message = new GetProductSalesResponse({});
+        if (data.product_sales != null) {
+            message.product_sales = data.product_sales.map(item => ProductSales.fromObject(item));
+        }
+        return message;
+    }
+    toObject() {
+        const data: {
+            product_sales?: ReturnType<typeof ProductSales.prototype.toObject>[];
+        } = {};
+        if (this.product_sales != null) {
+            data.product_sales = this.product_sales.map((item: ProductSales) => item.toObject());
+        }
+        return data;
+    }
+    serialize(): Uint8Array;
+    serialize(w: pb_1.BinaryWriter): void;
+    serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+        const writer = w || new pb_1.BinaryWriter();
+        if (this.product_sales.length)
+            writer.writeRepeatedMessage(1, this.product_sales, (item: ProductSales) => item.serialize(writer));
+        if (!w)
+            return writer.getResultBuffer();
+    }
+    static deserialize(bytes: Uint8Array | pb_1.BinaryReader): GetProductSalesResponse {
+        const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new GetProductSalesResponse();
+        while (reader.nextField()) {
+            if (reader.isEndGroup())
+                break;
+            switch (reader.getFieldNumber()) {
+                case 1:
+                    reader.readMessage(message.product_sales, () => pb_1.Message.addToRepeatedWrapperField(message, 1, ProductSales.deserialize(reader), ProductSales));
+                    break;
+                default: reader.skipField();
+            }
+        }
+        return message;
+    }
+    serializeBinary(): Uint8Array {
+        return this.serialize();
+    }
+    static deserializeBinary(bytes: Uint8Array): GetProductSalesResponse {
+        return GetProductSalesResponse.deserialize(bytes);
+    }
+}
+export class ProductSales extends pb_1.Message {
+    #one_of_decls: number[][] = [];
+    constructor(data?: any[] | {
+        product_id?: string;
+        product_name?: string;
+        total_sales?: number;
+        total_revenue?: number;
+    }) {
+        super();
+        pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+        if (!Array.isArray(data) && typeof data == "object") {
+            if ("product_id" in data && data.product_id != undefined) {
+                this.product_id = data.product_id;
+            }
+            if ("product_name" in data && data.product_name != undefined) {
+                this.product_name = data.product_name;
+            }
+            if ("total_sales" in data && data.total_sales != undefined) {
+                this.total_sales = data.total_sales;
+            }
+            if ("total_revenue" in data && data.total_revenue != undefined) {
+                this.total_revenue = data.total_revenue;
+            }
+        }
+    }
+    get product_id() {
+        return pb_1.Message.getFieldWithDefault(this, 1, "") as string;
+    }
+    set product_id(value: string) {
+        pb_1.Message.setField(this, 1, value);
+    }
+    get product_name() {
+        return pb_1.Message.getFieldWithDefault(this, 2, "") as string;
+    }
+    set product_name(value: string) {
+        pb_1.Message.setField(this, 2, value);
+    }
+    get total_sales() {
+        return pb_1.Message.getFieldWithDefault(this, 3, 0) as number;
+    }
+    set total_sales(value: number) {
+        pb_1.Message.setField(this, 3, value);
+    }
+    get total_revenue() {
+        return pb_1.Message.getFieldWithDefault(this, 4, 0) as number;
+    }
+    set total_revenue(value: number) {
+        pb_1.Message.setField(this, 4, value);
+    }
+    static fromObject(data: {
+        product_id?: string;
+        product_name?: string;
+        total_sales?: number;
+        total_revenue?: number;
+    }): ProductSales {
+        const message = new ProductSales({});
+        if (data.product_id != null) {
+            message.product_id = data.product_id;
+        }
+        if (data.product_name != null) {
+            message.product_name = data.product_name;
+        }
+        if (data.total_sales != null) {
+            message.total_sales = data.total_sales;
+        }
+        if (data.total_revenue != null) {
+            message.total_revenue = data.total_revenue;
+        }
+        return message;
+    }
+    toObject() {
+        const data: {
+            product_id?: string;
+            product_name?: string;
+            total_sales?: number;
+            total_revenue?: number;
+        } = {};
+        if (this.product_id != null) {
+            data.product_id = this.product_id;
+        }
+        if (this.product_name != null) {
+            data.product_name = this.product_name;
+        }
+        if (this.total_sales != null) {
+            data.total_sales = this.total_sales;
+        }
+        if (this.total_revenue != null) {
+            data.total_revenue = this.total_revenue;
+        }
+        return data;
+    }
+    serialize(): Uint8Array;
+    serialize(w: pb_1.BinaryWriter): void;
+    serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+        const writer = w || new pb_1.BinaryWriter();
+        if (this.product_id.length)
+            writer.writeString(1, this.product_id);
+        if (this.product_name.length)
+            writer.writeString(2, this.product_name);
+        if (this.total_sales != 0)
+            writer.writeInt64(3, this.total_sales);
+        if (this.total_revenue != 0)
+            writer.writeInt64(4, this.total_revenue);
+        if (!w)
+            return writer.getResultBuffer();
+    }
+    static deserialize(bytes: Uint8Array | pb_1.BinaryReader): ProductSales {
+        const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new ProductSales();
+        while (reader.nextField()) {
+            if (reader.isEndGroup())
+                break;
+            switch (reader.getFieldNumber()) {
+                case 1:
+                    message.product_id = reader.readString();
+                    break;
+                case 2:
+                    message.product_name = reader.readString();
+                    break;
+                case 3:
+                    message.total_sales = reader.readInt64();
+                    break;
+                case 4:
+                    message.total_revenue = reader.readInt64();
+                    break;
+                default: reader.skipField();
+            }
+        }
+        return message;
+    }
+    serializeBinary(): Uint8Array {
+        return this.serialize();
+    }
+    static deserializeBinary(bytes: Uint8Array): ProductSales {
+        return ProductSales.deserialize(bytes);
+    }
+}
+export class GetUserPurchasesRequest extends pb_1.Message {
+    #one_of_decls: number[][] = [];
+    constructor(data?: any[] | {
+        user_id?: string;
+        start_date?: string;
+        end_date?: string;
+    }) {
+        super();
+        pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+        if (!Array.isArray(data) && typeof data == "object") {
+            if ("user_id" in data && data.user_id != undefined) {
+                this.user_id = data.user_id;
+            }
+            if ("start_date" in data && data.start_date != undefined) {
+                this.start_date = data.start_date;
+            }
+            if ("end_date" in data && data.end_date != undefined) {
+                this.end_date = data.end_date;
+            }
+        }
+    }
+    get user_id() {
+        return pb_1.Message.getFieldWithDefault(this, 1, "") as string;
+    }
+    set user_id(value: string) {
+        pb_1.Message.setField(this, 1, value);
+    }
+    get start_date() {
+        return pb_1.Message.getFieldWithDefault(this, 2, "") as string;
+    }
+    set start_date(value: string) {
+        pb_1.Message.setField(this, 2, value);
+    }
+    get end_date() {
+        return pb_1.Message.getFieldWithDefault(this, 3, "") as string;
+    }
+    set end_date(value: string) {
+        pb_1.Message.setField(this, 3, value);
+    }
+    static fromObject(data: {
+        user_id?: string;
+        start_date?: string;
+        end_date?: string;
+    }): GetUserPurchasesRequest {
+        const message = new GetUserPurchasesRequest({});
+        if (data.user_id != null) {
+            message.user_id = data.user_id;
+        }
+        if (data.start_date != null) {
+            message.start_date = data.start_date;
+        }
+        if (data.end_date != null) {
+            message.end_date = data.end_date;
+        }
+        return message;
+    }
+    toObject() {
+        const data: {
+            user_id?: string;
+            start_date?: string;
+            end_date?: string;
+        } = {};
+        if (this.user_id != null) {
+            data.user_id = this.user_id;
+        }
+        if (this.start_date != null) {
+            data.start_date = this.start_date;
+        }
+        if (this.end_date != null) {
+            data.end_date = this.end_date;
+        }
+        return data;
+    }
+    serialize(): Uint8Array;
+    serialize(w: pb_1.BinaryWriter): void;
+    serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+        const writer = w || new pb_1.BinaryWriter();
+        if (this.user_id.length)
+            writer.writeString(1, this.user_id);
+        if (this.start_date.length)
+            writer.writeString(2, this.start_date);
+        if (this.end_date.length)
+            writer.writeString(3, this.end_date);
+        if (!w)
+            return writer.getResultBuffer();
+    }
+    static deserialize(bytes: Uint8Array | pb_1.BinaryReader): GetUserPurchasesRequest {
+        const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new GetUserPurchasesRequest();
+        while (reader.nextField()) {
+            if (reader.isEndGroup())
+                break;
+            switch (reader.getFieldNumber()) {
+                case 1:
+                    message.user_id = reader.readString();
+                    break;
+                case 2:
+                    message.start_date = reader.readString();
+                    break;
+                case 3:
+                    message.end_date = reader.readString();
+                    break;
+                default: reader.skipField();
+            }
+        }
+        return message;
+    }
+    serializeBinary(): Uint8Array {
+        return this.serialize();
+    }
+    static deserializeBinary(bytes: Uint8Array): GetUserPurchasesRequest {
+        return GetUserPurchasesRequest.deserialize(bytes);
+    }
+}
+export class GetUserPurchasesResponse extends pb_1.Message {
+    #one_of_decls: number[][] = [];
+    constructor(data?: any[] | {
+        user_purchases?: UserPurchases[];
+    }) {
+        super();
+        pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [1], this.#one_of_decls);
+        if (!Array.isArray(data) && typeof data == "object") {
+            if ("user_purchases" in data && data.user_purchases != undefined) {
+                this.user_purchases = data.user_purchases;
+            }
+        }
+    }
+    get user_purchases() {
+        return pb_1.Message.getRepeatedWrapperField(this, UserPurchases, 1) as UserPurchases[];
+    }
+    set user_purchases(value: UserPurchases[]) {
+        pb_1.Message.setRepeatedWrapperField(this, 1, value);
+    }
+    static fromObject(data: {
+        user_purchases?: ReturnType<typeof UserPurchases.prototype.toObject>[];
+    }): GetUserPurchasesResponse {
+        const message = new GetUserPurchasesResponse({});
+        if (data.user_purchases != null) {
+            message.user_purchases = data.user_purchases.map(item => UserPurchases.fromObject(item));
+        }
+        return message;
+    }
+    toObject() {
+        const data: {
+            user_purchases?: ReturnType<typeof UserPurchases.prototype.toObject>[];
+        } = {};
+        if (this.user_purchases != null) {
+            data.user_purchases = this.user_purchases.map((item: UserPurchases) => item.toObject());
+        }
+        return data;
+    }
+    serialize(): Uint8Array;
+    serialize(w: pb_1.BinaryWriter): void;
+    serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+        const writer = w || new pb_1.BinaryWriter();
+        if (this.user_purchases.length)
+            writer.writeRepeatedMessage(1, this.user_purchases, (item: UserPurchases) => item.serialize(writer));
+        if (!w)
+            return writer.getResultBuffer();
+    }
+    static deserialize(bytes: Uint8Array | pb_1.BinaryReader): GetUserPurchasesResponse {
+        const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new GetUserPurchasesResponse();
+        while (reader.nextField()) {
+            if (reader.isEndGroup())
+                break;
+            switch (reader.getFieldNumber()) {
+                case 1:
+                    reader.readMessage(message.user_purchases, () => pb_1.Message.addToRepeatedWrapperField(message, 1, UserPurchases.deserialize(reader), UserPurchases));
+                    break;
+                default: reader.skipField();
+            }
+        }
+        return message;
+    }
+    serializeBinary(): Uint8Array {
+        return this.serialize();
+    }
+    static deserializeBinary(bytes: Uint8Array): GetUserPurchasesResponse {
+        return GetUserPurchasesResponse.deserialize(bytes);
+    }
+}
+export class UserPurchases extends pb_1.Message {
+    #one_of_decls: number[][] = [];
+    constructor(data?: any[] | {
+        user_id?: string;
+        user_name?: string;
+        product_id?: string;
+        product_name?: string;
+        total_purchases?: number;
+        total_revenue?: number;
+    }) {
+        super();
+        pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+        if (!Array.isArray(data) && typeof data == "object") {
+            if ("user_id" in data && data.user_id != undefined) {
+                this.user_id = data.user_id;
+            }
+            if ("user_name" in data && data.user_name != undefined) {
+                this.user_name = data.user_name;
+            }
+            if ("product_id" in data && data.product_id != undefined) {
+                this.product_id = data.product_id;
+            }
+            if ("product_name" in data && data.product_name != undefined) {
+                this.product_name = data.product_name;
+            }
+            if ("total_purchases" in data && data.total_purchases != undefined) {
+                this.total_purchases = data.total_purchases;
+            }
+            if ("total_revenue" in data && data.total_revenue != undefined) {
+                this.total_revenue = data.total_revenue;
+            }
+        }
+    }
+    get user_id() {
+        return pb_1.Message.getFieldWithDefault(this, 1, "") as string;
+    }
+    set user_id(value: string) {
+        pb_1.Message.setField(this, 1, value);
+    }
+    get user_name() {
+        return pb_1.Message.getFieldWithDefault(this, 2, "") as string;
+    }
+    set user_name(value: string) {
+        pb_1.Message.setField(this, 2, value);
+    }
+    get product_id() {
+        return pb_1.Message.getFieldWithDefault(this, 3, "") as string;
+    }
+    set product_id(value: string) {
+        pb_1.Message.setField(this, 3, value);
+    }
+    get product_name() {
+        return pb_1.Message.getFieldWithDefault(this, 4, "") as string;
+    }
+    set product_name(value: string) {
+        pb_1.Message.setField(this, 4, value);
+    }
+    get total_purchases() {
+        return pb_1.Message.getFieldWithDefault(this, 5, 0) as number;
+    }
+    set total_purchases(value: number) {
+        pb_1.Message.setField(this, 5, value);
+    }
+    get total_revenue() {
+        return pb_1.Message.getFieldWithDefault(this, 6, 0) as number;
+    }
+    set total_revenue(value: number) {
+        pb_1.Message.setField(this, 6, value);
+    }
+    static fromObject(data: {
+        user_id?: string;
+        user_name?: string;
+        product_id?: string;
+        product_name?: string;
+        total_purchases?: number;
+        total_revenue?: number;
+    }): UserPurchases {
+        const message = new UserPurchases({});
+        if (data.user_id != null) {
+            message.user_id = data.user_id;
+        }
+        if (data.user_name != null) {
+            message.user_name = data.user_name;
+        }
+        if (data.product_id != null) {
+            message.product_id = data.product_id;
+        }
+        if (data.product_name != null) {
+            message.product_name = data.product_name;
+        }
+        if (data.total_purchases != null) {
+            message.total_purchases = data.total_purchases;
+        }
+        if (data.total_revenue != null) {
+            message.total_revenue = data.total_revenue;
+        }
+        return message;
+    }
+    toObject() {
+        const data: {
+            user_id?: string;
+            user_name?: string;
+            product_id?: string;
+            product_name?: string;
+            total_purchases?: number;
+            total_revenue?: number;
+        } = {};
+        if (this.user_id != null) {
+            data.user_id = this.user_id;
+        }
+        if (this.user_name != null) {
+            data.user_name = this.user_name;
+        }
+        if (this.product_id != null) {
+            data.product_id = this.product_id;
+        }
+        if (this.product_name != null) {
+            data.product_name = this.product_name;
+        }
+        if (this.total_purchases != null) {
+            data.total_purchases = this.total_purchases;
+        }
+        if (this.total_revenue != null) {
+            data.total_revenue = this.total_revenue;
+        }
+        return data;
+    }
+    serialize(): Uint8Array;
+    serialize(w: pb_1.BinaryWriter): void;
+    serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+        const writer = w || new pb_1.BinaryWriter();
+        if (this.user_id.length)
+            writer.writeString(1, this.user_id);
+        if (this.user_name.length)
+            writer.writeString(2, this.user_name);
+        if (this.product_id.length)
+            writer.writeString(3, this.product_id);
+        if (this.product_name.length)
+            writer.writeString(4, this.product_name);
+        if (this.total_purchases != 0)
+            writer.writeInt64(5, this.total_purchases);
+        if (this.total_revenue != 0)
+            writer.writeInt64(6, this.total_revenue);
+        if (!w)
+            return writer.getResultBuffer();
+    }
+    static deserialize(bytes: Uint8Array | pb_1.BinaryReader): UserPurchases {
+        const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new UserPurchases();
+        while (reader.nextField()) {
+            if (reader.isEndGroup())
+                break;
+            switch (reader.getFieldNumber()) {
+                case 1:
+                    message.user_id = reader.readString();
+                    break;
+                case 2:
+                    message.user_name = reader.readString();
+                    break;
+                case 3:
+                    message.product_id = reader.readString();
+                    break;
+                case 4:
+                    message.product_name = reader.readString();
+                    break;
+                case 5:
+                    message.total_purchases = reader.readInt64();
+                    break;
+                case 6:
+                    message.total_revenue = reader.readInt64();
+                    break;
+                default: reader.skipField();
+            }
+        }
+        return message;
+    }
+    serializeBinary(): Uint8Array {
+        return this.serialize();
+    }
+    static deserializeBinary(bytes: Uint8Array): UserPurchases {
+        return UserPurchases.deserialize(bytes);
+    }
+}
 export class CreateProductRequest extends pb_1.Message {
     #one_of_decls: number[][] = [];
     constructor(data?: any[] | {
@@ -1493,32 +2171,52 @@ export class PaymentServiceClient {
         this._address = address;
         this._client = new grpc_web_1.GrpcWebClientBase(options);
     }
-    private static CreateProduct = new grpc_web_1.MethodDescriptor<CreateProductRequest, CreateProductResponse>("/sortedchat.PaymentService/CreateProduct", grpc_web_1.MethodType.UNARY, CreateProductRequest, CreateProductResponse, (message: CreateProductRequest) => message.serialize(), CreateProductResponse.deserialize);
-    CreateProduct(message: CreateProductRequest, metadata: grpc_web_1.Metadata | null) {
-        return this._client.unaryCall(this._address + "/sortedchat.PaymentService/CreateProduct", message, metadata || {}, PaymentServiceClient.CreateProduct);
-    }
     private static ListProducts = new grpc_web_1.MethodDescriptor<ListProductsRequest, ListProductsResponse>("/sortedchat.PaymentService/ListProducts", grpc_web_1.MethodType.UNARY, ListProductsRequest, ListProductsResponse, (message: ListProductsRequest) => message.serialize(), ListProductsResponse.deserialize);
     ListProducts(message: ListProductsRequest, metadata: grpc_web_1.Metadata | null) {
-        return this._client.unaryCall(this._address + "/sortedchat.PaymentService/ListProducts", message, metadata || {}, PaymentServiceClient.ListProducts);
+        return this._client.thenableCall<ListProductsRequest, ListProductsResponse>(this._address + "/sortedchat.PaymentService/ListProducts", message, metadata || {}, PaymentServiceClient.ListProducts);
     }
     private static CreateStripeCheckoutSession = new grpc_web_1.MethodDescriptor<CreateStripeCheckoutSessionRequest, CreateStripeCheckoutSessionResponse>("/sortedchat.PaymentService/CreateStripeCheckoutSession", grpc_web_1.MethodType.UNARY, CreateStripeCheckoutSessionRequest, CreateStripeCheckoutSessionResponse, (message: CreateStripeCheckoutSessionRequest) => message.serialize(), CreateStripeCheckoutSessionResponse.deserialize);
     CreateStripeCheckoutSession(message: CreateStripeCheckoutSessionRequest, metadata: grpc_web_1.Metadata | null) {
-        return this._client.unaryCall(this._address + "/sortedchat.PaymentService/CreateStripeCheckoutSession", message, metadata || {}, PaymentServiceClient.CreateStripeCheckoutSession);
+        return this._client.thenableCall<CreateStripeCheckoutSessionRequest, CreateStripeCheckoutSessionResponse>(this._address + "/sortedchat.PaymentService/CreateStripeCheckoutSession", message, metadata || {}, PaymentServiceClient.CreateStripeCheckoutSession);
     }
     private static CreateRazorpayCheckoutSession = new grpc_web_1.MethodDescriptor<CreateRazorpayCheckoutSessionRequest, CreateRazorpayCheckoutSessionResponse>("/sortedchat.PaymentService/CreateRazorpayCheckoutSession", grpc_web_1.MethodType.UNARY, CreateRazorpayCheckoutSessionRequest, CreateRazorpayCheckoutSessionResponse, (message: CreateRazorpayCheckoutSessionRequest) => message.serialize(), CreateRazorpayCheckoutSessionResponse.deserialize);
     CreateRazorpayCheckoutSession(message: CreateRazorpayCheckoutSessionRequest, metadata: grpc_web_1.Metadata | null) {
-        return this._client.unaryCall(this._address + "/sortedchat.PaymentService/CreateRazorpayCheckoutSession", message, metadata || {}, PaymentServiceClient.CreateRazorpayCheckoutSession);
+        return this._client.thenableCall<CreateRazorpayCheckoutSessionRequest, CreateRazorpayCheckoutSessionResponse>(this._address + "/sortedchat.PaymentService/CreateRazorpayCheckoutSession", message, metadata || {}, PaymentServiceClient.CreateRazorpayCheckoutSession);
     }
     private static CreateStripeSubscriptionCheckoutSession = new grpc_web_1.MethodDescriptor<CreateStripeSubscriptionCheckoutSessionRequest, CreateStripeSubscriptionCheckoutSessionResponse>("/sortedchat.PaymentService/CreateStripeSubscriptionCheckoutSession", grpc_web_1.MethodType.UNARY, CreateStripeSubscriptionCheckoutSessionRequest, CreateStripeSubscriptionCheckoutSessionResponse, (message: CreateStripeSubscriptionCheckoutSessionRequest) => message.serialize(), CreateStripeSubscriptionCheckoutSessionResponse.deserialize);
     CreateStripeSubscriptionCheckoutSession(message: CreateStripeSubscriptionCheckoutSessionRequest, metadata: grpc_web_1.Metadata | null) {
-        return this._client.unaryCall(this._address + "/sortedchat.PaymentService/CreateStripeSubscriptionCheckoutSession", message, metadata || {}, PaymentServiceClient.CreateStripeSubscriptionCheckoutSession);
+        return this._client.thenableCall<CreateStripeSubscriptionCheckoutSessionRequest, CreateStripeSubscriptionCheckoutSessionResponse>(this._address + "/sortedchat.PaymentService/CreateStripeSubscriptionCheckoutSession", message, metadata || {}, PaymentServiceClient.CreateStripeSubscriptionCheckoutSession);
     }
     private static CreateRazorpaySubscriptionCheckoutSession = new grpc_web_1.MethodDescriptor<CreateRazorpaySubscriptionCheckoutSessionRequest, CreateRazorpaySubscriptionCheckoutSessionResponse>("/sortedchat.PaymentService/CreateRazorpaySubscriptionCheckoutSession", grpc_web_1.MethodType.UNARY, CreateRazorpaySubscriptionCheckoutSessionRequest, CreateRazorpaySubscriptionCheckoutSessionResponse, (message: CreateRazorpaySubscriptionCheckoutSessionRequest) => message.serialize(), CreateRazorpaySubscriptionCheckoutSessionResponse.deserialize);
     CreateRazorpaySubscriptionCheckoutSession(message: CreateRazorpaySubscriptionCheckoutSessionRequest, metadata: grpc_web_1.Metadata | null) {
-        return this._client.unaryCall(this._address + "/sortedchat.PaymentService/CreateRazorpaySubscriptionCheckoutSession", message, metadata || {}, PaymentServiceClient.CreateRazorpaySubscriptionCheckoutSession);
+        return this._client.thenableCall<CreateRazorpaySubscriptionCheckoutSessionRequest, CreateRazorpaySubscriptionCheckoutSessionResponse>(this._address + "/sortedchat.PaymentService/CreateRazorpaySubscriptionCheckoutSession", message, metadata || {}, PaymentServiceClient.CreateRazorpaySubscriptionCheckoutSession);
     }
     private static CheckUserProductAccess = new grpc_web_1.MethodDescriptor<CheckUserProductAccessRequest, CheckUserProductAccessResponse>("/sortedchat.PaymentService/CheckUserProductAccess", grpc_web_1.MethodType.UNARY, CheckUserProductAccessRequest, CheckUserProductAccessResponse, (message: CheckUserProductAccessRequest) => message.serialize(), CheckUserProductAccessResponse.deserialize);
     CheckUserProductAccess(message: CheckUserProductAccessRequest, metadata: grpc_web_1.Metadata | null) {
-        return this._client.unaryCall(this._address + "/sortedchat.PaymentService/CheckUserProductAccess", message, metadata || {}, PaymentServiceClient.CheckUserProductAccess);
+        return this._client.thenableCall<CheckUserProductAccessRequest, CheckUserProductAccessResponse>(this._address + "/sortedchat.PaymentService/CheckUserProductAccess", message, metadata || {}, PaymentServiceClient.CheckUserProductAccess);
+    }
+}
+// Server-side service class removed for client-side compatibility
+export class PaymentAdminServiceClient {
+    private _address: string;
+    private _client: grpc_web_1.GrpcWebClientBase;
+    constructor(address: string, credentials?: Object, options?: grpc_web_1.GrpcWebClientBaseOptions) {
+        if (!options)
+            options = {};
+        options.format = options.format || "text";
+        this._address = address;
+        this._client = new grpc_web_1.GrpcWebClientBase(options);
+    }
+    private static CreateProduct = new grpc_web_1.MethodDescriptor<CreateProductRequest, CreateProductResponse>("/sortedchat.PaymentAdminService/CreateProduct", grpc_web_1.MethodType.UNARY, CreateProductRequest, CreateProductResponse, (message: CreateProductRequest) => message.serialize(), CreateProductResponse.deserialize);
+    CreateProduct(message: CreateProductRequest, metadata: grpc_web_1.Metadata | null) {
+        return this._client.thenableCall<CreateProductRequest, CreateProductResponse>(this._address + "/sortedchat.PaymentAdminService/CreateProduct", message, metadata || {}, PaymentAdminServiceClient.CreateProduct);
+    }
+    private static GetProductSales = new grpc_web_1.MethodDescriptor<GetProductSalesRequest, GetProductSalesResponse>("/sortedchat.PaymentAdminService/GetProductSales", grpc_web_1.MethodType.UNARY, GetProductSalesRequest, GetProductSalesResponse, (message: GetProductSalesRequest) => message.serialize(), GetProductSalesResponse.deserialize);
+    GetProductSales(message: GetProductSalesRequest, metadata: grpc_web_1.Metadata | null) {
+        return this._client.thenableCall<GetProductSalesRequest, GetProductSalesResponse>(this._address + "/sortedchat.PaymentAdminService/GetProductSales", message, metadata || {}, PaymentAdminServiceClient.GetProductSales);
+    }
+    private static GetUserPurchases = new grpc_web_1.MethodDescriptor<GetUserPurchasesRequest, GetUserPurchasesResponse>("/sortedchat.PaymentAdminService/GetUserPurchases", grpc_web_1.MethodType.UNARY, GetUserPurchasesRequest, GetUserPurchasesResponse, (message: GetUserPurchasesRequest) => message.serialize(), GetUserPurchasesResponse.deserialize);
+    GetUserPurchases(message: GetUserPurchasesRequest, metadata: grpc_web_1.Metadata | null) {
+        return this._client.thenableCall<GetUserPurchasesRequest, GetUserPurchasesResponse>(this._address + "/sortedchat.PaymentAdminService/GetUserPurchases", message, metadata || {}, PaymentAdminServiceClient.GetUserPurchases);
     }
 }
