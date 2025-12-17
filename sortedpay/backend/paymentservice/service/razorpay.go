@@ -16,7 +16,7 @@ import (
 	"time"
 )
 
-func (s *PaymentService) CreateProductRazorpay(ctx context.Context, name string, description string, amountInSmallestUnit int64, currency string, isRecurring bool, intervalCount int64, period string) (string, error) {
+func (a *PaymentAdminService) CreateProductRazorpay(ctx context.Context, name string, description string, amountInSmallestUnit int64, currency string, isRecurring bool, intervalCount int64, period string) (string, error) {
 	slog.Info("paymentservice:razorpay:CreateProductRazorpay", "name", name, "isRecurring", isRecurring, "intervalCount", intervalCount, "period", period, "description", description, "amountInSmallestUnit", amountInSmallestUnit, "currency", currency)
 
 	if isRecurring {
@@ -40,7 +40,7 @@ func (s *PaymentService) CreateProductRazorpay(ctx context.Context, name string,
 		slog.Info("paymentservice:service:CreateProductRazorpay", "planData", planData)
 
 		// Create plan in Razorpay
-		plan, err := s.razorpayClient.Plan.Create(planData, nil)
+		plan, err := a.razorpayClient.Plan.Create(planData, nil)
 		if err != nil {
 			slog.Error("paymentservice:service:CreateProductRazorpay", "error", err, "errorType", fmt.Sprintf("%T", err), "planData", planData)
 			// Return more specific error information for debugging
@@ -66,7 +66,7 @@ func (s *PaymentService) CreateProductRazorpay(ctx context.Context, name string,
 		}
 
 		// Create item in Razorpay
-		item, err := s.razorpayClient.Item.Create(itemData, nil)
+		item, err := a.razorpayClient.Item.Create(itemData, nil)
 		if err != nil {
 			slog.Error("paymentservice:service:CreateProductRazorpay", "error", err)
 			return "", fmt.Errorf("failed to process the request")

@@ -31,7 +31,6 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type PaymentServiceClient interface {
-	// rpc CreateProduct(CreateProductRequest) returns (CreateProductResponse);
 	ListProducts(ctx context.Context, in *ListProductsRequest, opts ...grpc.CallOption) (*ListProductsResponse, error)
 	CreateStripeCheckoutSession(ctx context.Context, in *CreateStripeCheckoutSessionRequest, opts ...grpc.CallOption) (*CreateStripeCheckoutSessionResponse, error)
 	CreateRazorpayCheckoutSession(ctx context.Context, in *CreateRazorpayCheckoutSessionRequest, opts ...grpc.CallOption) (*CreateRazorpayCheckoutSessionResponse, error)
@@ -112,7 +111,6 @@ func (c *paymentServiceClient) CheckUserProductAccess(ctx context.Context, in *C
 // All implementations must embed UnimplementedPaymentServiceServer
 // for forward compatibility.
 type PaymentServiceServer interface {
-	// rpc CreateProduct(CreateProductRequest) returns (CreateProductResponse);
 	ListProducts(context.Context, *ListProductsRequest) (*ListProductsResponse, error)
 	CreateStripeCheckoutSession(context.Context, *CreateStripeCheckoutSessionRequest) (*CreateStripeCheckoutSessionResponse, error)
 	CreateRazorpayCheckoutSession(context.Context, *CreateRazorpayCheckoutSessionRequest) (*CreateRazorpayCheckoutSessionResponse, error)

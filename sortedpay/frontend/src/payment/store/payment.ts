@@ -1,15 +1,14 @@
 import { atom } from "nanostores";
 import {
-    CreateProductRequest, PaymentServiceClient, ListProductsRequest, Product, CreateStripeCheckoutSessionRequest, CreateRazorpayCheckoutSessionRequest, Currency, PaymentType, Interval, CreateStripeSubscriptionCheckoutSessionRequest, CreateRazorpaySubscriptionCheckoutSessionRequest
+    CreateProductRequest, PaymentServiceClient, ListProductsRequest, Product, CreateStripeCheckoutSessionRequest, CreateRazorpayCheckoutSessionRequest, Currency, PaymentType, Interval, CreateStripeSubscriptionCheckoutSessionRequest, CreateRazorpaySubscriptionCheckoutSessionRequest, PaymentAdminServiceClient, GetTransactionsRequest, Transaction
 } from "../../../proto/paymentservice"
 // import { createAuthenticatedClientOptions } from "../../lib/auth";
 import { toast } from "sonner";
 
 //take it from env or use /hack
-const client = new PaymentServiceClient("/hack", {}, {
-    format: "text"
-});
+const client = new PaymentServiceClient("/hack", {});
 
+const adminClient = new PaymentAdminServiceClient("/hack", {});
 
 export const createProduct = async (
     name: string,
@@ -51,7 +50,7 @@ export const createProduct = async (
                 interval: interval
             })
         });
-        const res = await client.CreateProduct(req, {});
+        const res = await adminClient.CreateProduct(req, {});
         toast.success("Product created successfully");
         return res.id;
     } catch (err) {
@@ -61,7 +60,6 @@ export const createProduct = async (
 }
 
 export const ProductList = atom<Product[]>([]);
-
 export const listProducts = async () => {
     try {
         const req = new ListProductsRequest({});
@@ -131,6 +129,19 @@ export const createRazorpaySubscriptionCheckoutSession = async (productId: strin
 
     } catch (err) {
         toast.error("Failed to create subscription checkout session");
+        throw err;
+    }
+}
+export const TransactionsList = atom<Transaction[]>([]);
+
+export const getTransactions = async (pageNumber: number, pageSize: number) => {
+    try {
+        const req = new GetTransactionsRequest({ pageNumber: pageNumber, pageSize: pageSize });
+        const res = await adminClient.GetTransactions(req, {});
+        TransactionsList.set(res.transactions);
+        return res.transactions;
+    } catch (err) {
+        toast.error("Failed to get transactions");
         throw err;
     }
 }

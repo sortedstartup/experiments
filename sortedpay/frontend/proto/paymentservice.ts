@@ -177,7 +177,8 @@ export class GetDashboardDataResponse extends pb_1.Message {
 export class GetTransactionsRequest extends pb_1.Message {
     #one_of_decls: number[][] = [];
     constructor(data?: any[] | {
-        pageNumber?: string;
+        pageNumber?: number;
+        pageSize?: number;
     }) {
         super();
         pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
@@ -185,29 +186,46 @@ export class GetTransactionsRequest extends pb_1.Message {
             if ("pageNumber" in data && data.pageNumber != undefined) {
                 this.pageNumber = data.pageNumber;
             }
+            if ("pageSize" in data && data.pageSize != undefined) {
+                this.pageSize = data.pageSize;
+            }
         }
     }
     get pageNumber() {
-        return pb_1.Message.getFieldWithDefault(this, 1, "") as string;
+        return pb_1.Message.getFieldWithDefault(this, 1, 0) as number;
     }
-    set pageNumber(value: string) {
+    set pageNumber(value: number) {
         pb_1.Message.setField(this, 1, value);
     }
+    get pageSize() {
+        return pb_1.Message.getFieldWithDefault(this, 2, 0) as number;
+    }
+    set pageSize(value: number) {
+        pb_1.Message.setField(this, 2, value);
+    }
     static fromObject(data: {
-        pageNumber?: string;
+        pageNumber?: number;
+        pageSize?: number;
     }): GetTransactionsRequest {
         const message = new GetTransactionsRequest({});
         if (data.pageNumber != null) {
             message.pageNumber = data.pageNumber;
         }
+        if (data.pageSize != null) {
+            message.pageSize = data.pageSize;
+        }
         return message;
     }
     toObject() {
         const data: {
-            pageNumber?: string;
+            pageNumber?: number;
+            pageSize?: number;
         } = {};
         if (this.pageNumber != null) {
             data.pageNumber = this.pageNumber;
+        }
+        if (this.pageSize != null) {
+            data.pageSize = this.pageSize;
         }
         return data;
     }
@@ -215,8 +233,10 @@ export class GetTransactionsRequest extends pb_1.Message {
     serialize(w: pb_1.BinaryWriter): void;
     serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
         const writer = w || new pb_1.BinaryWriter();
-        if (this.pageNumber.length)
-            writer.writeString(1, this.pageNumber);
+        if (this.pageNumber != 0)
+            writer.writeInt32(1, this.pageNumber);
+        if (this.pageSize != 0)
+            writer.writeInt32(2, this.pageSize);
         if (!w)
             return writer.getResultBuffer();
     }
@@ -227,7 +247,10 @@ export class GetTransactionsRequest extends pb_1.Message {
                 break;
             switch (reader.getFieldNumber()) {
                 case 1:
-                    message.pageNumber = reader.readString();
+                    message.pageNumber = reader.readInt32();
+                    break;
+                case 2:
+                    message.pageSize = reader.readInt32();
                     break;
                 default: reader.skipField();
             }

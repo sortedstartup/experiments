@@ -202,3 +202,38 @@ func (d *SQLiteDAO) CheckUserProductAccess(userID, productID string) (bool, erro
 	slog.Info("paymentservice:dao_sqlite:CheckUserProductAccess", "hasAccess", hasAccess)
 	return hasAccess, nil
 }
+
+func (d *SQLiteDAO) GetTransactions(userID string, pageNumber int32, pageSize int32) ([]*Transaction, error) {
+
+	page := 1
+	if pageNumber > 0 {
+		page = int(pageNumber)
+	}
+
+	// Calculate offset: (page - 1) * pageSize
+	offset := (page - 1) * int(pageSize)
+
+	query := `SELECT 
+		s.id,
+		s.user_id,
+		s.product_id,
+		p.name AS product_name,
+		p.price AS amount,
+		p.currency,
+		s.status,
+		s.created_at,
+		s.updated_at
+	FROM paymentservice_subscriptions s 
+	LEFT JOIN paymentservice_products p ON s.product_id = p.id 
+	WHERE s.user_id = ? 
+	ORDER BY s.created_at DESC 
+	LIMIT ? OFFSET ?`
+
+	transactions := []*Transaction{}
+	err := d.db.Select(&transactions, query, userID, pageSize, offset)
+	if err != nil {
+		slog.Error("paymentservice:dao_sqlite:GetTransactions", "error", err)
+		return nil, err
+	}
+	return transactions, nil
+}

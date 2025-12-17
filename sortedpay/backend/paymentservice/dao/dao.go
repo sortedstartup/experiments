@@ -16,4 +16,5 @@ type DAO interface {
 	CreateUserPayment(userID, productID, subscriptionID, paymentID, transactionMetadata string, isSuccess bool) (string, error)
 
 	// Admin methods
+	GetTransactions(userID string, pageNumber int32, pageSize int32) ([]*Transaction, error)
 }

@@ -23,6 +23,11 @@ type PaymentServiceAPI struct {
 	service *service.PaymentService
 }
 
+type PaymentAdminServiceAPI struct {
+	pb.UnimplementedPaymentAdminServiceServer
+	adminService *service.PaymentAdminService
+}
+
 func NewPaymentServiceAPI(mux *http.ServeMux, daoFactory dao.DAOFactory) *PaymentServiceAPI {
 
 	service, err := service.NewPaymentService(daoFactory)
@@ -40,7 +45,20 @@ func NewPaymentServiceAPI(mux *http.ServeMux, daoFactory dao.DAOFactory) *Paymen
 	return s
 }
 
-func (s *PaymentServiceAPI) CreateProduct(ctx context.Context, req *pb.CreateProductRequest) (*pb.CreateProductResponse, error) {
+func NewPaymentAdminServiceAPI(mux *http.ServeMux, daoFactory dao.DAOFactory) *PaymentAdminServiceAPI {
+	adminService, err := service.NewPaymentAdminService(daoFactory)
+	if err != nil {
+		slog.Error("paymentservice:api:NewPaymentAdminServiceAPI", "error", err)
+		return nil
+	}
+
+	adminServiceAPI := &PaymentAdminServiceAPI{
+		adminService: adminService,
+	}
+	return adminServiceAPI
+}
+
+func (adminServiceAPI *PaymentAdminServiceAPI) CreateProduct(ctx context.Context, req *pb.CreateProductRequest) (*pb.CreateProductResponse, error) {
 	userID, err := auth.GetUserIDFromContext_WithError(ctx)
 	if err != nil {
 		slog.Error("paymentservice:api:CreateProduct", "error", err)
@@ -95,7 +113,7 @@ func (s *PaymentServiceAPI) CreateProduct(ctx context.Context, req *pb.CreatePro
 		}
 	}
 
-	id, err := s.service.CreateProduct(ctx, userID, req.Name, req.Description, req.AmountInSmallestUnit, currencyStr, isRecurring, req.IntervalCount, intervalPeriod)
+	id, err := adminServiceAPI.adminService.CreateProduct(ctx, userID, req.Name, req.Description, req.AmountInSmallestUnit, currencyStr, isRecurring, req.IntervalCount, intervalPeriod)
 	if err != nil {
 		return nil, err
 	}
@@ -288,7 +306,7 @@ func (s *PaymentServiceAPI) Init(config *dao.Config) error {
 	return nil
 }
 
-func (s *PaymentServiceAPI) CheckUserProductAccess(ctx context.Context, req *pb.CheckUserProductAccessRequest) (*pb.CheckUserProductAccessResponse, error) {
+func (adminServiceAPI *PaymentAdminServiceAPI) CheckUserProductAccess(ctx context.Context, req *pb.CheckUserProductAccessRequest) (*pb.CheckUserProductAccessResponse, error) {
 	userID, err := auth.GetUserIDFromContext_WithError(ctx)
 	if err != nil {
 		slog.Error("paymentservice:api:CheckUserProductAccess", "error", err)
@@ -298,7 +316,7 @@ func (s *PaymentServiceAPI) CheckUserProductAccess(ctx context.Context, req *pb.
 		return nil, status.Error(codes.InvalidArgument, "Product ID cannot be empty")
 	}
 
-	hasAccess, err := s.service.CheckUserProductAccess(ctx, userID, req.ProductId)
+	hasAccess, err := adminServiceAPI.adminService.CheckUserProductAccess(ctx, userID, req.ProductId)
 	if err != nil {
 		slog.Error("paymentservice:api:CheckUserProductAccess", "error", err)
 		return nil, status.Errorf(codes.Internal, "failed to check user product access: %v", err)
@@ -307,4 +325,44 @@ func (s *PaymentServiceAPI) CheckUserProductAccess(ctx context.Context, req *pb.
 	return &pb.CheckUserProductAccessResponse{
 		HasAccess: hasAccess,
 	}, nil
+}
+
+func (adminServiceAPI *PaymentAdminServiceAPI) GetTransactions(ctx context.Context, req *pb.GetTransactionsRequest) (*pb.GetTransactionsResponse, error) {
+	userID, err := auth.GetUserIDFromContext_WithError(ctx)
+	if err != nil {
+		slog.Error("paymentservice:api:GetTransactions", "error", err)
+		return nil, err
+	}
+
+	if req.PageNumber <= 0 {
+		return nil, status.Error(codes.InvalidArgument, "Page number must be greater than 0")
+	}
+	if req.PageSize <= 0 || req.PageSize > 100 {
+		return nil, status.Error(codes.InvalidArgument, "Page size must be between 1 and 100")
+	}
+
+	transactions, err := adminServiceAPI.adminService.GetTransactions(ctx, userID, req.PageNumber, req.PageSize)
+	if err != nil {
+		slog.Error("paymentservice:api:GetTransactions", "error", err)
+		return nil, status.Errorf(codes.Internal, "failed to get transactions: %v", err)
+	}
+
+	protoTransactions := make([]*pb.Transaction, len(transactions))
+	for i, transaction := range transactions {
+		protoTransactions[i] = &pb.Transaction{
+			Id:          transaction.ID,
+			UserId:      transaction.UserID,
+			ProductId:   transaction.ProductID,
+			ProductName: transaction.ProductName,
+			Amount:      transaction.Amount,
+			Currency:    transaction.Currency,
+			Status:      transaction.Status,
+			CreatedAt:   transaction.CreatedAt,
+			UpdatedAt:   transaction.UpdatedAt,
+		}
+	}
+	return &pb.GetTransactionsResponse{
+		Transactions: protoTransactions,
+	}, nil
+
 }

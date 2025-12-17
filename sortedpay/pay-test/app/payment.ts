@@ -97,3 +97,14 @@ export const checkUserProductAccess = async (productId: string) => {
         throw err;
     }
 }
+
+export const getTransactions = async (pageNumber: number, pageSize: number) => {
+    try {
+        const req = new GetTransactionsRequest({ page_number: pageNumber, page_size: pageSize });
+        const res = await adminClient.GetTransactions(req, {});
+        return res.transactions;
+    } catch (err) {
+        toast.error("Failed to get transactions");
+        throw err;
+    }
+}

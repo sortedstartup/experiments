@@ -15,6 +15,11 @@ type PaymentService struct {
 	razorpayClient *razorpay.Client
 }
 
+type PaymentAdminService struct {
+	dao            dao.DAO
+	razorpayClient *razorpay.Client
+}
+
 func NewPaymentService(daoFactory dao.DAOFactory) (*PaymentService, error) {
 	dao, err := daoFactory.CreateDAO()
 	if err != nil {
@@ -25,9 +30,22 @@ func NewPaymentService(daoFactory dao.DAOFactory) (*PaymentService, error) {
 		dao:            dao,
 		razorpayClient: razorpay.NewClient(os.Getenv("RAZORPAY_KEY_ID"), os.Getenv("RAZORPAY_KEY_SECRET")),
 	}, nil
+
 }
 
-func (s *PaymentService) CreateProduct(ctx context.Context, userID string, name string, description string, amountInSmallestUnit int64, currency string, isRecurring bool, intervalCount int64, intervalPeriod string) (string, error) {
+func NewPaymentAdminService(daoFactory dao.DAOFactory) (*PaymentAdminService, error) {
+	dao, err := daoFactory.CreateDAO()
+	if err != nil {
+		slog.Error("paymentservice:service:NewPaymentAdminService", "error", err)
+		return nil, err
+	}
+	return &PaymentAdminService{
+		dao:            dao,
+		razorpayClient: razorpay.NewClient(os.Getenv("RAZORPAY_KEY_ID"), os.Getenv("RAZORPAY_KEY_SECRET")),
+	}, nil
+}
+
+func (a *PaymentAdminService) CreateProduct(ctx context.Context, userID string, name string, description string, amountInSmallestUnit int64, currency string, isRecurring bool, intervalCount int64, intervalPeriod string) (string, error) {
 	slog.Info("paymentservice:service:CreateProduct", "userID", userID, "name", name, "isRecurring", isRecurring, "intervalCount", intervalCount, "intervalPeriod", intervalPeriod)
 
 	if isRecurring {
@@ -51,7 +69,7 @@ func (s *PaymentService) CreateProduct(ctx context.Context, userID string, name 
 	}
 
 	// Convert interval period for Stripe (day, week, month, year)
-	stripeInterval := s.convertIntervalForStripe(intervalPeriod)
+	stripeInterval := a.convertIntervalForStripe(intervalPeriod)
 	stripeIntervalCount := intervalCount
 
 	// Handle quarterly for Stripe (convert to monthly with count 3)
@@ -60,10 +78,10 @@ func (s *PaymentService) CreateProduct(ctx context.Context, userID string, name 
 	}
 
 	// Convert interval period for Razorpay (daily, weekly, monthly, quarterly, yearly)
-	razorpayInterval := s.convertIntervalForRazorpay(intervalPeriod)
+	razorpayInterval := a.convertIntervalForRazorpay(intervalPeriod)
 
 	// Create product on Stripe
-	stripeProductID, err := s.CreateProductStripe(ctx, name, description, amountInSmallestUnit, currency, isRecurring, stripeIntervalCount, stripeInterval)
+	stripeProductID, err := a.CreateProductStripe(ctx, name, description, amountInSmallestUnit, currency, isRecurring, stripeIntervalCount, stripeInterval)
 	if err != nil {
 		slog.Error("paymentservice:service:CreateProduct", "error", "failed to create Stripe product", "details", err)
 		return "", fmt.Errorf("failed to create Stripe product")
@@ -71,7 +89,7 @@ func (s *PaymentService) CreateProduct(ctx context.Context, userID string, name 
 	slog.Info("paymentservice:service:CreateProduct", "stripeProductID", stripeProductID)
 
 	// Create product on Razorpay
-	razorpayProductID, err := s.CreateProductRazorpay(ctx, name, description, amountInSmallestUnit, currency, isRecurring, intervalCount, razorpayInterval)
+	razorpayProductID, err := a.CreateProductRazorpay(ctx, name, description, amountInSmallestUnit, currency, isRecurring, intervalCount, razorpayInterval)
 	if err != nil {
 		slog.Error("paymentservice:service:CreateProduct", "error", "failed to create Razorpay product", "details", err)
 		return "", fmt.Errorf("failed to create Razorpay product")
@@ -79,7 +97,7 @@ func (s *PaymentService) CreateProduct(ctx context.Context, userID string, name 
 	slog.Info("paymentservice:service:CreateProduct", "razorpayProductID", razorpayProductID)
 
 	// Save to database with both provider IDs
-	productID, err := s.dao.CreateProduct(stripeProductID, razorpayProductID, userID, name, description, amountInSmallestUnit, currency, isRecurring, intervalCount, intervalPeriod)
+	productID, err := a.dao.CreateProduct(stripeProductID, razorpayProductID, userID, name, description, amountInSmallestUnit, currency, isRecurring, intervalCount, intervalPeriod)
 	if err != nil {
 		slog.Error("paymentservice:service:CreateProduct", "error", "failed to save product to database", "details", err)
 		return "", fmt.Errorf("failed to save product to database")
@@ -101,7 +119,7 @@ func (s *PaymentService) ListProducts(ctx context.Context, userID string) ([]*da
 }
 
 // convertIntervalForStripe converts internal interval to Stripe format
-func (s *PaymentService) convertIntervalForStripe(intervalPeriod string) string {
+func (a *PaymentAdminService) convertIntervalForStripe(intervalPeriod string) string {
 	switch intervalPeriod {
 	case "week":
 		return "week"
@@ -117,7 +135,7 @@ func (s *PaymentService) convertIntervalForStripe(intervalPeriod string) string 
 }
 
 // convertIntervalForRazorpay converts internal interval to Razorpay format
-func (s *PaymentService) convertIntervalForRazorpay(intervalPeriod string) string {
+func (a *PaymentAdminService) convertIntervalForRazorpay(intervalPeriod string) string {
 	switch intervalPeriod {
 	case "week":
 		return "weekly"
@@ -132,10 +150,10 @@ func (s *PaymentService) convertIntervalForRazorpay(intervalPeriod string) strin
 	}
 }
 
-func (s *PaymentService) CheckUserProductAccess(ctx context.Context, userID, productID string) (bool, error) {
+func (a *PaymentAdminService) CheckUserProductAccess(ctx context.Context, userID, productID string) (bool, error) {
 	slog.Info("paymentservice:service:CheckUserProductAccess", "userID", userID, "productID", productID)
 
-	hasAccess, err := s.dao.CheckUserProductAccess(userID, productID)
+	hasAccess, err := a.dao.CheckUserProductAccess(userID, productID)
 	if err != nil {
 		slog.Error("paymentservice:service:CheckUserProductAccess", "error", err)
 		return false, err
@@ -143,4 +161,14 @@ func (s *PaymentService) CheckUserProductAccess(ctx context.Context, userID, pro
 
 	slog.Info("paymentservice:service:CheckUserProductAccess", "result", hasAccess, "userID", userID, "productID", productID)
 	return hasAccess, nil
+}
+
+func (a *PaymentAdminService) GetTransactions(ctx context.Context, userID string, pageNumber int32, pageSize int32) ([]*dao.Transaction, error) {
+
+	transactions, err := a.dao.GetTransactions(userID, pageNumber, pageSize)
+	if err != nil {
+		slog.Error("paymentservice:service:GetTransactions", "error", err)
+		return nil, fmt.Errorf("failed to get transactions")
+	}
+	return transactions, nil
 }

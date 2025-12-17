@@ -53,9 +53,14 @@ type Subscription struct {
 	IsRecurring                bool          `db:"is_recurring"`
 }
 
-type ProductSales struct {
-	ProductID    string `db:"product_id"`
-	ProductName  string `db:"product_name"`
-	TotalSales   int64  `db:"total_sales"`
-	TotalRevenue int64  `db:"total_revenue"`
+type Transaction struct {
+	ID          string `db:"id"`
+	UserID      string `db:"user_id"`
+	ProductID   string `db:"product_id"`
+	ProductName string `db:"product_name"`
+	Amount      int64  `db:"amount"`
+	Currency    string `db:"currency"`
+	Status      string `db:"status"`
+	CreatedAt   string `db:"created_at"`
+	UpdatedAt   string `db:"updated_at"`
 }

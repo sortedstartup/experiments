@@ -115,14 +115,22 @@ func main() {
 		log.Fatal("Failed to create payment service API")
 	}
 
+	// Create payment admin service API
+	paymentAdminServiceApi := paymentApi.NewPaymentAdminServiceAPI(mux, daoFactory)
+	if paymentAdminServiceApi == nil {
+		slog.Error("Failed to create payment admin service API")
+		log.Fatal("Failed to create payment admin service API")
+	}
+
 	// Initialize payment service (runs migrations and seeds)
 	if err := paymentServiceApi.Init(config); err != nil {
 		slog.Error("Failed to initialize payment service", "error", err)
 		log.Fatalf("Failed to initialize payment service: %v", err)
 	}
 
-	// Register payment service with gRPC server
+	// Register payment services with gRPC server
 	paymentProto.RegisterPaymentServiceServer(grpcServer, paymentServiceApi)
+	paymentProto.RegisterPaymentAdminServiceServer(grpcServer, paymentAdminServiceApi)
 
 	// Enable reflection (for testing/debugging)
 	reflection.Register(grpcServer)

@@ -17,7 +17,7 @@ import (
 	"github.com/stripe/stripe-go/v83/webhook"
 )
 
-func (s *PaymentService) CreateProductStripe(ctx context.Context, name string, description string, amountInSmallestUnit int64, currency string, isRecurring bool, intervalCount int64, interval string) (string, error) {
+func (a *PaymentAdminService) CreateProductStripe(ctx context.Context, name string, description string, amountInSmallestUnit int64, currency string, isRecurring bool, intervalCount int64, interval string) (string, error) {
 	slog.Info("paymentservice:stripe:CreateProductStripe", "name", name, "isRecurring", isRecurring, "intervalCount", intervalCount, "interval", interval)
 
 	// Create the product with appropriate pricing

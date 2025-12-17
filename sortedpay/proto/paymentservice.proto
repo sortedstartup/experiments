@@ -22,7 +22,6 @@ enum Interval {
 }
 
 service PaymentService {
-    // rpc CreateProduct(CreateProductRequest) returns (CreateProductResponse);
     rpc ListProducts(ListProductsRequest) returns (ListProductsResponse);
     rpc CreateStripeCheckoutSession(CreateStripeCheckoutSessionRequest) returns (CreateStripeCheckoutSessionResponse);
     rpc CreateRazorpayCheckoutSession(CreateRazorpayCheckoutSessionRequest) returns (CreateRazorpayCheckoutSessionResponse);
@@ -45,7 +44,8 @@ message GetDashboardDataResponse {
     double monthlySales = 3;
 }
 message GetTransactionsRequest {
-    string pageNumber = 1;
+    int32 pageNumber = 1;
+    int32 pageSize = 2;
 }
 message GetTransactionsResponse {
     repeated Transaction transactions = 1;

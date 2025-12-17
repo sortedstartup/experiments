@@ -263,7 +263,8 @@ func (x *GetDashboardDataResponse) GetMonthlySales() float64 {
 
 type GetTransactionsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	PageNumber    string                 `protobuf:"bytes,1,opt,name=pageNumber,proto3" json:"pageNumber,omitempty"`
+	PageNumber    int32                  `protobuf:"varint,1,opt,name=pageNumber,proto3" json:"pageNumber,omitempty"`
+	PageSize      int32                  `protobuf:"varint,2,opt,name=pageSize,proto3" json:"pageSize,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -298,11 +299,18 @@ func (*GetTransactionsRequest) Descriptor() ([]byte, []int) {
 	return file_paymentservice_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *GetTransactionsRequest) GetPageNumber() string {
+func (x *GetTransactionsRequest) GetPageNumber() int32 {
 	if x != nil {
 		return x.PageNumber
 	}
-	return ""
+	return 0
+}
+
+func (x *GetTransactionsRequest) GetPageSize() int32 {
+	if x != nil {
+		return x.PageSize
+	}
+	return 0
 }
 
 type GetTransactionsResponse struct {
@@ -1321,11 +1329,12 @@ const file_paymentservice_proto_rawDesc = "" +
 	"todaySales\x18\x01 \x01(\x01R\n" +
 	"todaySales\x12 \n" +
 	"\vweeklySales\x18\x02 \x01(\x01R\vweeklySales\x12\"\n" +
-	"\fmonthlySales\x18\x03 \x01(\x01R\fmonthlySales\"8\n" +
+	"\fmonthlySales\x18\x03 \x01(\x01R\fmonthlySales\"T\n" +
 	"\x16GetTransactionsRequest\x12\x1e\n" +
 	"\n" +
-	"pageNumber\x18\x01 \x01(\tR\n" +
-	"pageNumber\"V\n" +
+	"pageNumber\x18\x01 \x01(\x05R\n" +
+	"pageNumber\x12\x1a\n" +
+	"\bpageSize\x18\x02 \x01(\x05R\bpageSize\"V\n" +
 	"\x17GetTransactionsResponse\x12;\n" +
 	"\ftransactions\x18\x01 \x03(\v2\x17.sortedchat.TransactionR\ftransactions\"\xfd\x01\n" +
 	"\vTransaction\x12\x0e\n" +

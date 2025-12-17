@@ -225,3 +225,21 @@ func (d *PostgresDAO) CheckUserProductAccess(userID, productID string) (bool, er
 	slog.Info("paymentservice:dao_postgres:CheckUserProductAccess", "hasAccess", hasAccess)
 	return hasAccess, nil
 }
+
+func (d *PostgresDAO) GetTransactions(userID string, pageNumber int32, pageSize int32) ([]*Transaction, error) {
+	slog.Info("paymentservice:dao_postgres:GetTransactions", "userID", userID, "pageNumber", pageNumber)
+	page := 1
+	if pageNumber > 0 {
+		page = int(pageNumber)
+	}
+	offset := (page - 1) * int(pageSize)
+
+	query := `SELECT * FROM paymentservice_transactions WHERE user_id = $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3`
+	transactions := []*Transaction{}
+	err := d.db.Select(&transactions, query, userID, pageSize, offset)
+	if err != nil {
+		slog.Error("paymentservice:dao_postgres:GetTransactions", "error", err)
+		return nil, err
+	}
+	return transactions, nil
+}
