@@ -243,3 +243,35 @@ func (d *PostgresDAO) GetTransactions(userID string, pageNumber int32, pageSize 
 	}
 	return transactions, nil
 }
+
+func (d *PostgresDAO) GetDashboardData(userID string) (*DashboardData, error) {
+	query := `
+        SELECT
+            p.currency,
+            SUM(CASE
+                WHEN up.created_at >= date('now', 'start of day')
+                AND up.created_at < date('now', 'start of day', '+1 day')
+                THEN p.price ELSE 0 END) AS daily_sales,
+            SUM(CASE
+                WHEN up.created_at >= date('now', '-6 days', 'start of day')
+                THEN p.price ELSE 0 END) AS weekly_sales,
+            SUM(CASE
+                WHEN up.created_at >= date('now', '-29 days', 'start of day')
+                THEN p.price ELSE 0 END) AS monthly_sales
+        FROM paymentservice_user_payments up
+        JOIN paymentservice_products p
+            ON up.product_id = p.id
+        WHERE up.is_success = TRUE
+        GROUP BY p.currency;
+    `
+
+	var rows []CurrencySales
+	err := d.db.Select(&rows, query)
+	if err != nil {
+		slog.Error("paymentservice:dao_postgres:GetDashboardData", "error", err)
+		return nil, err
+	}
+	return &DashboardData{
+		ByCurrency: rows,
+	}, nil
+}

@@ -64,15 +64,86 @@ export class GetDashboardDataRequest extends pb_1.Message {
 export class GetDashboardDataResponse extends pb_1.Message {
     #one_of_decls: number[][] = [];
     constructor(data?: any[] | {
-        todaySales?: number;
+        dashboardData?: DashboardData[];
+    }) {
+        super();
+        pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [1], this.#one_of_decls);
+        if (!Array.isArray(data) && typeof data == "object") {
+            if ("dashboardData" in data && data.dashboardData != undefined) {
+                this.dashboardData = data.dashboardData;
+            }
+        }
+    }
+    get dashboardData() {
+        return pb_1.Message.getRepeatedWrapperField(this, DashboardData, 1) as DashboardData[];
+    }
+    set dashboardData(value: DashboardData[]) {
+        pb_1.Message.setRepeatedWrapperField(this, 1, value);
+    }
+    static fromObject(data: {
+        dashboardData?: ReturnType<typeof DashboardData.prototype.toObject>[];
+    }): GetDashboardDataResponse {
+        const message = new GetDashboardDataResponse({});
+        if (data.dashboardData != null) {
+            message.dashboardData = data.dashboardData.map(item => DashboardData.fromObject(item));
+        }
+        return message;
+    }
+    toObject() {
+        const data: {
+            dashboardData?: ReturnType<typeof DashboardData.prototype.toObject>[];
+        } = {};
+        if (this.dashboardData != null) {
+            data.dashboardData = this.dashboardData.map((item: DashboardData) => item.toObject());
+        }
+        return data;
+    }
+    serialize(): Uint8Array;
+    serialize(w: pb_1.BinaryWriter): void;
+    serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+        const writer = w || new pb_1.BinaryWriter();
+        if (this.dashboardData.length)
+            writer.writeRepeatedMessage(1, this.dashboardData, (item: DashboardData) => item.serialize(writer));
+        if (!w)
+            return writer.getResultBuffer();
+    }
+    static deserialize(bytes: Uint8Array | pb_1.BinaryReader): GetDashboardDataResponse {
+        const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new GetDashboardDataResponse();
+        while (reader.nextField()) {
+            if (reader.isEndGroup())
+                break;
+            switch (reader.getFieldNumber()) {
+                case 1:
+                    reader.readMessage(message.dashboardData, () => pb_1.Message.addToRepeatedWrapperField(message, 1, DashboardData.deserialize(reader), DashboardData));
+                    break;
+                default: reader.skipField();
+            }
+        }
+        return message;
+    }
+    serializeBinary(): Uint8Array {
+        return this.serialize();
+    }
+    static deserializeBinary(bytes: Uint8Array): GetDashboardDataResponse {
+        return GetDashboardDataResponse.deserialize(bytes);
+    }
+}
+export class DashboardData extends pb_1.Message {
+    #one_of_decls: number[][] = [];
+    constructor(data?: any[] | {
+        currency?: string;
+        dailySales?: number;
         weeklySales?: number;
         monthlySales?: number;
     }) {
         super();
         pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
         if (!Array.isArray(data) && typeof data == "object") {
-            if ("todaySales" in data && data.todaySales != undefined) {
-                this.todaySales = data.todaySales;
+            if ("currency" in data && data.currency != undefined) {
+                this.currency = data.currency;
+            }
+            if ("dailySales" in data && data.dailySales != undefined) {
+                this.dailySales = data.dailySales;
             }
             if ("weeklySales" in data && data.weeklySales != undefined) {
                 this.weeklySales = data.weeklySales;
@@ -82,32 +153,42 @@ export class GetDashboardDataResponse extends pb_1.Message {
             }
         }
     }
-    get todaySales() {
-        return pb_1.Message.getFieldWithDefault(this, 1, 0) as number;
+    get currency() {
+        return pb_1.Message.getFieldWithDefault(this, 1, "") as string;
     }
-    set todaySales(value: number) {
+    set currency(value: string) {
         pb_1.Message.setField(this, 1, value);
     }
-    get weeklySales() {
+    get dailySales() {
         return pb_1.Message.getFieldWithDefault(this, 2, 0) as number;
     }
-    set weeklySales(value: number) {
+    set dailySales(value: number) {
         pb_1.Message.setField(this, 2, value);
     }
-    get monthlySales() {
+    get weeklySales() {
         return pb_1.Message.getFieldWithDefault(this, 3, 0) as number;
     }
-    set monthlySales(value: number) {
+    set weeklySales(value: number) {
         pb_1.Message.setField(this, 3, value);
     }
+    get monthlySales() {
+        return pb_1.Message.getFieldWithDefault(this, 4, 0) as number;
+    }
+    set monthlySales(value: number) {
+        pb_1.Message.setField(this, 4, value);
+    }
     static fromObject(data: {
-        todaySales?: number;
+        currency?: string;
+        dailySales?: number;
         weeklySales?: number;
         monthlySales?: number;
-    }): GetDashboardDataResponse {
-        const message = new GetDashboardDataResponse({});
-        if (data.todaySales != null) {
-            message.todaySales = data.todaySales;
+    }): DashboardData {
+        const message = new DashboardData({});
+        if (data.currency != null) {
+            message.currency = data.currency;
+        }
+        if (data.dailySales != null) {
+            message.dailySales = data.dailySales;
         }
         if (data.weeklySales != null) {
             message.weeklySales = data.weeklySales;
@@ -119,12 +200,16 @@ export class GetDashboardDataResponse extends pb_1.Message {
     }
     toObject() {
         const data: {
-            todaySales?: number;
+            currency?: string;
+            dailySales?: number;
             weeklySales?: number;
             monthlySales?: number;
         } = {};
-        if (this.todaySales != null) {
-            data.todaySales = this.todaySales;
+        if (this.currency != null) {
+            data.currency = this.currency;
+        }
+        if (this.dailySales != null) {
+            data.dailySales = this.dailySales;
         }
         if (this.weeklySales != null) {
             data.weeklySales = this.weeklySales;
@@ -138,28 +223,33 @@ export class GetDashboardDataResponse extends pb_1.Message {
     serialize(w: pb_1.BinaryWriter): void;
     serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
         const writer = w || new pb_1.BinaryWriter();
-        if (this.todaySales != 0)
-            writer.writeDouble(1, this.todaySales);
+        if (this.currency.length)
+            writer.writeString(1, this.currency);
+        if (this.dailySales != 0)
+            writer.writeDouble(2, this.dailySales);
         if (this.weeklySales != 0)
-            writer.writeDouble(2, this.weeklySales);
+            writer.writeDouble(3, this.weeklySales);
         if (this.monthlySales != 0)
-            writer.writeDouble(3, this.monthlySales);
+            writer.writeDouble(4, this.monthlySales);
         if (!w)
             return writer.getResultBuffer();
     }
-    static deserialize(bytes: Uint8Array | pb_1.BinaryReader): GetDashboardDataResponse {
-        const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new GetDashboardDataResponse();
+    static deserialize(bytes: Uint8Array | pb_1.BinaryReader): DashboardData {
+        const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new DashboardData();
         while (reader.nextField()) {
             if (reader.isEndGroup())
                 break;
             switch (reader.getFieldNumber()) {
                 case 1:
-                    message.todaySales = reader.readDouble();
+                    message.currency = reader.readString();
                     break;
                 case 2:
-                    message.weeklySales = reader.readDouble();
+                    message.dailySales = reader.readDouble();
                     break;
                 case 3:
+                    message.weeklySales = reader.readDouble();
+                    break;
+                case 4:
                     message.monthlySales = reader.readDouble();
                     break;
                 default: reader.skipField();
@@ -170,8 +260,8 @@ export class GetDashboardDataResponse extends pb_1.Message {
     serializeBinary(): Uint8Array {
         return this.serialize();
     }
-    static deserializeBinary(bytes: Uint8Array): GetDashboardDataResponse {
-        return GetDashboardDataResponse.deserialize(bytes);
+    static deserializeBinary(bytes: Uint8Array): DashboardData {
+        return DashboardData.deserialize(bytes);
     }
 }
 export class GetTransactionsRequest extends pb_1.Message {

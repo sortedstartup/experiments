@@ -196,7 +196,7 @@ func HasRole(ctx context.Context, role string) bool {
 	return false
 }
 
-func IsUserAdmin(ctx context.Context) bool {
+func IsUserAdmin(ctx context.Context) (bool, error) {
 	// slog.Debug("common:jwt:IsUserAdmin")
 	// roles, ok := GetUserRolesFromContext(ctx)
 	// if !ok {
@@ -208,5 +208,5 @@ func IsUserAdmin(ctx context.Context) bool {
 	// 		return true
 	// 	}
 	// }
-	return true //right now return true
+	return true, nil //right now return true
 }

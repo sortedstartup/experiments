@@ -17,4 +17,5 @@ type DAO interface {
 
 	// Admin methods
 	GetTransactions(userID string, pageNumber int32, pageSize int32) ([]*Transaction, error)
+	GetDashboardData(userID string) (*DashboardData, error)
 }

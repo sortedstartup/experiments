@@ -142,7 +142,7 @@ func (s *PaymentService) CreateStripeCheckoutSession(ctx context.Context, userID
 	return session.URL, nil
 }
 
-func (s *PaymentService) CreateStripeSubscriptionCheckoutSession(ctx context.Context, userID string, productID string) (string, error) {
+func (s *PaymentService) CreateStripeSubscriptionCheckoutSession(ctx context.Context, userID string, productID string, success_url string, cancel_url string) (string, error) {
 	slog.Info("paymentservice:stripe:CreateStripeSubscriptionCheckoutSession", "userID", userID, "productID", productID)
 
 	hasAccess, err := s.dao.CheckUserProductAccess(userID, productID)
@@ -204,8 +204,8 @@ func (s *PaymentService) CreateStripeSubscriptionCheckoutSession(ctx context.Con
 			},
 		},
 		Mode:              stripe.String("subscription"), // Key difference: subscription mode
-		SuccessURL:        stripe.String(frontendURL + "/success"),
-		CancelURL:         stripe.String(frontendURL + "/cancel"),
+		SuccessURL:        stripe.String(success_url),
+		CancelURL:         stripe.String(cancel_url),
 		ClientReferenceID: stripe.String(userID),
 		Metadata:          map[string]string{"user_id": userID, "product_id": productID},
 		// Set customer metadata when customer is created

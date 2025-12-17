@@ -5,6 +5,7 @@ import Transactions from "./payment/Transactions";
 import Success from "./payment/Success";
 import Cancel from "./payment/Cancel";
 import Layout from "./Layout";
+import Dashboard from "./payment/Dashboard";
 
 
 const router = createBrowserRouter([
@@ -14,7 +15,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Transactions />,
+        element: <Dashboard />,
       },
       {
         path: "/create-product",
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
       {
         path: "/list-products",
         element: <ListProducts />,
+      },
+      {
+        path: "/transactions/:page",
+        element: <Transactions />,
       },
     ],
   },

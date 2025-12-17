@@ -19,6 +19,17 @@ function Layout() {
           <nav className="flex-1 p-4">
             <div className="space-y-2">
               <Link
+                to="/"
+                className={`block w-full text-left px-4 py-3 rounded-lg transition-colors ${
+                  isActive('/')
+                    ? 'bg-blue-50 text-blue-700 border border-blue-200'
+                    : 'text-gray-700 hover:bg-gray-50'
+                }`}
+              >
+                Dashboard
+              </Link>
+              
+              <Link
                 to="/create-product"
                 className={`block w-full text-left px-4 py-3 rounded-lg transition-colors ${
                   isActive('/create-product')
@@ -41,9 +52,9 @@ function Layout() {
               </Link>
               
               <Link
-                to="/"
+                to="/transactions/1"
                 className={`block w-full text-left px-4 py-3 rounded-lg transition-colors ${
-                  isActive('/')
+                  location.pathname.startsWith('/transactions')
                     ? 'bg-blue-50 text-blue-700 border border-blue-200'
                     : 'text-gray-700 hover:bg-gray-50'
                 }`}

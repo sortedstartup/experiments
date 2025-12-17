@@ -39,9 +39,14 @@ message GetDashboardDataRequest {
     
 }
 message GetDashboardDataResponse {
-    double todaySales = 1;
-    double weeklySales = 2;
-    double monthlySales = 3;
+    repeated DashboardData dashboardData = 1;
+}
+
+message DashboardData {
+    string currency = 1;
+    double dailySales = 2;
+    double weeklySales = 3;
+    double monthlySales = 4;
 }
 message GetTransactionsRequest {
     int32 pageNumber = 1;

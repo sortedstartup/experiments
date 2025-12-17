@@ -1,6 +1,6 @@
 import { atom } from "nanostores";
 import {
-    CreateProductRequest, PaymentServiceClient, ListProductsRequest, Product, CreateStripeCheckoutSessionRequest, CreateRazorpayCheckoutSessionRequest, Currency, PaymentType, Interval, CreateStripeSubscriptionCheckoutSessionRequest, CreateRazorpaySubscriptionCheckoutSessionRequest, PaymentAdminServiceClient, GetTransactionsRequest, Transaction
+    CreateProductRequest, PaymentServiceClient, ListProductsRequest, Product, CreateStripeCheckoutSessionRequest, CreateRazorpayCheckoutSessionRequest, Currency, PaymentType, Interval, CreateStripeSubscriptionCheckoutSessionRequest, CreateRazorpaySubscriptionCheckoutSessionRequest, PaymentAdminServiceClient, GetTransactionsRequest, Transaction, GetDashboardDataRequest, DashboardData
 } from "../../../proto/paymentservice"
 // import { createAuthenticatedClientOptions } from "../../lib/auth";
 import { toast } from "sonner";
@@ -142,6 +142,23 @@ export const getTransactions = async (pageNumber: number, pageSize: number) => {
         return res.transactions;
     } catch (err) {
         toast.error("Failed to get transactions");
+        throw err;
+    }
+}
+
+export const DashboardDataList = atom<DashboardData[]>([]);
+
+export const getDashboardData = async () => {
+    try {
+        const req = new GetDashboardDataRequest({});
+        const res = await adminClient.GetDashboardData(req, {});
+        
+        console.log("dashboard data", res.dashboardData);
+        DashboardDataList.set(res.dashboardData);
+        
+        return res;
+    } catch (err) {
+        toast.error("Failed to get dashboard data");
         throw err;
     }
 }

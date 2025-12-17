@@ -172,3 +172,13 @@ func (a *PaymentAdminService) GetTransactions(ctx context.Context, userID string
 	}
 	return transactions, nil
 }
+
+func (a *PaymentAdminService) GetDashboardData(ctx context.Context, userID string) (*dao.DashboardData, error) {
+
+	dashboardData, err := a.dao.GetDashboardData(userID)
+	if err != nil {
+		slog.Error("paymentservice:service:GetDashboardData", "error", err)
+		return nil, fmt.Errorf("failed to get dashboard data")
+	}
+	return dashboardData, nil
+}

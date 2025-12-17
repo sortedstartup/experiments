@@ -214,26 +214,68 @@ func (d *SQLiteDAO) GetTransactions(userID string, pageNumber int32, pageSize in
 	offset := (page - 1) * int(pageSize)
 
 	query := `SELECT 
-		s.id,
-		s.user_id,
-		s.product_id,
+		up.id,
+		up.user_id,
+		up.product_id,
 		p.name AS product_name,
 		p.price AS amount,
 		p.currency,
-		s.status,
-		s.created_at,
-		s.updated_at
-	FROM paymentservice_subscriptions s 
-	LEFT JOIN paymentservice_products p ON s.product_id = p.id 
-	WHERE s.user_id = ? 
-	ORDER BY s.created_at DESC 
+		CASE WHEN up.is_success = 1 THEN 'success' ELSE 'failed' END AS status,
+		up.created_at,
+		up.updated_at
+	FROM paymentservice_user_payments up 
+	LEFT JOIN paymentservice_products p ON up.product_id = p.id 
+	ORDER BY up.created_at DESC 
 	LIMIT ? OFFSET ?`
 
 	transactions := []*Transaction{}
-	err := d.db.Select(&transactions, query, userID, pageSize, offset)
+	err := d.db.Select(&transactions, query, pageSize, offset)
 	if err != nil {
 		slog.Error("paymentservice:dao_sqlite:GetTransactions", "error", err)
 		return nil, err
 	}
 	return transactions, nil
+}
+
+func (d *SQLiteDAO) GetDashboardData(userID string) (*DashboardData, error) {
+	query := `
+        SELECT
+            p.currency,
+
+            SUM(CASE
+                WHEN up.created_at >= datetime('now','start of day')
+                 AND up.created_at <  datetime('now','start of day','+1 day')
+                THEN p.price ELSE 0 END) / 100.0 AS daily_sales,
+
+            SUM(CASE
+                WHEN up.created_at >= datetime('now','-6 days','start of day')
+                THEN p.price ELSE 0 END) / 100.0 AS weekly_sales,
+
+            SUM(CASE
+                WHEN up.created_at >= datetime('now','-29 days','start of day')
+                THEN p.price ELSE 0 END) / 100.0 AS monthly_sales
+
+        FROM paymentservice_user_payments up
+        JOIN paymentservice_products p
+            ON up.product_id = p.id
+
+        WHERE up.is_success = TRUE
+
+        GROUP BY p.currency;
+    `
+
+	var rows []CurrencySales
+	err := d.db.Select(&rows, query)
+	if err != nil {
+		slog.Error(
+			"paymentservice:dao_sqlite:GetDashboardData",
+			"userID", userID,
+			"error", err,
+		)
+		return nil, err
+	}
+
+	return &DashboardData{
+		ByCurrency: rows,
+	}, nil
 }

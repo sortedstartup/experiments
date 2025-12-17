@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useStore } from "@nanostores/react";
+import { useParams, useNavigate } from "react-router-dom";
 import { TransactionsList, getTransactions } from "./store/payment";
 
 const Transactions: React.FC = () => {
     const transactions = useStore(TransactionsList);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
-    const [currentPage, setCurrentPage] = useState(1);
-    const pageSize = 20;
+    const { page } = useParams<{ page: string }>();
+    const navigate = useNavigate();
+    const currentPage = parseInt(page || "1", 10);
+    const pageSize = 10;
 
     const fetchTransactions = async (page: number) => {
         try {
@@ -23,18 +26,23 @@ const Transactions: React.FC = () => {
     };
 
     useEffect(() => {
+        // Redirect to page 1 if no page or invalid page
+        if (!page || isNaN(currentPage) || currentPage < 1) {
+            navigate("/transactions/1", { replace: true });
+            return;
+        }
         fetchTransactions(currentPage);
-    }, [currentPage]);
+    }, [page, currentPage, navigate]);
 
     const handlePreviousPage = () => {
         if (currentPage > 1) {
-            setCurrentPage(currentPage - 1);
+            navigate(`/transactions/${currentPage - 1}`);
         }
     };
 
     const handleNextPage = () => {
         if (transactions.length === pageSize) {
-            setCurrentPage(currentPage + 1);
+            navigate(`/transactions/${currentPage + 1}`);
         }
     };
 

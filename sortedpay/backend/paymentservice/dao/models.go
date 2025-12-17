@@ -64,3 +64,14 @@ type Transaction struct {
 	CreatedAt   string `db:"created_at"`
 	UpdatedAt   string `db:"updated_at"`
 }
+
+type CurrencySales struct {
+	Currency     string  `db:"currency"`
+	DailySales   float64 `db:"daily_sales"`
+	WeeklySales  float64 `db:"weekly_sales"`
+	MonthlySales float64 `db:"monthly_sales"`
+}
+
+type DashboardData struct {
+	ByCurrency []CurrencySales
+}

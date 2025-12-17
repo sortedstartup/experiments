@@ -65,6 +65,16 @@ func (adminServiceAPI *PaymentAdminServiceAPI) CreateProduct(ctx context.Context
 		return nil, err
 	}
 
+	isAdmin, err := auth.IsUserAdmin(ctx)
+	if err != nil {
+		slog.Error("paymentservice:api:GetDashboardData", "error", err)
+		return nil, status.Errorf(codes.Internal, "failed to check if user is admin: %v", err)
+	}
+
+	if !isAdmin {
+		return nil, status.Error(codes.PermissionDenied, "user is not an admin")
+	}
+
 	if strings.TrimSpace(req.Name) == "" {
 		return nil, status.Error(codes.InvalidArgument, "Product name cannot be empty")
 	}
@@ -231,8 +241,14 @@ func (s *PaymentServiceAPI) CreateStripeSubscriptionCheckoutSession(ctx context.
 	if strings.TrimSpace(req.ProductId) == "" {
 		return nil, status.Error(codes.InvalidArgument, "Product ID cannot be empty")
 	}
+	if strings.TrimSpace(req.SuccessUrl) == "" {
+		return nil, status.Error(codes.InvalidArgument, "Success URL cannot be empty")
+	}
+	if strings.TrimSpace(req.CancelUrl) == "" {
+		return nil, status.Error(codes.InvalidArgument, "Cancel URL cannot be empty")
+	}
 
-	sessionURL, err := s.service.CreateStripeSubscriptionCheckoutSession(ctx, userID, req.ProductId)
+	sessionURL, err := s.service.CreateStripeSubscriptionCheckoutSession(ctx, userID, req.ProductId, req.SuccessUrl, req.CancelUrl)
 	if err != nil {
 		slog.Error("paymentservice:api:CreateStripeSubscriptionCheckoutSession", "error", err)
 		return nil, status.Errorf(codes.Internal, "failed to create Stripe subscription checkout session: %v", err)
@@ -312,6 +328,15 @@ func (adminServiceAPI *PaymentAdminServiceAPI) CheckUserProductAccess(ctx contex
 		slog.Error("paymentservice:api:CheckUserProductAccess", "error", err)
 		return nil, err
 	}
+	isAdmin, err := auth.IsUserAdmin(ctx)
+	if err != nil {
+		slog.Error("paymentservice:api:GetDashboardData", "error", err)
+		return nil, status.Errorf(codes.Internal, "failed to check if user is admin: %v", err)
+	}
+
+	if !isAdmin {
+		return nil, status.Error(codes.PermissionDenied, "user is not an admin")
+	}
 	if strings.TrimSpace(req.ProductId) == "" {
 		return nil, status.Error(codes.InvalidArgument, "Product ID cannot be empty")
 	}
@@ -332,6 +357,16 @@ func (adminServiceAPI *PaymentAdminServiceAPI) GetTransactions(ctx context.Conte
 	if err != nil {
 		slog.Error("paymentservice:api:GetTransactions", "error", err)
 		return nil, err
+	}
+
+	isAdmin, err := auth.IsUserAdmin(ctx)
+	if err != nil {
+		slog.Error("paymentservice:api:GetDashboardData", "error", err)
+		return nil, status.Errorf(codes.Internal, "failed to check if user is admin: %v", err)
+	}
+
+	if !isAdmin {
+		return nil, status.Error(codes.PermissionDenied, "user is not an admin")
 	}
 
 	if req.PageNumber <= 0 {
@@ -365,4 +400,41 @@ func (adminServiceAPI *PaymentAdminServiceAPI) GetTransactions(ctx context.Conte
 		Transactions: protoTransactions,
 	}, nil
 
+}
+
+func (adminServiceAPI *PaymentAdminServiceAPI) GetDashboardData(ctx context.Context, req *pb.GetDashboardDataRequest) (*pb.GetDashboardDataResponse, error) {
+	userID, err := auth.GetUserIDFromContext_WithError(ctx)
+	if err != nil {
+		slog.Error("paymentservice:api:GetDashboardData", "error", err)
+		return nil, err
+	}
+
+	isAdmin, err := auth.IsUserAdmin(ctx)
+	if err != nil {
+		slog.Error("paymentservice:api:GetDashboardData", "error", err)
+		return nil, status.Errorf(codes.Internal, "failed to check if user is admin: %v", err)
+	}
+
+	if !isAdmin {
+		return nil, status.Error(codes.PermissionDenied, "user is not an admin")
+	}
+
+	dashboardData, err := adminServiceAPI.adminService.GetDashboardData(ctx, userID)
+	if err != nil {
+		slog.Error("paymentservice:api:GetDashboardData", "error", err)
+		return nil, status.Errorf(codes.Internal, "failed to get dashboard data: %v", err)
+	}
+
+	protoDashboardData := make([]*pb.DashboardData, len(dashboardData.ByCurrency))
+	for i, currencySale := range dashboardData.ByCurrency {
+		protoDashboardData[i] = &pb.DashboardData{
+			Currency:     currencySale.Currency,
+			DailySales:   currencySale.DailySales,
+			WeeklySales:  currencySale.WeeklySales,
+			MonthlySales: currencySale.MonthlySales,
+		}
+	}
+	return &pb.GetDashboardDataResponse{
+		DashboardData: protoDashboardData,
+	}, nil
 }
