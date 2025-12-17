@@ -1,26 +1,30 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import CreateProduct from "./payment/CreateProduct";
 import ListProducts from "./payment/ListProducts";
+import Transactions from "./payment/Transactions";
 import Success from "./payment/Success";
 import Cancel from "./payment/Cancel";
+import Layout from "./Layout";
 
-// Dummy Home Page
-function Home() {
-  return <div>payment</div>;
-}
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
-  },
-  {
-    path: "/create-product",
-    element: <CreateProduct />,
-  },
-  {
-    path: "/list-products",
-    element: <ListProducts />,
+    element: <Layout />,
+    children: [
+      {
+        path: "/",
+        element: <Transactions />,
+      },
+      {
+        path: "/create-product",
+        element: <CreateProduct />,
+      },
+      {
+        path: "/list-products",
+        element: <ListProducts />,
+      },
+    ],
   },
   {
     path: "/success",
