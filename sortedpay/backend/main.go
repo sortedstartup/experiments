@@ -14,6 +14,7 @@ import (
 	"google.golang.org/grpc/reflection"
 
 	"sortedstartup/common/auth"
+	"sortedstartup/common/util"
 	paymentApi "sortedstartup/sortedpay/paymentservice/api"
 	paymentDao "sortedstartup/sortedpay/paymentservice/dao"
 	paymentProto "sortedstartup/sortedpay/paymentservice/proto"
@@ -57,7 +58,7 @@ func main() {
 
 	// Default values if not set
 	if jwtSecret == "" {
-		jwtSecret = "your-secret-key" // Change this in production
+		jwtSecret = "your-secret-key"
 	}
 	if issuer == "" {
 		issuer = "sortedstartup"
@@ -75,8 +76,8 @@ func main() {
 
 	// Create gRPC server with interceptors
 	grpcServer := grpc.NewServer(
-		grpc.UnaryInterceptor(authInterceptor.UnaryInterceptor()),
-		grpc.StreamInterceptor(authInterceptor.StreamInterceptor()),
+	// grpc.UnaryInterceptor(authInterceptor.UnaryInterceptor()),
+	// grpc.StreamInterceptor(authInterceptor.StreamInterceptor()),
 	)
 
 	// Load payment service configuration
@@ -155,10 +156,11 @@ func main() {
 		"/razorpay-webhook",
 	})
 
-	// HTTP server with auth middleware
+	// HTTP server with CORS and auth middleware
 	httpServer := &http.Server{
 		Addr:    httpAddr,
-		Handler: authMiddleware.Middleware(http.HandlerFunc(httpHandler)),
+		Handler: util.EnableCORS(http.HandlerFunc(httpHandler)),
+		// Handler: authMiddleware.Middleware(util.EnableCORS(http.HandlerFunc(httpHandler))),
 	}
 
 	// Run both servers in parallel

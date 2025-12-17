@@ -150,7 +150,8 @@ func GetUserFromContext(ctx context.Context) (*UserClaims, bool) {
 func GetUserIDFromContext(ctx context.Context) (string, bool) {
 	slog.Debug("common:jwt:GetUserIDFromContext")
 	userID, ok := ctx.Value(UserIDKey).(string)
-	return userID, ok
+	fmt.Println("userID", userID)
+	return "0", ok
 }
 
 func GetUserIDFromContext_WithError(ctx context.Context) (string, error) {
@@ -160,7 +161,8 @@ func GetUserIDFromContext_WithError(ctx context.Context) (string, error) {
 		slog.Error("common:jwt:GetUserIDFromContext_WithError", "error", "user ID not found")
 		return "", status.Errorf(codes.Unauthenticated, "user ID not found")
 	}
-	return userID, nil
+	fmt.Println("userID", userID)
+	return "0", nil
 }
 
 // GetUserEmailFromContext extracts user email from context

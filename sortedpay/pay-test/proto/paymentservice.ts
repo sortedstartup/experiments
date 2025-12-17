@@ -1495,30 +1495,30 @@ export class PaymentServiceClient {
     }
     private static CreateProduct = new grpc_web_1.MethodDescriptor<CreateProductRequest, CreateProductResponse>("/sortedchat.PaymentService/CreateProduct", grpc_web_1.MethodType.UNARY, CreateProductRequest, CreateProductResponse, (message: CreateProductRequest) => message.serialize(), CreateProductResponse.deserialize);
     CreateProduct(message: CreateProductRequest, metadata: grpc_web_1.Metadata | null) {
-        return this._client.thenableCall<CreateProductRequest, CreateProductResponse>(this._address + "/sortedchat.PaymentService/CreateProduct", message, metadata || {}, PaymentServiceClient.CreateProduct);
+        return this._client.unaryCall(this._address + "/sortedchat.PaymentService/CreateProduct", message, metadata || {}, PaymentServiceClient.CreateProduct);
     }
     private static ListProducts = new grpc_web_1.MethodDescriptor<ListProductsRequest, ListProductsResponse>("/sortedchat.PaymentService/ListProducts", grpc_web_1.MethodType.UNARY, ListProductsRequest, ListProductsResponse, (message: ListProductsRequest) => message.serialize(), ListProductsResponse.deserialize);
     ListProducts(message: ListProductsRequest, metadata: grpc_web_1.Metadata | null) {
-        return this._client.thenableCall<ListProductsRequest, ListProductsResponse>(this._address + "/sortedchat.PaymentService/ListProducts", message, metadata || {}, PaymentServiceClient.ListProducts);
+        return this._client.unaryCall(this._address + "/sortedchat.PaymentService/ListProducts", message, metadata || {}, PaymentServiceClient.ListProducts);
     }
     private static CreateStripeCheckoutSession = new grpc_web_1.MethodDescriptor<CreateStripeCheckoutSessionRequest, CreateStripeCheckoutSessionResponse>("/sortedchat.PaymentService/CreateStripeCheckoutSession", grpc_web_1.MethodType.UNARY, CreateStripeCheckoutSessionRequest, CreateStripeCheckoutSessionResponse, (message: CreateStripeCheckoutSessionRequest) => message.serialize(), CreateStripeCheckoutSessionResponse.deserialize);
     CreateStripeCheckoutSession(message: CreateStripeCheckoutSessionRequest, metadata: grpc_web_1.Metadata | null) {
-        return this._client.thenableCall<CreateStripeCheckoutSessionRequest, CreateStripeCheckoutSessionResponse>(this._address + "/sortedchat.PaymentService/CreateStripeCheckoutSession", message, metadata || {}, PaymentServiceClient.CreateStripeCheckoutSession);
+        return this._client.unaryCall(this._address + "/sortedchat.PaymentService/CreateStripeCheckoutSession", message, metadata || {}, PaymentServiceClient.CreateStripeCheckoutSession);
     }
     private static CreateRazorpayCheckoutSession = new grpc_web_1.MethodDescriptor<CreateRazorpayCheckoutSessionRequest, CreateRazorpayCheckoutSessionResponse>("/sortedchat.PaymentService/CreateRazorpayCheckoutSession", grpc_web_1.MethodType.UNARY, CreateRazorpayCheckoutSessionRequest, CreateRazorpayCheckoutSessionResponse, (message: CreateRazorpayCheckoutSessionRequest) => message.serialize(), CreateRazorpayCheckoutSessionResponse.deserialize);
     CreateRazorpayCheckoutSession(message: CreateRazorpayCheckoutSessionRequest, metadata: grpc_web_1.Metadata | null) {
-        return this._client.thenableCall<CreateRazorpayCheckoutSessionRequest, CreateRazorpayCheckoutSessionResponse>(this._address + "/sortedchat.PaymentService/CreateRazorpayCheckoutSession", message, metadata || {}, PaymentServiceClient.CreateRazorpayCheckoutSession);
+        return this._client.unaryCall(this._address + "/sortedchat.PaymentService/CreateRazorpayCheckoutSession", message, metadata || {}, PaymentServiceClient.CreateRazorpayCheckoutSession);
     }
     private static CreateStripeSubscriptionCheckoutSession = new grpc_web_1.MethodDescriptor<CreateStripeSubscriptionCheckoutSessionRequest, CreateStripeSubscriptionCheckoutSessionResponse>("/sortedchat.PaymentService/CreateStripeSubscriptionCheckoutSession", grpc_web_1.MethodType.UNARY, CreateStripeSubscriptionCheckoutSessionRequest, CreateStripeSubscriptionCheckoutSessionResponse, (message: CreateStripeSubscriptionCheckoutSessionRequest) => message.serialize(), CreateStripeSubscriptionCheckoutSessionResponse.deserialize);
     CreateStripeSubscriptionCheckoutSession(message: CreateStripeSubscriptionCheckoutSessionRequest, metadata: grpc_web_1.Metadata | null) {
-        return this._client.thenableCall<CreateStripeSubscriptionCheckoutSessionRequest, CreateStripeSubscriptionCheckoutSessionResponse>(this._address + "/sortedchat.PaymentService/CreateStripeSubscriptionCheckoutSession", message, metadata || {}, PaymentServiceClient.CreateStripeSubscriptionCheckoutSession);
+        return this._client.unaryCall(this._address + "/sortedchat.PaymentService/CreateStripeSubscriptionCheckoutSession", message, metadata || {}, PaymentServiceClient.CreateStripeSubscriptionCheckoutSession);
     }
     private static CreateRazorpaySubscriptionCheckoutSession = new grpc_web_1.MethodDescriptor<CreateRazorpaySubscriptionCheckoutSessionRequest, CreateRazorpaySubscriptionCheckoutSessionResponse>("/sortedchat.PaymentService/CreateRazorpaySubscriptionCheckoutSession", grpc_web_1.MethodType.UNARY, CreateRazorpaySubscriptionCheckoutSessionRequest, CreateRazorpaySubscriptionCheckoutSessionResponse, (message: CreateRazorpaySubscriptionCheckoutSessionRequest) => message.serialize(), CreateRazorpaySubscriptionCheckoutSessionResponse.deserialize);
     CreateRazorpaySubscriptionCheckoutSession(message: CreateRazorpaySubscriptionCheckoutSessionRequest, metadata: grpc_web_1.Metadata | null) {
-        return this._client.thenableCall<CreateRazorpaySubscriptionCheckoutSessionRequest, CreateRazorpaySubscriptionCheckoutSessionResponse>(this._address + "/sortedchat.PaymentService/CreateRazorpaySubscriptionCheckoutSession", message, metadata || {}, PaymentServiceClient.CreateRazorpaySubscriptionCheckoutSession);
+        return this._client.unaryCall(this._address + "/sortedchat.PaymentService/CreateRazorpaySubscriptionCheckoutSession", message, metadata || {}, PaymentServiceClient.CreateRazorpaySubscriptionCheckoutSession);
     }
     private static CheckUserProductAccess = new grpc_web_1.MethodDescriptor<CheckUserProductAccessRequest, CheckUserProductAccessResponse>("/sortedchat.PaymentService/CheckUserProductAccess", grpc_web_1.MethodType.UNARY, CheckUserProductAccessRequest, CheckUserProductAccessResponse, (message: CheckUserProductAccessRequest) => message.serialize(), CheckUserProductAccessResponse.deserialize);
     CheckUserProductAccess(message: CheckUserProductAccessRequest, metadata: grpc_web_1.Metadata | null) {
-        return this._client.thenableCall<CheckUserProductAccessRequest, CheckUserProductAccessResponse>(this._address + "/sortedchat.PaymentService/CheckUserProductAccess", message, metadata || {}, PaymentServiceClient.CheckUserProductAccess);
+        return this._client.unaryCall(this._address + "/sortedchat.PaymentService/CheckUserProductAccess", message, metadata || {}, PaymentServiceClient.CheckUserProductAccess);
     }
 }
