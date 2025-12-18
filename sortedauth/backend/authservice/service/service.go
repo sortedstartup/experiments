@@ -72,8 +72,12 @@ func (s *AuthService) initialize() {
 		ClientID:     clientID,
 		ClientSecret: clientSecret,
 		RedirectURL:  redirectURL,
-		Endpoint:     provider.Endpoint(),
-		Scopes:       []string{oidc.ScopeOpenID, "email", "profile"},
+		Endpoint: oauth2.Endpoint{
+			AuthURL:  "https://www.linkedin.com/oauth/v2/authorization",
+			TokenURL: "https://www.linkedin.com/oauth/v2/accessToken",
+		},
+		// provider.Endpoint(),
+		Scopes: []string{oidc.ScopeOpenID, "email", "profile"},
 	}
 
 	// Create the callback HTML template
