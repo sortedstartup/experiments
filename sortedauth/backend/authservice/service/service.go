@@ -250,7 +250,7 @@ func (s *AuthService) OAuthCallbackHandler(w http.ResponseWriter, r *http.Reques
 	roles := "user" // Convert to string for DAO
 	isFederated := true
 	email := claims.Email
-
+	name := claims.Name
 	// Check if email is in the allowlist
 	if !isEmailAllowed(email) {
 		slog.Debug("authservice:service:OAuthCallbackHandler", "step", "Login attempt from unauthorized email", "email", email)
@@ -258,7 +258,7 @@ func (s *AuthService) OAuthCallbackHandler(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	userID, err := s.userService.CreateUserIfNotExists(email, roles, oAuthProvider, oAuthUserID, isFederated)
+	userID, err := s.userService.CreateUserIfNotExists(email, name, roles, oAuthProvider, oAuthUserID, isFederated)
 	if err != nil {
 		slog.Error("authservice:service:OAuthCallbackHandler", "step", "user creation failed", "error", err)
 		http.Error(w, "user creation failed", http.StatusInternalServerError)
@@ -274,6 +274,7 @@ func (s *AuthService) OAuthCallbackHandler(w http.ResponseWriter, r *http.Reques
 		"roles": []string{roles}, // Convert back to array for JWT
 		"iat":   now.Unix(),
 		"exp":   now.Add(s.tokenTTL).Unix(),
+		"name":  claims.Name,
 	}).SignedString(s.appJWTSecret)
 	if err != nil {
 		slog.Error("authservice:service:OAuthCallbackHandler", "step", "jwt issue failed", "error", err)
@@ -373,12 +374,12 @@ func (u *UserService) DoesUserExist(userID string) (bool, error) {
 	return u.dao.DoesUserExist(userID)
 }
 
-func (u *UserService) CreateUserIfNotExists(email, roles, oAuthProvider, oAuthUserID string, isFederated bool) (string, error) {
+func (u *UserService) CreateUserIfNotExists(email, name, roles, oAuthProvider, oAuthUserID string, isFederated bool) (string, error) {
 	slog.Info("authservice:service:CreateUserIfNotExists", "email", email, "roles", roles, "oAuthProvider", oAuthProvider, "oAuthUserID", oAuthUserID, "isFederated", isFederated)
 	// Generate a new user ID
 	userID := GenerateNewUserID()
 
-	return u.dao.CreateUserIfNotExists(userID, email, roles, oAuthProvider, oAuthUserID, isFederated)
+	return u.dao.CreateUserIfNotExists(userID, email, name, roles, oAuthProvider, oAuthUserID, isFederated)
 }
 
 // getEnvOrDefault returns the environment variable value or the default value

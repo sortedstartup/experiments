@@ -11,7 +11,7 @@ import (
 
 type UserDAO interface {
 	DoesUserExist(userID string) (bool, error)
-	CreateUserIfNotExists(userID, email, roles, oAuthProvider, oAuthUserID string, isFederated bool) (string, error)
+	CreateUserIfNotExists(userID, email, name, roles, oAuthProvider, oAuthUserID string, isFederated bool) (string, error)
 	GetUserIDByEmail(email string) (string, error)
 }
 
@@ -48,7 +48,7 @@ func (u *UserSqliteDAO) DoesUserExist(userID string) (bool, error) {
 	return count > 0, nil
 }
 
-func (u *UserSqliteDAO) CreateUserIfNotExists(userID, email, roles, oAuthProvider, oAuthUserID string, isFederated bool) (string, error) {
+func (u *UserSqliteDAO) CreateUserIfNotExists(userID, email, name, roles, oAuthProvider, oAuthUserID string, isFederated bool) (string, error) {
 	// First check if user exists by email
 	existingUserID, err := u.GetUserIDByEmail(email)
 	if err == nil && existingUserID != "" {
@@ -71,12 +71,12 @@ func (u *UserSqliteDAO) CreateUserIfNotExists(userID, email, roles, oAuthProvide
 	// User doesn't exist, insert new user
 	insertQuery := `
 		INSERT INTO userservice_users 
-		(user_id, email, roles, oauth_provider, oauth_user_id, is_federated)
-		VALUES (?, ?, ?, ?, ?, ?)
+		(user_id, email, name, roles, oauth_provider, oauth_user_id, is_federated)
+		VALUES (?, ?, ?, ?, ?, ?, ?)
 	`
 
-	slog.Debug("Inserting new user", "userID", userID, "email", email, "roles", roles, "oAuthProvider", oAuthProvider, "oAuthUserID", oAuthUserID, "isFederated", isFederated)
-	_, err = u.db.Exec(insertQuery, userID, email, roles, oAuthProvider, oAuthUserID, isFederated)
+	slog.Debug("Inserting new user", "userID", userID, "email", email, "name", name, "roles", roles, "oAuthProvider", oAuthProvider, "oAuthUserID", oAuthUserID, "isFederated", isFederated)
+	_, err = u.db.Exec(insertQuery, userID, email, name, roles, oAuthProvider, oAuthUserID, isFederated)
 	if err != nil {
 		slog.Error("Error inserting new user", "error", err)
 		return "", err
@@ -145,7 +145,7 @@ func (u *UserPostgresDAO) DoesUserExist(userID string) (bool, error) {
 	return count > 0, nil
 }
 
-func (u *UserPostgresDAO) CreateUserIfNotExists(userID, email, roles, oAuthProvider, oAuthUserID string, isFederated bool) (string, error) {
+func (u *UserPostgresDAO) CreateUserIfNotExists(userID, email, name, roles, oAuthProvider, oAuthUserID string, isFederated bool) (string, error) {
 	// First check if user exists by email
 	existingUserID, err := u.GetUserIDByEmail(email)
 	if err == nil && existingUserID != "" {
@@ -167,12 +167,12 @@ func (u *UserPostgresDAO) CreateUserIfNotExists(userID, email, roles, oAuthProvi
 	// User doesn't exist, insert new user
 	insertQuery := `
 		INSERT INTO userservice_users 
-		(user_id, email, roles, oauth_provider, oauth_user_id, is_federated)
-		VALUES ($1, $2, $3, $4, $5, $6)
+		(user_id, email,name, roles, oauth_provider, oauth_user_id, is_federated)
+		VALUES ($1, $2, $3, $4, $5, $6, $7)
 	`
 
-	slog.Debug("Inserting new user", "userID", userID, "email", email, "roles", roles, "oAuthProvider", oAuthProvider, "oAuthUserID", oAuthUserID, "isFederated", isFederated)
-	_, err = u.db.Exec(insertQuery, userID, email, roles, oAuthProvider, oAuthUserID, isFederated)
+	slog.Debug("Inserting new user", "userID", userID, "email", email, "name", name, "roles", roles, "oAuthProvider", oAuthProvider, "oAuthUserID", oAuthUserID, "isFederated", isFederated)
+	_, err = u.db.Exec(insertQuery, userID, email, name, roles, oAuthProvider, oAuthUserID, isFederated)
 	if err != nil {
 		slog.Error("Error inserting new user", "error", err)
 		return "", err

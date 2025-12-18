@@ -3,6 +3,7 @@
 CREATE TABLE IF NOT EXISTS userservice_users (
     user_id TEXT PRIMARY KEY,
     email TEXT NOT NULL,
+    name TEXT NOT NULL,
     roles TEXT NOT NULL,
     oauth_provider TEXT NOT NULL,
     oauth_user_id TEXT NOT NULL,
