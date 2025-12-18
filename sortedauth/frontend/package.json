@@ -12,6 +12,8 @@
   "dependencies": {
     "@nanostores/react": "^1.0.0",
     "@tailwindcss/vite": "^4.1.18",
+    "google-protobuf": "^4.0.1",
+    "grpc-web": "1.5.0",
     "nanostores": "^1.1.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",

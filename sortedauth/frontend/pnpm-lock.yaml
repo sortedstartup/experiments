@@ -14,6 +14,12 @@ importers:
       '@tailwindcss/vite':
         specifier: ^4.1.18
         version: 4.1.18(vite@7.3.0(@types/node@24.10.4)(jiti@2.6.1)(lightningcss@1.30.2))
+      google-protobuf:
+        specifier: ^4.0.1
+        version: 4.0.1
+      grpc-web:
+        specifier: 1.5.0
+        version: 1.5.0
       nanostores:
         specifier: ^1.1.0
         version: 1.1.0
@@ -898,8 +904,14 @@ packages:
     resolution: {integrity: sha512-c/c15i26VrJ4IRt5Z89DnIzCGDn9EcebibhAOjw5ibqEHsE1wLUgkPn9RDmNcUKyU87GeaL633nyJ+pplFR2ZQ==}
     engines: {node: '>=18'}
 
+  google-protobuf@4.0.1:
+    resolution: {integrity: sha512-0I4mx3UtAwpcc8l9Ds5gHcwV2FyPdwvxxBcor8LusE4b6PjoFxEngZRBepjvuQ4B0eZ2iu/Vezh8oRsnpJ9UGA==}
+
   graceful-fs@4.2.11:
     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
+
+  grpc-web@1.5.0:
+    resolution: {integrity: sha512-y1tS3BBIoiVSzKTDF3Hm7E8hV2n7YY7pO0Uo7depfWJqKzWE+SKr0jvHNIJsJJYILQlpYShpi/DRJJMbosgDMQ==}
 
   has-flag@4.0.0:
     resolution: {integrity: sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ==}
@@ -2098,7 +2110,11 @@ snapshots:
 
   globals@16.5.0: {}
 
+  google-protobuf@4.0.1: {}
+
   graceful-fs@4.2.11: {}
+
+  grpc-web@1.5.0: {}
 
   has-flag@4.0.0: {}
 

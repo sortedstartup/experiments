@@ -193,3 +193,8 @@ func HasRole(ctx context.Context, role string) bool {
 	}
 	return false
 }
+
+func IsUserAdmin(ctx context.Context) (bool, error) {
+	//Temporary return true for now
+	return true, nil
+}
