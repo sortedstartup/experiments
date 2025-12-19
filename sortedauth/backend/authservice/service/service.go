@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"log/slog"
@@ -25,6 +26,7 @@ type AuthService struct {
 	cookiePath   string
 	tokenTTL     time.Duration
 	appIssuer    string
+	issuerUrl    string
 
 	callbackTemplate *template.Template
 	userService      *UserService
@@ -51,18 +53,18 @@ func (s *AuthService) initialize() {
 	defaults := getDefaults()
 
 	// OIDC discovery - use configurable OAuth provider
-	issuer := getEnvOrDefault("OAUTH_ISSUER_URL", defaults["OAUTH_ISSUER_URL"])
+	issuerUrl := getEnvOrDefault("OAUTH_ISSUER_URL", defaults["OAUTH_ISSUER_URL"])
 	s.oauthProviderURLForFrontend = getEnvOrDefault("OAUTH_PROVIDER_URL_FOR_FRONTEND", defaults["OAUTH_PROVIDER_URL_FOR_FRONTEND"])
 	clientID := getEnvOrDefault("GOOGLE_CLIENT_ID", defaults["GOOGLE_CLIENT_ID"])
 	clientSecret := getEnvOrDefault("GOOGLE_CLIENT_SECRET", defaults["GOOGLE_CLIENT_SECRET"])
 	redirectURL := getEnvOrDefault("GOOGLE_REDIRECT_URL", defaults["GOOGLE_REDIRECT_URL"])
 
 	//using these env variables to start
-	slog.Debug("AuthService:service:initialize", "step", "initializing", "issuer", issuer, "clientID", clientID, "clientSecret", "[HIDDEN]", "redirectURL", redirectURL)
+	slog.Debug("AuthService:service:initialize", "step", "initializing", "issuer", issuerUrl, "clientID", clientID, "clientSecret", "[HIDDEN]", "redirectURL", redirectURL)
 	var err error
-	provider, err := oidc.NewProvider(ctx, issuer)
+	provider, err := oidc.NewProvider(ctx, issuerUrl)
 	if err != nil {
-		slog.Error("authservice:service:initialize", "step", "oidc provider, issuer", "error", err, "issuer", issuer)
+		slog.Error("authservice:service:initialize", "step", "oidc provider, issuer", "error", err, "issuer", issuerUrl)
 		s.initError = err
 		return
 	}
@@ -144,7 +146,7 @@ func (s *AuthService) initialize() {
 	s.appIssuer = getEnvOrDefault("APP_ISSUER", defaults["APP_ISSUER"])
 	s.callbackTemplate = callbackTemplate
 	s.initialized = true
-
+	s.issuerUrl = issuerUrl
 	// Debug: Log the JWT configuration being used
 	slog.Info("AuthService JWT configuration",
 		"appIssuer", s.appIssuer,
@@ -325,4 +327,94 @@ func (s *AuthService) GetOAuthConfigForFrontend() OAuthFrontendConfig {
 		OAuthProviderURL: s.oauthProviderURLForFrontend,
 		OAuthRedirectURL: s.oauthCfg.RedirectURL,
 	}
+}
+
+type TokenReq struct {
+	Token string `json:"token"`
+}
+
+func (s *AuthService) GoogleOneTapHandler(w http.ResponseWriter, r *http.Request) {
+	s.initOnce.Do(s.initialize)
+	var req TokenReq
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		slog.Error("authservice:service:GoogleOneTapHandler", "step", "failed to decode request", "error", err)
+		http.Error(w, "invalid request", http.StatusBadRequest)
+		return
+	}
+
+	ctx := context.Background()
+	slog.Info("authservice:service:GoogleOneTapHandler", "step", "getting provider", "appIssuer", s.appIssuer)
+	provider, err := oidc.NewProvider(ctx, s.issuerUrl)
+	if err != nil {
+		slog.Error("authservice:service:GoogleOneTapHandler", "step", "failed to get provider", "error", err)
+		http.Error(w, "failed to get provider", http.StatusInternalServerError)
+		return
+	}
+
+	// The ClientID must match your frontend exactly
+	verifier := provider.Verifier(&oidc.Config{
+		ClientID: s.oauthCfg.ClientID,
+	})
+
+	// Verify the ID Token signature and expiration
+	idToken, err := verifier.Verify(ctx, req.Token)
+	if err != nil {
+		slog.Error("authservice:service:GoogleOneTapHandler", "step", "failed to verify token", "error", err)
+		http.Error(w, "failed to verify token: "+err.Error(), http.StatusUnauthorized)
+		return
+	}
+
+	// Extract user claims
+	var claims struct {
+		Sub           string `json:"sub"`
+		Email         string `json:"email"`
+		EmailVerified bool   `json:"email_verified"`
+		Name          string `json:"name"`
+		Picture       string `json:"picture"`
+	}
+	if err := idToken.Claims(&claims); err != nil {
+		slog.Error("authservice:service:GoogleOneTapHandler", "step", "failed to parse claims", "error", err)
+		http.Error(w, "failed to parse claims", http.StatusInternalServerError)
+		return
+	}
+
+	oAuthProvider := "google"
+	oAuthUserID := claims.Sub
+	roles := "user" // Convert to string for DAO
+	isFederated := true
+	email := claims.Email
+	name := claims.Name
+	// Check if email is in the allowlist
+	if !isEmailAllowed(email) {
+		slog.Debug("authservice:service:OAuthCallbackHandler", "step", "Login attempt from unauthorized email", "email", email)
+		http.Error(w, "Access denied: Your email is not authorized to access this application", http.StatusForbidden)
+		return
+	}
+
+	userID, err := s.userService.CreateUserIfNotExists(email, name, roles, oAuthProvider, oAuthUserID, isFederated)
+	if err != nil {
+		slog.Error("authservice:service:OAuthCallbackHandler", "step", "user creation failed", "error", err)
+		http.Error(w, "user creation failed", http.StatusInternalServerError)
+		return
+	}
+
+	// Mint your app JWT
+	now := time.Now()
+	appJWT, err := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"iss":   s.appIssuer,
+		"sub":   userID,
+		"email": claims.Email,
+		"roles": []string{roles}, // Convert back to array for JWT
+		"iat":   now.Unix(),
+		"exp":   now.Add(s.tokenTTL).Unix(),
+		"name":  claims.Name,
+	}).SignedString(s.appJWTSecret)
+	if err != nil {
+		slog.Error("authservice:service:OAuthCallbackHandler", "step", "jwt issue failed", "error", err)
+		http.Error(w, "jwt issue failed", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]string{"status": "ok", "jwt": appJWT})
 }

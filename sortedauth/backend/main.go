@@ -74,6 +74,7 @@ func main() {
 		"/login",
 		"/callback",
 		"/oauth-config",
+		"/google-one-tap-callback",
 	})
 
 	// Load auth config and create services

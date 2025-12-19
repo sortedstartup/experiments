@@ -25,6 +25,7 @@ func (a *AuthServiceAPI) initCore() {
 	a.mux.HandleFunc("/callback", a.service.OAuthCallbackHandler)
 	a.mux.HandleFunc("/login", a.loginHandler)
 	a.mux.HandleFunc("/oauth-config", a.oAuthConfigHandler)
+	a.mux.HandleFunc("/google-one-tap-callback", a.service.GoogleOneTapHandler)
 }
 
 func (a *AuthServiceAPI) oAuthConfigHandler(w http.ResponseWriter, r *http.Request) {
