@@ -343,6 +343,8 @@ func (s *AuthService) GoogleOneTapHandler(w http.ResponseWriter, r *http.Request
 	}
 
 	ctx := context.Background()
+	//TODO: New Provider, verifier is already in initialize function so we dont have to do it here
+	//TODO: Remove redundant code
 	slog.Info("authservice:service:GoogleOneTapHandler", "step", "getting provider", "appIssuer", s.appIssuer)
 	provider, err := oidc.NewProvider(ctx, s.issuerUrl)
 	if err != nil {
