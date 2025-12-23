@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package sortedauth;
+
+option go_package = "sortedstartup/authservice/proto";
+
+
+service UserService {
+    rpc UsersList(UsersListRequest) returns (UsersListResponse);
+}
+
+
+
+message UsersListRequest {
+    int64 page = 1;
+    int64 page_size = 2;
+}
+
+message UsersListResponse {
+    repeated User users = 1;
+}
+
+message User {
+    string id = 1;
+    string email = 2;
+    string name = 3;
+    string roles = 4;
+}
+
+//Tenant Service to be added later
