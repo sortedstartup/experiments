@@ -16,6 +16,39 @@ export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
+    const { google } = window as any;
+
+    if (google) {
+      google.accounts.id.initialize({
+        client_id: '410294925787-nvmuoh607khojahfm5eqtrcu4o0jp87a.apps.googleusercontent.com',
+        callback: async (response: any) => {
+          console.log('response', response);
+
+          const responseData = {
+            token: response.credential,
+          };
+
+          const oneTapResponse = await fetch('http://localhost:8080/google-one-tap-callback', {
+            method: 'POST',
+            body: JSON.stringify(responseData),
+          });
+          console.log('oneTapResponse', oneTapResponse);
+          if (oneTapResponse.ok) {
+            const data = await oneTapResponse.json();
+            console.log('data', data);
+            localStorage.setItem('sortedchat.jwt', data.jwt);
+            router.push('/');
+          } else {
+            console.error('Failed to call Google One Tap callback');
+            router.push('/login');
+          }
+        },
+      });
+      google.accounts.id.prompt();
+    }
+  }, []);
+
+  useEffect(() => {
     // Check if user is authenticated
     const token = localStorage.getItem('sortedchat.jwt');
     
