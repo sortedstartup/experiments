@@ -1,0 +1,125 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>LLM Model Cards</title>
+</head>
+
+<body class="p-6 bg-gray-100 min-h-screen">
+    <h1 class="text-4xl font-extrabold text-center text-gray-800 mb-12">LLM Model Cards UX Variations</h1>
+
+    <!-- Variation 1: Simple Card Layout -->
+    <section class="mb-16">
+        <h2 class="text-2xl font-semibold text-gray-700 mb-6">Variation 1: Simple Card Layout (Updated with Grey Background)</h2>
+        <p class="text-gray-600 mb-6"><strong>UX Thinking:</strong> This variation focuses on clarity and conciseness, now with enhanced visual branding and a distinct grey background. The light grey background provides a subtle distinction and visual warmth, while the prominent model logo aids in immediate brand recognition and appeal. All key information remains immediately visible, making it easy to scan and compare models quickly while reinforcing brand identity.</p>
+        <div class="bg-gray-50 rounded-lg shadow-xl p-6 max-w-sm mx-auto border border-gray-200">
+            <div class="flex items-center mb-4">
+                <img src="https://via.placeholder.com/40x40?text=Logo" alt="Model Logo" class="w-10 h-10 rounded-full mr-4 border border-gray-300">
+                <h3 class="text-xl font-bold text-gray-900">Model Name: GPT-4 Turbo</h3>
+            </div>
+            <p class="text-gray-700 text-sm mb-4"><strong>Description:</strong> A powerful large language model offering advanced reasoning capabilities and a vast knowledge base, designed for complex tasks.</p>
+            <div class="grid grid-cols-2 gap-y-2 text-sm mb-4">
+                <span class="font-medium text-gray-800">Pricing:</span>
+                <span class="text-gray-600">$0.03/1K tokens</span>
+
+                <span class="font-medium text-gray-800">Rating:</span>
+                <span class="text-yellow-500">★★★★★ (4.8/5)</span>
+
+                <span class="font-medium text-gray-800">Content Window:</span>
+                <span class="text-gray-600">128K tokens</span>
+
+                <span class="font-medium text-gray-800">Provider:</span>
+                <span class="text-gray-600">OpenAI</span>
+            </div>
+            <button class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors duration-200">View Details</button>
+        </div>
+    </section>
+
+    <!-- Variation 2: Detailed Card with Expandable Description and More Visuals -->
+    <section class="mb-16">
+        <h2 class="text-2xl font-semibold text-gray-700 mb-6">Variation 2: Detailed Card with Expandable Description and More Visuals</h2>
+        <p class="text-gray-600 mb-6"><strong>UX Thinking:</strong> This variation caters to users who need more detailed information without cluttering the initial view. The description is truncated but expandable, allowing users to dive deeper if interested. It also incorporates visual elements like a progress bar for content window size and a more prominent rating display to enhance engagement and provide quick insights.</p>
+        <div class="bg-white rounded-lg shadow-xl p-8 max-w-md mx-auto border border-gray-200 relative overflow-hidden">
+            <div class="absolute top-0 right-0 bg-purple-600 text-white text-xs font-bold py-1 px-3 rounded-bl-lg">NEW</div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-2">GPT-4 Omni</h3>
+            <p class="text-gray-700 text-sm mb-4"><strong>Provider:</strong> Google</p>
+            
+            <div class="flex items-center mb-4">
+                <div class="text-3xl text-yellow-500 mr-2">4.9</div>
+                <div class="flex">
+                    <span class="text-yellow-500">★★★★★</span>
+                    <span class="text-gray-400"> (1.2K reviews)</span>
+                </div>
+            </div>
+
+            <p class="text-gray-700 text-sm mb-4 line-clamp-3" id="desc2">
+                <strong>Description:</strong> An advanced, multimodal LLM capable of understanding and generating text, audio, and video. It excels in complex reasoning, creative content generation, and real-time interaction, pushing the boundaries of AI capabilities...
+            </p>
+            <button onclick="document.getElementById('desc2').classList.toggle('line-clamp-3'); this.textContent = this.textContent === 'Read More' ? 'Show Less' : 'Read More';" class="text-blue-600 hover:underline text-sm mb-4">Read More</button>
+            
+            <div class="mb-4">
+                <span class="font-semibold text-gray-800">Pricing:</span> <span class="text-gray-600">$0.025/1K tokens</span>
+            </div>
+
+            <div class="mb-6">
+                <div class="flex justify-between text-sm text-gray-800 mb-1">
+                    <span class="font-semibold">Content Window:</span>
+                    <span>256K tokens</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                    <div class="bg-blue-500 h-2.5 rounded-full" style="width: 80%;"></div>
+                </div>
+            </div>
+            
+            <button class="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition-colors duration-200">Get Started</button>
+        </div>
+    </section>
+
+    <!-- Variation 3: Compact List Item with Hover Details -->
+    <section class="mb-16">
+        <h2 class="text-2xl font-semibold text-gray-700 mb-6">Variation 3: Compact List Item with Hover Details</h2>
+        <p class="text-gray-600 mb-6"><strong>UX Thinking:</strong> This variation is designed for scenarios where many model cards need to be displayed in a limited space, such as a search results page. The initial view is very compact, showing only the most critical information. On hover, more details are revealed, providing an efficient way to browse and then explore specific models without navigating to a new page.</p>
+        <div class="max-w-2xl mx-auto space-y-4">
+            <!-- Model 1 -->
+            <div class="relative bg-white rounded-lg shadow-md p-4 flex items-center justify-between border border-gray-200 group">
+                <div class="flex-grow">
+                    <h3 class="text-lg font-semibold text-gray-900">Claude 3 Opus</h3>
+                    <p class="text-sm text-gray-600">Anthropic • <span class="text-yellow-500">★★★★★ (4.7)</span></p>
+                </div>
+                <div class="text-right">
+                    <p class="text-md font-bold text-gray-800">$0.05/1K</p>
+                    <p class="text-sm text-gray-500">200K tokens</p>
+                </div>
+                <div class="absolute inset-0 bg-blue-500 bg-opacity-95 text-white rounded-lg flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-4">
+                    <p class="text-center mb-2"><strong>Description:</strong> Anthropic's flagship model, known for its strong performance in complex tasks and safety. Ideal for enterprise applications.</p>
+                    <p class="text-sm"><strong>Pricing:</strong> $0.05/1K tokens (input), $0.15/1K tokens (output)</p>
+                    <p class="text-sm"><strong>Content Window:</strong> 200K tokens</p>
+                    <a href="#" class="mt-3 inline-block bg-white text-blue-700 py-1.5 px-4 rounded-md hover:bg-gray-100 transition-colors duration-200 text-sm">Learn More</a>
+                </div>
+            </div>
+
+            <!-- Model 2 -->
+            <div class="relative bg-white rounded-lg shadow-md p-4 flex items-center justify-between border border-gray-200 group">
+                <div class="flex-grow">
+                    <h3 class="text-lg font-semibold text-gray-900">Llama 3 70B</h3>
+                    <p class="text-sm text-gray-600">Meta • <span class="text-yellow-500">★★★★☆ (4.5)</span></p>
+                </div>
+                <div class="text-right">
+                    <p class="text-md font-bold text-gray-800">Free/Open</p>
+                    <p class="text-sm text-gray-500">8K tokens</p>
+                </div>
+                <div class="absolute inset-0 bg-blue-500 bg-opacity-95 text-white rounded-lg flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-4">
+                    <p class="text-center mb-2"><strong>Description:</strong> A powerful open-source model from Meta, suitable for various applications and fine-tuning. Great for researchers and developers.</p>
+                    <p class="text-sm"><strong>Pricing:</strong> Free (open-source), deployment costs apply</p>
+                    <p class="text-sm"><strong>Content Window:</strong> 8K tokens</p>
+                    <a href="#" class="mt-3 inline-block bg-white text-blue-700 py-1.5 px-4 rounded-md hover:bg-gray-100 transition-colors duration-200 text-sm">Download</a>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>

@@ -1,0 +1,434 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>Smaller Product Cards</title>
+</head>
+
+<body>
+    <div class="container mx-auto p-4 space-y-8">
+        <h1 class="text-4xl font-bold text-center mb-8">Smaller E-commerce Product Card Variations</h1>
+
+        <!-- Variant 1: Compact List Card -->
+        <section class="border p-4 rounded-lg shadow-md bg-white">
+            <h2 class="text-2xl font-semibold mb-4">Variant 1: Compact List Card</h2>
+            <p class="mb-4 text-gray-700"><strong>UX Thinking:</strong> This variant is designed for a dense list view, where multiple products need to be displayed in a vertical or horizontal flow. It prioritizes the product image and name, with key purchasing actions (add to cart, quantity) immediately accessible. Specifications and detailed descriptions are minimized or implied to keep the card's footprint small, encouraging a quick scan of many products.</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <!-- Card 1 -->
+                <div class="border rounded-lg p-3 shadow-sm flex flex-col justify-between">
+                    <img src="https://picsum.photos/200/150?random=1" alt="Product Image" class="w-full h-auto object-cover rounded mb-2">
+                    <h3 class="text-lg font-semibold leading-tight mb-1">Smartwatch Pro X</h3>
+                    <div class="flex items-center mb-1">
+                        <img src="https://www.google.com/s2/favicons?domain=apple.com&sz=64" alt="Apple Logo" class="w-4 h-4 mr-1">
+                        <p class="text-gray-600 text-sm">by Apple</p>
+                    </div>
+                    <div class="flex items-center text-sm mb-2">
+                        <span class="text-yellow-500">★★★★☆</span>
+                        <span class="ml-1 text-gray-500">(120)</span>
+                    </div>
+                    <p class="text-gray-800 font-bold mb-2">$299.00</p>
+                    <p class="text-xs text-gray-700 mb-2"><strong>Ship:</strong> 2-3 days | <strong>Return:</strong> 15 days</p>
+                    <div class="flex items-center space-x-2 mt-auto">
+                        <input type="number" min="1" value="1" class="w-12 p-1 border rounded text-center text-sm">
+                        <button class="bg-blue-600 text-white px-3 py-1 text-sm rounded hover:bg-blue-700">Add</button>
+                    </div>
+                </div>
+                <!-- Card 2 -->
+                <div class="border rounded-lg p-3 shadow-sm flex flex-col justify-between">
+                    <img src="https://picsum.photos/200/150?random=2" alt="Product Image" class="w-full h-auto object-cover rounded mb-2">
+                    <h3 class="text-lg font-semibold leading-tight mb-1">Noise Cancelling Headphones</h3>
+                    <div class="flex items-center mb-1">
+                        <img src="https://www.google.com/s2/favicons?domain=sony.com&sz=64" alt="Sony Logo" class="w-4 h-4 mr-1">
+                        <p class="text-gray-600 text-sm">by Sony</p>
+                    </div>
+                    <div class="flex items-center text-sm mb-2">
+                        <span class="text-yellow-500">★★★★★</span>
+                        <span class="ml-1 text-gray-500">(340)</span>
+                    </div>
+                    <p class="text-gray-800 font-bold mb-2">$199.99</p>
+                    <p class="text-xs text-gray-700 mb-2"><strong>Ship:</strong> 3-5 days | <strong>Return:</strong> 30 days</p>
+                    <div class="flex items-center space-x-2 mt-auto">
+                        <input type="number" min="1" value="1" class="w-12 p-1 border rounded text-center text-sm">
+                        <button class="bg-blue-600 text-white px-3 py-1 text-sm rounded hover:bg-blue-700">Add</button>
+                    </div>
+                </div>
+                <!-- Card 3 -->
+                <div class="border rounded-lg p-3 shadow-sm flex flex-col justify-between">
+                    <img src="https://picsum.photos/200/150?random=3" alt="Product Image" class="w-full h-auto object-cover rounded mb-2">
+                    <h3 class="text-lg font-semibold leading-tight mb-1">Ultra-Thin Laptop</h3>
+                    <div class="flex items-center mb-1">
+                        <img src="https://www.google.com/s2/favicons?domain=microsoft.com&sz=64" alt="Microsoft Logo" class="w-4 h-4 mr-1">
+                        <p class="text-gray-600 text-sm">by Microsoft</p>
+                    </div>
+                    <div class="flex items-center text-sm mb-2">
+                        <span class="text-yellow-500">★★★★☆</span>
+                        <span class="ml-1 text-gray-500">(85)</span>
+                    </div>
+                    <p class="text-gray-800 font-bold mb-2">$1200.00</p>
+                    <p class="text-xs text-gray-700 mb-2"><strong>Ship:</strong> 1-2 days | <strong>Return:</strong> 30 days</p>
+                    <div class="flex items-center space-x-2 mt-auto">
+                        <input type="number" min="1" value="1" class="w-12 p-1 border rounded text-center text-sm">
+                        <button class="bg-blue-600 text-white px-3 py-1 text-sm rounded hover:bg-blue-700">Add</button>
+                    </div>
+                </div>
+                <!-- Card 4 -->
+                <div class="border rounded-lg p-3 shadow-sm flex flex-col justify-between">
+                    <img src="https://picsum.photos/200/150?random=4" alt="Product Image" class="w-full h-auto object-cover rounded mb-2">
+                    <h3 class="text-lg font-semibold leading-tight mb-1">Ergonomic Office Chair</h3>
+                    <div class="flex items-center mb-1">
+                        <img src="https://www.google.com/s2/favicons?domain=hermanmiller.com&sz=64" alt="Herman Miller Logo" class="w-4 h-4 mr-1">
+                        <p class="text-gray-600 text-sm">by HM</p>
+                    </div>
+                    <div class="flex items-center text-sm mb-2">
+                        <span class="text-yellow-500">★★★★★</span>
+                        <span class="ml-1 text-gray-500">(210)</span>
+                    </div>
+                    <p class="text-gray-800 font-bold mb-2">$750.00</p>
+                    <p class="text-xs text-gray-700 mb-2"><strong>Ship:</strong> 5-7 days | <strong>Return:</strong> 60 days</p>
+                    <div class="flex items-center space-x-2 mt-auto">
+                        <input type="number" min="1" value="1" class="w-12 p-1 border rounded text-center text-sm">
+                        <button class="bg-blue-600 text-white px-3 py-1 text-sm rounded hover:bg-blue-700">Add</button>
+                    </div>
+                </div>
+                 <!-- Card 5 -->
+                 <div class="border rounded-lg p-3 shadow-sm flex flex-col justify-between">
+                    <img src="https://picsum.photos/200/150?random=5" alt="Product Image" class="w-full h-auto object-cover rounded mb-2">
+                    <h3 class="text-lg font-semibold leading-tight mb-1">4K Smart TV 55-inch</h3>
+                    <div class="flex items-center mb-1">
+                        <img src="https://www.google.com/s2/favicons?domain=samsung.com&sz=64" alt="Samsung Logo" class="w-4 h-4 mr-1">
+                        <p class="text-gray-600 text-sm">by Samsung</p>
+                    </div>
+                    <div class="flex items-center text-sm mb-2">
+                        <span class="text-yellow-500">★★★★☆</span>
+                        <span class="ml-1 text-gray-500">(400)</span>
+                    </div>
+                    <p class="text-gray-800 font-bold mb-2">$699.00</p>
+                    <p class="text-xs text-gray-700 mb-2"><strong>Ship:</strong> 3-4 days | <strong>Return:</strong> 30 days</p>
+                    <div class="flex items-center space-x-2 mt-auto">
+                        <input type="number" min="1" value="1" class="w-12 p-1 border rounded text-center text-sm">
+                        <button class="bg-blue-600 text-white px-3 py-1 text-sm rounded hover:bg-blue-700">Add</button>
+                    </div>
+                </div>
+                <!-- Card 6 -->
+                <div class="border rounded-lg p-3 shadow-sm flex flex-col justify-between">
+                    <img src="https://picsum.photos/200/150?random=6" alt="Product Image" class="w-full h-auto object-cover rounded mb-2">
+                    <h3 class="text-lg font-semibold leading-tight mb-1">Espresso Machine</h3>
+                    <div class="flex items-center mb-1">
+                        <img src="https://www.google.com/s2/favicons?domain=delonghi.com&sz=64" alt="DeLonghi Logo" class="w-4 h-4 mr-1">
+                        <p class="text-gray-600 text-sm">by De'Longhi</p>
+                    </div>
+                    <div class="flex items-center text-sm mb-2">
+                        <span class="text-yellow-500">★★★★★</span>
+                        <span class="ml-1 text-gray-500">(180)</span>
+                    </div>
+                    <p class="text-gray-800 font-bold mb-2">$350.00</p>
+                    <p class="text-xs text-gray-700 mb-2"><strong>Ship:</strong> 4-6 days | <strong>Return:</strong> 30 days</p>
+                    <div class="flex items-center space-x-2 mt-auto">
+                        <input type="number" min="1" value="1" class="w-12 p-1 border rounded text-center text-sm">
+                        <button class="bg-blue-600 text-white px-3 py-1 text-sm rounded hover:bg-blue-700">Add</button>
+                    </div>
+                </div>
+                <!-- Card 7 -->
+                <div class="border rounded-lg p-3 shadow-sm flex flex-col justify-between">
+                    <img src="https://picsum.photos/200/150?random=7" alt="Product Image" class="w-full h-auto object-cover rounded mb-2">
+                    <h3 class="text-lg font-semibold leading-tight mb-1">Robotic Vacuum Cleaner</h3>
+                    <div class="flex items-center mb-1">
+                        <img src="https://www.google.com/s2/favicons?domain=irobot.com&sz=64" alt="iRobot Logo" class="w-4 h-4 mr-1">
+                        <p class="text-gray-600 text-sm">by iRobot</p>
+                    </div>
+                    <div class="flex items-center text-sm mb-2">
+                        <span class="text-yellow-500">★★★★☆</span>
+                        <span class="ml-1 text-gray-500">(290)</span>
+                    </div>
+                    <p class="text-gray-800 font-bold mb-2">$450.00</p>
+                    <p class="text-xs text-gray-700 mb-2"><strong>Ship:</strong> 3-5 days | <strong>Return:</strong> 30 days</p>
+                    <div class="flex items-center space-x-2 mt-auto">
+                        <input type="number" min="1" value="1" class="w-12 p-1 border rounded text-center text-sm">
+                        <button class="bg-blue-600 text-white px-3 py-1 text-sm rounded hover:bg-blue-700">Add</button>
+                    </div>
+                </div>
+                <!-- Card 8 -->
+                <div class="border rounded-lg p-3 shadow-sm flex flex-col justify-between">
+                    <img src="https://picsum.photos/200/150?random=8" alt="Product Image" class="w-full h-auto object-cover rounded mb-2">
+                    <h3 class="text-lg font-semibold leading-tight mb-1">Portable Bluetooth Speaker</h3>
+                    <div class="flex items-center mb-1">
+                        <img src="https://www.google.com/s2/favicons?domain=jbl.com&sz=64" alt="JBL Logo" class="w-4 h-4 mr-1">
+                        <p class="text-gray-600 text-sm">by JBL</p>
+                    </div>
+                    <div class="flex items-center text-sm mb-2">
+                        <span class="text-yellow-500">★★★★★</span>
+                        <span class="ml-1 text-gray-500">(500)</span>
+                    </div>
+                    <p class="text-gray-800 font-bold mb-2">$79.00</p>
+                    <p class="text-xs text-gray-700 mb-2"><strong>Ship:</strong> 2-4 days | <strong>Return:</strong> 15 days</p>
+                    <div class="flex items-center space-x-2 mt-auto">
+                        <input type="number" min="1" value="1" class="w-12 p-1 border rounded text-center text-sm">
+                        <button class="bg-blue-600 text-white px-3 py-1 text-sm rounded hover:bg-blue-700">Add</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Variant 2: Grid Thumbnail Card -->
+        <section class="border p-4 rounded-lg shadow-md bg-white">
+            <h2 class="text-2xl font-semibold mb-4">Variant 2: Grid Thumbnail Card</h2>
+            <p class="mb-4 text-gray-700"><strong>UX Thinking:</strong> This variant focuses on a highly visual grid display, ideal for product discovery pages where users are browsing many items quickly. The image is central and larger, with minimal text overlay for immediate recognition. Key actions like adding to cart are readily available, while other details (specifications, full description) are deferred to a full product page click, making the browsing experience fluid and engaging.</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <!-- Card 1 -->
+                <div class="group relative border rounded-lg shadow-sm overflow-hidden flex flex-col justify-between">
+                    <img src="https://picsum.photos/300/250?random=9" alt="Product Image" class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105">
+                    <div class="p-3 flex flex-col flex-grow">
+                        <h3 class="text-lg font-semibold leading-tight mb-1">Gaming Mouse G502</h3>
+                        <div class="flex items-center mb-1">
+                            <img src="https://www.google.com/s2/favicons?domain=logitech.com&sz=64" alt="Logitech Logo" class="w-4 h-4 mr-1">
+                            <p class="text-gray-600 text-sm">by Logitech</p>
+                        </div>
+                        <p class="text-gray-800 font-bold text-xl mb-2">$79.99</p>
+                        <div class="flex items-center text-sm mb-2 mt-auto">
+                            <span class="text-yellow-500">★★★★★</span>
+                            <span class="ml-1 text-gray-500">(500 Reviews)</span>
+                        </div>
+                        <button class="bg-green-600 text-white px-4 py-2 text-sm rounded hover:bg-green-700 transition-colors w-full">Add to Cart</button>
+                    </div>
+                </div>
+                <!-- Card 2 -->
+                <div class="group relative border rounded-lg shadow-sm overflow-hidden flex flex-col justify-between">
+                    <img src="https://picsum.photos/300/250?random=10" alt="Product Image" class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105">
+                    <div class="p-3 flex flex-col flex-grow">
+                        <h3 class="text-lg font-semibold leading-tight mb-1">Mechanical Keyboard</h3>
+                        <div class="flex items-center mb-1">
+                            <img src="https://www.google.com/s2/favicons?domain=razer.com&sz=64" alt="Razer Logo" class="w-4 h-4 mr-1">
+                            <p class="text-gray-600 text-sm">by Razer</p>
+                        </div>
+                        <p class="text-gray-800 font-bold text-xl mb-2">$129.00</p>
+                        <div class="flex items-center text-sm mb-2 mt-auto">
+                            <span class="text-yellow-500">★★★★☆</span>
+                            <span class="ml-1 text-gray-500">(320 Reviews)</span>
+                        </div>
+                        <button class="bg-green-600 text-white px-4 py-2 text-sm rounded hover:bg-green-700 transition-colors w-full">Add to Cart</button>
+                    </div>
+                </div>
+                <!-- Card 3 -->
+                <div class="group relative border rounded-lg shadow-sm overflow-hidden flex flex-col justify-between">
+                    <img src="https://picsum.photos/300/250?random=11" alt="Product Image" class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105">
+                    <div class="p-3 flex flex-col flex-grow">
+                        <h3 class="text-lg font-semibold leading-tight mb-1">Webcam 1080p</h3>
+                        <div class="flex items-center mb-1">
+                            <img src="https://www.google.com/s2/favicons?domain=logitech.com&sz=64" alt="Logitech Logo" class="w-4 h-4 mr-1">
+                            <p class="text-gray-600 text-sm">by Logitech</p>
+                        </div>
+                        <p class="text-gray-800 font-bold text-xl mb-2">$59.99</p>
+                        <div class="flex items-center text-sm mb-2 mt-auto">
+                            <span class="text-yellow-500">★★★★☆</span>
+                            <span class="ml-1 text-gray-500">(180 Reviews)</span>
+                        </div>
+                        <button class="bg-green-600 text-white px-4 py-2 text-sm rounded hover:bg-green-700 transition-colors w-full">Add to Cart</button>
+                    </div>
+                </div>
+                <!-- Card 4 -->
+                <div class="group relative border rounded-lg shadow-sm overflow-hidden flex flex-col justify-between">
+                    <img src="https://picsum.photos/300/250?random=12" alt="Product Image" class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105">
+                    <div class="p-3 flex flex-col flex-grow">
+                        <h3 class="text-lg font-semibold leading-tight mb-1">High-Res Monitor 27"</h3>
+                        <div class="flex items-center mb-1">
+                            <img src="https://www.google.com/s2/favicons?domain=dell.com&sz=64" alt="Dell Logo" class="w-4 h-4 mr-1">
+                            <p class="text-gray-600 text-sm">by Dell</p>
+                        </div>
+                        <p class="text-gray-800 font-bold text-xl mb-2">$349.00</p>
+                        <div class="flex items-center text-sm mb-2 mt-auto">
+                            <span class="text-yellow-500">★★★★★</span>
+                            <span class="ml-1 text-gray-500">(250 Reviews)</span>
+                        </div>
+                        <button class="bg-green-600 text-white px-4 py-2 text-sm rounded hover:bg-green-700 transition-colors w-full">Add to Cart</button>
+                    </div>
+                </div>
+                <!-- Card 5 -->
+                <div class="group relative border rounded-lg shadow-sm overflow-hidden flex flex-col justify-between">
+                    <img src="https://picsum.photos/300/250?random=13" alt="Product Image" class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105">
+                    <div class="p-3 flex flex-col flex-grow">
+                        <h3 class="text-lg font-semibold leading-tight mb-1">Portable SSD 1TB</h3>
+                        <div class="flex items-center mb-1">
+                            <img src="https://www.google.com/s2/favicons?domain=samsung.com&sz=64" alt="Samsung Logo" class="w-4 h-4 mr-1">
+                            <p class="text-gray-600 text-sm">by Samsung</p>
+                        </div>
+                        <p class="text-gray-800 font-bold text-xl mb-2">$99.00</p>
+                        <div class="flex items-center text-sm mb-2 mt-auto">
+                            <span class="text-yellow-500">★★★★★</span>
+                            <span class="ml-1 text-gray-500">(410 Reviews)</span>
+                        </div>
+                        <button class="bg-green-600 text-white px-4 py-2 text-sm rounded hover:bg-green-700 transition-colors w-full">Add to Cart</button>
+                    </div>
+                </div>
+                <!-- Card 6 -->
+                <div class="group relative border rounded-lg shadow-sm overflow-hidden flex flex-col justify-between">
+                    <img src="https://picsum.photos/300/250?random=14" alt="Product Image" class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105">
+                    <div class="p-3 flex flex-col flex-grow">
+                        <h3 class="text-lg font-semibold leading-tight mb-1">Wireless Charger Stand</h3>
+                        <div class="flex items-center mb-1">
+                            <img src="https://www.google.com/s2/favicons?domain=anker.com&sz=64" alt="Anker Logo" class="w-4 h-4 mr-1">
+                            <p class="text-gray-600 text-sm">by Anker</p>
+                        </div>
+                        <p class="text-gray-800 font-bold text-xl mb-2">$29.99</p>
+                        <div class="flex items-center text-sm mb-2 mt-auto">
+                            <span class="text-yellow-500">★★★★☆</span>
+                            <span class="ml-1 text-gray-500">(200 Reviews)</span>
+                        </div>
+                        <button class="bg-green-600 text-white px-4 py-2 text-sm rounded hover:bg-green-700 transition-colors w-full">Add to Cart</button>
+                    </div>
+                </div>
+                <!-- Card 7 -->
+                <div class="group relative border rounded-lg shadow-sm overflow-hidden flex flex-col justify-between">
+                    <img src="https://picsum.photos/300/250?random=15" alt="Product Image" class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105">
+                    <div class="p-3 flex flex-col flex-grow">
+                        <h3 class="text-lg font-semibold leading-tight mb-1">Smart Home Hub</h3>
+                        <div class="flex items-center mb-1">
+                            <img src="https://www.google.com/s2/favicons?domain=amazon.com&sz=64" alt="Amazon Logo" class="w-4 h-4 mr-1">
+                            <p class="text-gray-600 text-sm">by Amazon</p>
+                        </div>
+                        <p class="text-gray-800 font-bold text-xl mb-2">$89.00</p>
+                        <div class="flex items-center text-sm mb-2 mt-auto">
+                            <span class="text-yellow-500">★★★★☆</span>
+                            <span class="ml-1 text-gray-500">(150 Reviews)</span>
+                        </div>
+                        <button class="bg-green-600 text-white px-4 py-2 text-sm rounded hover:bg-green-700 transition-colors w-full">Add to Cart</button>
+                    </div>
+                </div>
+                <!-- Card 8 -->
+                <div class="group relative border rounded-lg shadow-sm overflow-hidden flex flex-col justify-between">
+                    <img src="https://picsum.photos/300/250?random=16" alt="Product Image" class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105">
+                    <div class="p-3 flex flex-col flex-grow">
+                        <h3 class="text-lg font-semibold leading-tight mb-1">E-Reader Paperwhite</h3>
+                        <div class="flex items-center mb-1">
+                            <img src="https://www.google.com/s2/favicons?domain=amazon.com&sz=64" alt="Amazon Logo" class="w-4 h-4 mr-1">
+                            <p class="text-gray-600 text-sm">by Amazon</p>
+                        </div>
+                        <p class="text-gray-800 font-bold text-xl mb-2">$139.00</p>
+                        <div class="flex items-center text-sm mb-2 mt-auto">
+                            <span class="text-yellow-500">★★★★★</span>
+                            <span class="ml-1 text-gray-500">(600 Reviews)</span>
+                        </div>
+                        <button class="bg-green-600 text-white px-4 py-2 text-sm rounded hover:bg-green-700 transition-colors w-full">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Variant 3: Feature-Focused Mini Card -->
+        <section class="border p-4 rounded-lg shadow-md bg-white">
+            <h2 class="text-2xl font-semibold mb-4">Variant 3: Feature-Focused Mini Card</h2>
+            <p class="mb-4 text-gray-700"><strong>UX Thinking:</strong> This variant is designed for promotional displays or sections where a specific key selling point needs to be highlighted. It offers a balance between the product image and a prominent feature, along with the price and a call to action. Less critical details are omitted to maintain focus on the value proposition, encouraging users to click through for more information on the most compelling aspects of the product.</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <!-- Card 1 -->
+                <div class="relative border rounded-lg shadow-sm overflow-hidden bg-gradient-to-br from-purple-50 to-indigo-100 flex flex-col">
+                    <img src="https://picsum.photos/250/180?random=17" alt="Product Image" class="w-full h-36 object-cover">
+                    <div class="p-3 flex flex-col flex-grow">
+                        <h3 class="text-lg font-bold text-indigo-800 mb-1">Smartphone X Pro</h3>
+                        <p class="text-xs text-indigo-600 mb-2">by NovaTech</p>
+                        <p class="text-sm text-gray-800 font-medium mb-2"><strong class="text-purple-700">Feature:</strong> Stunning 120Hz Display</p>
+                        <div class="flex justify-between items-center mt-auto">
+                            <p class="text-xl font-bold text-indigo-900">$899</p>
+                            <button class="bg-indigo-600 text-white px-4 py-1 text-sm rounded-full hover:bg-indigo-700">View Deal</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 2 -->
+                <div class="relative border rounded-lg shadow-sm overflow-hidden bg-gradient-to-br from-green-50 to-teal-100 flex flex-col">
+                    <img src="https://picsum.photos/250/180?random=18" alt="Product Image" class="w-full h-36 object-cover">
+                    <div class="p-3 flex flex-col flex-grow">
+                        <h3 class="text-lg font-bold text-teal-800 mb-1">Fitness Tracker Max</h3>
+                        <p class="text-xs text-teal-600 mb-2">by ActiveLife</p>
+                        <p class="text-sm text-gray-800 font-medium mb-2"><strong class="text-green-700">Feature:</strong> 7-Day Battery Life</p>
+                        <div class="flex justify-between items-center mt-auto">
+                            <p class="text-xl font-bold text-teal-900">$129</p>
+                            <button class="bg-teal-600 text-white px-4 py-1 text-sm rounded-full hover:bg-teal-700">View Deal</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 3 -->
+                <div class="relative border rounded-lg shadow-sm overflow-hidden bg-gradient-to-br from-red-50 to-orange-100 flex flex-col">
+                    <img src="https://picsum.photos/250/180?random=19" alt="Product Image" class="w-full h-36 object-cover">
+                    <div class="p-3 flex flex-col flex-grow">
+                        <h3 class="text-lg font-bold text-orange-800 mb-1">Portable Projector</h3>
+                        <p class="text-xs text-orange-600 mb-2">by CineView</p>
+                        <p class="text-sm text-gray-800 font-medium mb-2"><strong class="text-red-700">Feature:</strong> 1080p Full HD</p>
+                        <div class="flex justify-between items-center mt-auto">
+                            <p class="text-xl font-bold text-orange-900">$249</p>
+                            <button class="bg-orange-600 text-white px-4 py-1 text-sm rounded-full hover:bg-orange-700">View Deal</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 4 -->
+                <div class="relative border rounded-lg shadow-sm overflow-hidden bg-gradient-to-br from-blue-50 to-cyan-100 flex flex-col">
+                    <img src="https://picsum.photos/250/180?random=20" alt="Product Image" class="w-full h-36 object-cover">
+                    <div class="p-3 flex flex-col flex-grow">
+                        <h3 class="text-lg font-bold text-cyan-800 mb-1">Noise Cancelling Earbuds</h3>
+                        <p class="text-xs text-cyan-600 mb-2">by AudioFlow</p>
+                        <p class="text-sm text-gray-800 font-medium mb-2"><strong class="text-blue-700">Feature:</strong> Adaptive ANC</p>
+                        <div class="flex justify-between items-center mt-auto">
+                            <p class="text-xl font-bold text-cyan-900">$179</p>
+                            <button class="bg-cyan-600 text-white px-4 py-1 text-sm rounded-full hover:bg-cyan-700">View Deal</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 5 -->
+                <div class="relative border rounded-lg shadow-sm overflow-hidden bg-gradient-to-br from-yellow-50 to-amber-100 flex flex-col">
+                    <img src="https://picsum.photos/250/180?random=21" alt="Product Image" class="w-full h-36 object-cover">
+                    <div class="p-3 flex flex-col flex-grow">
+                        <h3 class="text-lg font-bold text-amber-800 mb-1">Smart Coffee Maker</h3>
+                        <p class="text-xs text-amber-600 mb-2">by BrewMaster</p>
+                        <p class="text-sm text-gray-800 font-medium mb-2"><strong class="text-yellow-700">Feature:</strong> App-Controlled Brewing</p>
+                        <div class="flex justify-between items-center mt-auto">
+                            <p class="text-xl font-bold text-amber-900">$99</p>
+                            <button class="bg-amber-600 text-white px-4 py-1 text-sm rounded-full hover:bg-amber-700">View Deal</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 6 -->
+                <div class="relative border rounded-lg shadow-sm overflow-hidden bg-gradient-to-br from-pink-50 to-rose-100 flex flex-col">
+                    <img src="https://picsum.photos/250/180?random=22" alt="Product Image" class="w-full h-36 object-cover">
+                    <div class="p-3 flex flex-col flex-grow">
+                        <h3 class="text-lg font-bold text-rose-800 mb-1">Compact Drone Mini</h3>
+                        <p class="text-xs text-rose-600 mb-2">by FlyHigh</p>
+                        <p class="text-sm text-gray-800 font-medium mb-2"><strong class="text-pink-700">Feature:</strong> 4K Camera, GPS</p>
+                        <div class="flex justify-between items-center mt-auto">
+                            <p class="text-xl font-bold text-rose-900">$399</p>
+                            <button class="bg-rose-600 text-white px-4 py-1 text-sm rounded-full hover:bg-rose-700">View Deal</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 7 -->
+                <div class="relative border rounded-lg shadow-sm overflow-hidden bg-gradient-to-br from-lime-50 to-emerald-100 flex flex-col">
+                    <img src="https://picsum.photos/250/180?random=23" alt="Product Image" class="w-full h-36 object-cover">
+                    <div class="p-3 flex flex-col flex-grow">
+                        <h3 class="text-lg font-bold text-emerald-800 mb-1">Portable Power Bank</h3>
+                        <p class="text-xs text-emerald-600 mb-2">by ChargeFast</p>
+                        <p class="text-sm text-gray-800 font-medium mb-2"><strong class="text-lime-700">Feature:</strong> 20000mAh Capacity</p>
+                        <div class="flex justify-between items-center mt-auto">
+                            <p class="text-xl font-bold text-emerald-900">$49</p>
+                            <button class="bg-emerald-600 text-white px-4 py-1 text-sm rounded-full hover:bg-emerald-700">View Deal</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 8 -->
+                <div class="relative border rounded-lg shadow-sm overflow-hidden bg-gradient-to-br from-sky-50 to-blue-100 flex flex-col">
+                    <img src="https://picsum.photos/250/180?random=24" alt="Product Image" class="w-full h-36 object-cover">
+                    <div class="p-3 flex flex-col flex-grow">
+                        <h3 class="text-lg font-bold text-blue-800 mb-1">Gaming Headset RGB</h3>
+                        <p class="text-xs text-blue-600 mb-2">by GameAudio</p>
+                        <p class="text-sm text-gray-800 font-medium mb-2"><strong class="text-sky-700">Feature:</strong> 7.1 Surround Sound</p>
+                        <div class="flex justify-between items-center mt-auto">
+                            <p class="text-xl font-bold text-blue-900">$79</p>
+                            <button class="bg-blue-600 text-white px-4 py-1 text-sm rounded-full hover:bg-blue-700">View Deal</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+</body>
+
+</html>
