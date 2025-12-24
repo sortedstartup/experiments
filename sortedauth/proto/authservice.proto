@@ -1,0 +1,183 @@
+syntax = "proto3";
+
+package sortedauth;
+
+option go_package = "sortedstartup/authservice/proto";
+
+
+service UserService {
+    rpc UsersList(UsersListRequest) returns (UsersListResponse);
+}
+
+service TenantService {
+    rpc TenantsList(TenantsListRequest) returns (TenantsListResponse);
+    rpc CreateTenant(CreateTenantRequest) returns (CreateTenantResponse);
+    rpc GetTenant(GetTenantRequest) returns (GetTenantResponse);
+
+    rpc AddUser(AddUserRequest) returns (AddUserToTenant);
+    rpc RemoveUser(RemoveUserRequest) returns (RemoveUserResponse);
+
+    // may be move to userservice
+    rpc AddRoleToUser(AddRoleToUserRequest) returns (AddRoleToUserResponse);
+    rpc RemoveRoleFromUser(RemoveRoleFromUserRequest) returns (RemoveRoleFromUserResponse);
+
+}
+
+service RoleService {
+    // this API works in context of a tenant
+    // either we take the tenatid in the request or in the header
+
+    // there will be a tenant_id in the JWT (?)
+
+    // today will return hardcoded list of roles : ["admin", "user"] 
+    rpc RolesList(RolesListRequest) returns (RolesListResponse);    
+    rpc GetRole(GetRoleRequest) returns (GetRoleResponse);
+    //rpc CreateRole(CreateRoleRequest) returns (CreateRoleResponse);
+}
+
+message Role {
+    string id = 1;
+    string name = 2;
+    string description = 3;
+}
+
+message Tenant {
+    string id = 1;
+    string name = 2;
+    string description = 3;
+}
+
+message User {
+    string id = 1;
+    string email = 2;
+    string name = 3;
+}
+
+message TenantUser {
+    User user = 1;
+    Tenant tenant = 2;
+    Role role = 3;
+}
+
+
+message AddUserRequest {
+    string tenant_id = 1;
+    oneof user {
+        string user_id = 2;
+        string email = 3;
+    };
+    string role_id = 4;
+}
+
+message AddUserToTenant {
+    TenantUser tenant_user = 1;
+}
+
+//page request common func
+// subject to change we will find it during implementation
+message PageRequest {
+    int64 page = 1;
+    int64 page_size = 2;
+}
+
+message PageResponse {
+//TODO:    int64 total_pages = 1;
+    int64 total_count = 2;
+}
+
+message AddRoleToUserRequest {
+    string tenant_id = 1;
+    string user_id = 2;
+    string role_id = 3;
+}
+message AddRoleToUserResponse {
+    TenantUser tenant_user = 1;
+}
+
+message RemoveRoleFromUserRequest {
+    string tenant_id = 1;
+    string user_id = 2;
+    string role_id = 3;
+}
+message RemoveRoleFromUserResponse {
+    TenantUser tenant_user = 1;
+}
+
+message GetRoleRequest {
+    string id = 1;
+}
+message GetRoleResponse {
+    Role role = 1;
+}
+
+message RolesListRequest {
+    PageRequest page_request = 1;
+}
+message RolesListResponse {
+    repeated Role roles = 1;
+    PageResponse page_response = 2;
+}
+
+message CreateRoleRequest {
+    string name = 1;
+    string description = 2;
+}
+
+message CreateRoleResponse {
+    string id = 1;
+    string name = 2;
+    string description = 3;
+}
+
+message GetTenantRequest {
+    string id = 1;
+}
+message GetTenantResponse {
+    Tenant tenant = 1;
+}
+
+message TenantsListRequest {
+    PageRequest page_request = 1;
+}
+message TenantsListResponse {
+    repeated Tenant tenants = 1;
+}
+
+
+message CreateTenantRequest {
+    string name = 1;
+    string description = 2;
+}
+
+message CreateTenantResponse {
+    string id = 1;
+    string name = 2;
+    string description = 3;
+}
+
+
+message UsersListRequest {
+    // filters
+    UserListFilter filters = 1;
+    PageRequest page_request = 2;
+}
+
+message UserListFilter {
+    string tenant_id = 1;
+}
+
+message UsersListResponse {
+    repeated User users = 1;
+    PageResponse page_response = 2;
+}
+
+message RemoveUserRequest {
+    string tenant_id = 1;
+    oneof user {
+        string user_id = 2;
+        string email = 3;
+    }
+}
+message RemoveUserResponse {
+    string message = 1;
+}
