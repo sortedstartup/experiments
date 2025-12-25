@@ -1,0 +1,381 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<body class="bg-gray-50 p-8">
+    <div class="max-w-7xl mx-auto">
+        <h1 class="text-4xl font-bold mb-8 text-gray-800">FANG Job Card UI Variations</h1>
+        
+        <!-- Variant 1: Modern Minimalist with Bold Accent -->
+        <section class="mb-16">
+            <h2 class="text-2xl font-semibold mb-4 text-gray-700">Variant 1: Modern Minimalist with Bold Accent</h2>
+            <p class="text-gray-600 mb-6 max-w-3xl">
+                <strong>UX Thinking:</strong> This design emphasizes clarity and scanability with a bold left accent bar that immediately draws attention. 
+                The company logo is prominently displayed, and information is organized in a clear hierarchy. The hover effect with subtle elevation 
+                creates an interactive feel. Tags are used for quick skill identification, and the CTA button is prominent but not overwhelming.
+            </p>
+            
+            <div class="max-w-2xl group cursor-pointer bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border-l-4 border-blue-600">
+                <div class="p-6">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex items-start gap-4">
+                            <img src="https://www.google.com/s2/favicons?domain=google.com&sz=64" alt="Google" class="w-16 h-16 rounded-lg">
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900">Senior Software Engineer</h3>
+                                <p class="text-lg text-blue-600 font-semibold">Google</p>
+                                <p class="text-sm text-gray-500 mt-1">Mountain View, CA • Full-time</p>
+                            </div>
+                        </div>
+                        <span class="bg-green-100 text-green-800 text-xs font-semibold px-3 py-1 rounded-full">New</span>
+                    </div>
+                    
+                    <p class="text-gray-600 mb-4 line-clamp-3">
+                        Join Google's Cloud Platform team to build scalable distributed systems that power millions of users worldwide. 
+                        Work with cutting-edge technologies and collaborate with world-class engineers.
+                    </p>
+                    
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="bg-gray-100 text-gray-700 text-xs px-3 py-1 rounded-full">Python</span>
+                        <span class="bg-gray-100 text-gray-700 text-xs px-3 py-1 rounded-full">Go</span>
+                        <span class="bg-gray-100 text-gray-700 text-xs px-3 py-1 rounded-full">Kubernetes</span>
+                        <span class="bg-gray-100 text-gray-700 text-xs px-3 py-1 rounded-full">Distributed Systems</span>
+                    </div>
+                    
+                    <div class="flex items-center justify-between pt-4 border-t border-gray-200">
+                        <div class="flex items-center gap-6 text-sm text-gray-600">
+                            <span>💰 $180k - $250k</span>
+                            <span>📅 Posted 2 days ago</span>
+                        </div>
+                        <button class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg transition-colors">
+                            Apply Now
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Variant 2: Card with Image Header -->
+        <section class="mb-16">
+            <h2 class="text-2xl font-semibold mb-4 text-gray-700">Variant 2: Card with Visual Header</h2>
+            <p class="text-gray-600 mb-6 max-w-3xl">
+                <strong>UX Thinking:</strong> This design uses visual storytelling with a hero image that represents the company culture or office environment. 
+                The overlay creates depth and the logo "floats" above the image for a modern look. This approach is great for employer branding and 
+                creating emotional connection. The saved/bookmark icon allows users to quickly save jobs for later.
+            </p>
+            
+            <div class="max-w-2xl bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden">
+                <div class="relative h-48 bg-gradient-to-r from-blue-500 to-purple-600 overflow-hidden">
+                    <img src="https://picsum.photos/800/300" alt="Office" class="w-full h-full object-cover opacity-50">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                    <div class="absolute bottom-4 left-6 flex items-end gap-4">
+                        <img src="https://www.google.com/s2/favicons?domain=facebook.com&sz=64" alt="Meta" class="w-20 h-20 rounded-xl bg-white p-2 shadow-lg">
+                        <div class="text-white mb-2">
+                            <h3 class="text-2xl font-bold">Product Designer</h3>
+                            <p class="text-lg">Meta (Facebook)</p>
+                        </div>
+                    </div>
+                    <button class="absolute top-4 right-4 bg-white/90 hover:bg-white p-2 rounded-full shadow-lg transition-colors">
+                        <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="p-6">
+                    <div class="flex items-center gap-4 mb-4 text-sm text-gray-600">
+                        <span class="flex items-center gap-1">📍 Menlo Park, CA</span>
+                        <span class="flex items-center gap-1">💼 Full-time</span>
+                        <span class="flex items-center gap-1">⏰ Remote Flexible</span>
+                    </div>
+                    
+                    <p class="text-gray-700 mb-4">
+                        Shape the future of social connection by designing intuitive and delightful experiences for billions of users. 
+                        Work on products that bring people together across Facebook, Instagram, and WhatsApp.
+                    </p>
+                    
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="bg-blue-50 text-blue-700 text-xs px-3 py-1 rounded-full border border-blue-200">Figma</span>
+                        <span class="bg-blue-50 text-blue-700 text-xs px-3 py-1 rounded-full border border-blue-200">User Research</span>
+                        <span class="bg-blue-50 text-blue-700 text-xs px-3 py-1 rounded-full border border-blue-200">Prototyping</span>
+                        <span class="bg-blue-50 text-blue-700 text-xs px-3 py-1 rounded-full border border-blue-200">Design Systems</span>
+                    </div>
+                    
+                    <div class="flex items-center justify-between pt-4 border-t border-gray-200">
+                        <div>
+                            <p class="text-2xl font-bold text-gray-900">$160k - $220k</p>
+                            <p class="text-xs text-gray-500">+ equity + benefits</p>
+                        </div>
+                        <div class="flex gap-3">
+                            <button class="border-2 border-blue-600 text-blue-600 font-semibold px-6 py-2 rounded-lg hover:bg-blue-50 transition-colors">
+                                Learn More
+                            </button>
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg transition-colors">
+                                Apply
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Variant 3: Compact List View -->
+        <section class="mb-16">
+            <h2 class="text-2xl font-semibold mb-4 text-gray-700">Variant 3: Compact List View</h2>
+            <p class="text-gray-600 mb-6 max-w-3xl">
+                <strong>UX Thinking:</strong> Designed for users who want to scan multiple jobs quickly. This horizontal layout maximizes information density 
+                while maintaining readability. Key details (salary, location, posting date) are immediately visible without hovering or expanding. 
+                Perfect for job listing pages where users need to compare multiple positions at once. The vertical dividers create clear sections.
+            </p>
+            
+            <div class="max-w-4xl bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 hover:border-blue-400">
+                <div class="p-5">
+                    <div class="flex items-center justify-between gap-6">
+                        <div class="flex items-center gap-4 flex-1">
+                            <img src="https://www.google.com/s2/favicons?domain=amazon.com&sz=64" alt="Amazon" class="w-14 h-14 rounded-lg">
+                            <div class="flex-1">
+                                <h3 class="text-lg font-bold text-gray-900 mb-1">Cloud Solutions Architect</h3>
+                                <p class="text-sm text-gray-600">Amazon Web Services (AWS)</p>
+                            </div>
+                        </div>
+                        
+                        <div class="h-12 w-px bg-gray-300"></div>
+                        
+                        <div class="text-center px-4">
+                            <p class="text-sm text-gray-500 mb-1">Location</p>
+                            <p class="text-sm font-semibold text-gray-900">Seattle, WA</p>
+                        </div>
+                        
+                        <div class="h-12 w-px bg-gray-300"></div>
+                        
+                        <div class="text-center px-4">
+                            <p class="text-sm text-gray-500 mb-1">Salary Range</p>
+                            <p class="text-sm font-semibold text-gray-900">$170k - $240k</p>
+                        </div>
+                        
+                        <div class="h-12 w-px bg-gray-300"></div>
+                        
+                        <div class="text-center px-4">
+                            <p class="text-sm text-gray-500 mb-1">Posted</p>
+                            <p class="text-sm font-semibold text-gray-900">3 days ago</p>
+                        </div>
+                        
+                        <div class="h-12 w-px bg-gray-300"></div>
+                        
+                        <button class="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-8 py-3 rounded-lg transition-colors whitespace-nowrap">
+                            Apply
+                        </button>
+                    </div>
+                    
+                    <div class="mt-4 pt-4 border-t border-gray-200">
+                        <p class="text-sm text-gray-700 mb-3">
+                            Design and implement cloud architectures for enterprise clients. Lead technical discussions and guide customers through their cloud journey.
+                        </p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex flex-wrap gap-2">
+                                <span class="bg-orange-50 text-orange-700 text-xs px-3 py-1 rounded">AWS</span>
+                                <span class="bg-orange-50 text-orange-700 text-xs px-3 py-1 rounded">Solution Design</span>
+                                <span class="bg-orange-50 text-orange-700 text-xs px-3 py-1 rounded">Enterprise</span>
+                                <span class="bg-orange-50 text-orange-700 text-xs px-3 py-1 rounded">Cloud Migration</span>
+                            </div>
+                            <div class="flex items-center gap-3 text-xs text-gray-500">
+                                <span class="flex items-center gap-1">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                    </svg>
+                                    87 applicants
+                                </span>
+                                <span>•</span>
+                                <span>Full-time</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Variant 4: Premium Gradient Card -->
+        <section class="mb-16">
+            <h2 class="text-2xl font-semibold mb-4 text-gray-700">Variant 4: Premium Gradient Card</h2>
+            <p class="text-gray-600 mb-6 max-w-3xl">
+                <strong>UX Thinking:</strong> This design emphasizes the premium nature of FANG positions with a sophisticated gradient background 
+                and glassmorphism effects. The darker theme conveys professionalism and exclusivity. Progress indicators show match score, 
+                engaging users by gamifying the application process. The split layout creates clear visual separation between job info and actions.
+            </p>
+            
+            <div class="max-w-2xl bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 rounded-2xl shadow-2xl overflow-hidden">
+                <div class="p-8">
+                    <div class="flex items-start justify-between mb-6">
+                        <div class="flex items-start gap-4">
+                            <div class="bg-white p-3 rounded-xl shadow-lg">
+                                <img src="https://www.google.com/s2/favicons?domain=netflix.com&sz=64" alt="Netflix" class="w-12 h-12">
+                            </div>
+                            <div>
+                                <span class="inline-block bg-red-500 text-white text-xs font-semibold px-3 py-1 rounded-full mb-2">Featured</span>
+                                <h3 class="text-2xl font-bold text-white mb-1">Senior Backend Engineer</h3>
+                                <p class="text-xl text-red-400 font-semibold">Netflix</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-green-400 text-sm font-semibold mb-1">85% Match</p>
+                            <div class="w-24 h-2 bg-gray-700 rounded-full overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-green-400 to-green-500 w-[85%]"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="backdrop-blur-sm bg-white/10 rounded-xl p-4 mb-6">
+                        <p class="text-gray-200 text-sm leading-relaxed">
+                            Build the streaming infrastructure that delivers entertainment to 230M+ subscribers worldwide. 
+                            Work with microservices, real-time data processing, and massive scale distributed systems.
+                        </p>
+                    </div>
+                    
+                    <div class="grid grid-cols-3 gap-4 mb-6">
+                        <div class="backdrop-blur-sm bg-white/10 rounded-lg p-3 text-center">
+                            <p class="text-gray-400 text-xs mb-1">Experience</p>
+                            <p class="text-white font-semibold">5+ years</p>
+                        </div>
+                        <div class="backdrop-blur-sm bg-white/10 rounded-lg p-3 text-center">
+                            <p class="text-gray-400 text-xs mb-1">Location</p>
+                            <p class="text-white font-semibold">Los Gatos, CA</p>
+                        </div>
+                        <div class="backdrop-blur-sm bg-white/10 rounded-lg p-3 text-center">
+                            <p class="text-gray-400 text-xs mb-1">Type</p>
+                            <p class="text-white font-semibold">Full-time</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        <span class="backdrop-blur-sm bg-white/20 text-white text-xs px-3 py-1 rounded-full">Java</span>
+                        <span class="backdrop-blur-sm bg-white/20 text-white text-xs px-3 py-1 rounded-full">Spring Boot</span>
+                        <span class="backdrop-blur-sm bg-white/20 text-white text-xs px-3 py-1 rounded-full">Microservices</span>
+                        <span class="backdrop-blur-sm bg-white/20 text-white text-xs px-3 py-1 rounded-full">Cassandra</span>
+                        <span class="backdrop-blur-sm bg-white/20 text-white text-xs px-3 py-1 rounded-full">Kafka</span>
+                    </div>
+                    
+                    <div class="flex items-center justify-between pt-6 border-t border-white/20">
+                        <div>
+                            <p class="text-3xl font-bold text-white">$200k - $300k</p>
+                            <p class="text-sm text-gray-400">Base + Bonus + RSUs</p>
+                        </div>
+                        <div class="flex gap-3">
+                            <button class="backdrop-blur-sm bg-white/20 hover:bg-white/30 text-white font-semibold px-6 py-3 rounded-lg transition-all">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path>
+                                </svg>
+                            </button>
+                            <button class="bg-red-600 hover:bg-red-700 text-white font-semibold px-8 py-3 rounded-lg transition-colors shadow-lg">
+                                Quick Apply
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Variant 5: Mobile-First Stacked Card -->
+        <section class="mb-16">
+            <h2 class="text-2xl font-semibold mb-4 text-gray-700">Variant 5: Mobile-First Stacked Card</h2>
+            <p class="text-gray-600 mb-6 max-w-3xl">
+                <strong>UX Thinking:</strong> Optimized for mobile-first experience with a vertical stacking pattern that works beautifully on small screens. 
+                The pill-shaped tags and rounded corners create a friendly, approachable feel. The "Quick Facts" section provides essential information 
+                at a glance with icons for visual scanning. Action buttons are full-width and thumb-friendly. The expandable description prevents 
+                information overload while keeping important details accessible.
+            </p>
+            
+            <div class="max-w-md bg-white rounded-3xl shadow-lg overflow-hidden border-2 border-gray-100">
+                <div class="bg-gradient-to-r from-green-400 to-blue-500 p-6 text-white">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="bg-white p-2 rounded-2xl shadow-lg">
+                            <img src="https://www.google.com/s2/favicons?domain=apple.com&sz=64" alt="Apple" class="w-10 h-10">
+                        </div>
+                        <button class="bg-white/20 backdrop-blur-sm hover:bg-white/30 p-2 rounded-full transition-colors">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-2">iOS Software Engineer</h3>
+                    <p class="text-lg font-semibold text-white/90">Apple Inc.</p>
+                </div>
+                
+                <div class="p-6">
+                    <div class="bg-gray-50 rounded-2xl p-4 mb-4">
+                        <h4 class="text-xs font-semibold text-gray-500 uppercase mb-3">Quick Facts</h4>
+                        <div class="space-y-2">
+                            <div class="flex items-center gap-3 text-sm">
+                                <span class="text-xl">📍</span>
+                                <span class="text-gray-700">Cupertino, California</span>
+                            </div>
+                            <div class="flex items-center gap-3 text-sm">
+                                <span class="text-xl">💰</span>
+                                <span class="text-gray-700 font-semibold">$150k - $220k + equity</span>
+                            </div>
+                            <div class="flex items-center gap-3 text-sm">
+                                <span class="text-xl">💼</span>
+                                <span class="text-gray-700">Full-time • On-site</span>
+                            </div>
+                            <div class="flex items-center gap-3 text-sm">
+                                <span class="text-xl">⏱️</span>
+                                <span class="text-gray-700">Posted 1 day ago</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <p class="text-gray-700 text-sm mb-4 leading-relaxed">
+                        Join the team building the next generation of iOS experiences. Work on frameworks and features 
+                        that millions of developers use to create amazing apps for iPhone and iPad.
+                    </p>
+                    
+                    <div class="mb-4">
+                        <h4 class="text-xs font-semibold text-gray-500 uppercase mb-2">Required Skills</h4>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-3 py-2 rounded-full">Swift</span>
+                            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-3 py-2 rounded-full">UIKit</span>
+                            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-3 py-2 rounded-full">SwiftUI</span>
+                            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-3 py-2 rounded-full">Core Data</span>
+                            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-3 py-2 rounded-full">Xcode</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex gap-2 mb-3">
+                        <span class="flex-1 text-center bg-green-50 text-green-700 text-xs font-semibold py-2 rounded-lg border border-green-200">
+                            🏥 Health Benefits
+                        </span>
+                        <span class="flex-1 text-center bg-purple-50 text-purple-700 text-xs font-semibold py-2 rounded-lg border border-purple-200">
+                            🎓 Learning Budget
+                        </span>
+                    </div>
+                    
+                    <button class="w-full bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600 text-white font-bold py-4 rounded-2xl transition-all shadow-md hover:shadow-lg mb-2">
+                        Apply for this Position
+                    </button>
+                    
+                    <button class="w-full border-2 border-gray-300 text-gray-700 font-semibold py-3 rounded-2xl hover:bg-gray-50 transition-colors">
+                        View Full Details
+                    </button>
+                    
+                    <div class="mt-4 pt-4 border-t border-gray-200 flex items-center justify-center gap-2 text-xs text-gray-500">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                        </svg>
+                        <span>234 people viewed this job</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="mt-16 pt-8 border-t border-gray-300 text-center text-gray-600">
+            <p>5 UX Design Variations for FANG Company Job Cards</p>
+            <p class="text-sm mt-2">Generated with Tailwind CSS • Responsive & Interactive</p>
+        </footer>
+    </div>
+</body>
+
+</html>

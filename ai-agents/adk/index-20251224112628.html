@@ -1,0 +1,184 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        body { background-color: #f3f4f6; }
+    </style>
+</head>
+
+<body class="p-8 space-y-12">
+    <div class="max-w-4xl mx-auto space-y-16">
+
+        <!-- Variant 1: The Balanced Standard (Google) -->
+        <section>
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">1. Balanced Standard - Focus on Clarity</h2>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-start gap-6 hover:shadow-md transition-shadow">
+                <div class="w-16 h-16 rounded-lg bg-gray-50 flex items-center justify-center border border-gray-100 p-2">
+                    <img src="https://www.google.com/s2/favicons?domain=google.com&sz=64" alt="Google" class="w-10 h-10">
+                </div>
+                <div class="flex-1">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900">Senior Software Engineer, Cloud</h3>
+                            <p class="text-gray-600 font-medium">Google • Sunnyvale, CA</p>
+                        </div>
+                        <span class="text-sm font-semibold text-green-600 bg-green-50 px-3 py-1 rounded-full">New</span>
+                    </div>
+                    <div class="mt-4 flex flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-gray-100 text-gray-600 text-xs rounded-md">Distributed Systems</span>
+                        <span class="px-3 py-1 bg-gray-100 text-gray-600 text-xs rounded-md">Go</span>
+                        <span class="px-3 py-1 bg-gray-100 text-gray-600 text-xs rounded-md">Kubernetes</span>
+                    </div>
+                    <div class="mt-6 flex items-center justify-between">
+                        <div class="text-sm text-gray-500">
+                            <span class="font-bold text-gray-700">$180k - $260k</span> / year
+                        </div>
+                        <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">Apply Now</button>
+                    </div>
+                </div>
+            </div>
+            <p class="mt-3 text-sm text-gray-500 italic">UX Thinking: Familiar hierarchy with clear separation between branding, job info, and actions. High legibility and standard alignment for trust.</p>
+        </section>
+
+        <!-- Variant 2: High-Density Compact (Amazon) -->
+        <section>
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">2. Compact List Style - Focus on Scannability</h2>
+            <div class="bg-white border-l-4 border-orange-400 shadow-sm overflow-hidden">
+                <div class="flex items-center px-4 py-3 hover:bg-gray-50 cursor-pointer">
+                    <img src="https://www.google.com/s2/favicons?domain=amazon.com&sz=64" class="w-8 h-8 mr-4">
+                    <div class="flex-1 grid grid-cols-3 gap-4 items-center">
+                        <div>
+                            <h3 class="font-bold text-gray-800 truncate">Solution Architect</h3>
+                            <p class="text-xs text-gray-500">AWS • Seattle, WA</p>
+                        </div>
+                        <div class="text-sm text-gray-600">
+                            Full-time • Remote Friendly
+                        </div>
+                        <div class="text-right flex items-center justify-end gap-3">
+                            <span class="text-xs text-gray-400 italic">Posted 2d ago</span>
+                            <button class="p-2 text-gray-400 hover:text-orange-500">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" /></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p class="mt-3 text-sm text-gray-500 italic">UX Thinking: Minimalist and space-efficient. Uses a grid to align data points, making it easy to scan multiple listings quickly. Brand color used as an accent border.</p>
+        </section>
+
+        <!-- Variant 3: Tech-Forward / Modern (Meta) -->
+        <section>
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">3. Modern Visual - Focus on Brand Identity</h2>
+            <div class="relative group overflow-hidden rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-800 p-[1px]">
+                <div class="bg-white rounded-2xl p-6 relative">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="flex items-center gap-4">
+                            <img src="https://www.google.com/s2/favicons?domain=facebook.com&sz=64" class="w-12 h-12">
+                            <div>
+                                <h3 class="text-xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Product Designer</h3>
+                                <p class="text-gray-500 text-sm">Meta • Menlo Park (Hybrid)</p>
+                            </div>
+                        </div>
+                        <button class="text-blue-600 p-2 bg-blue-50 rounded-full">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" /></svg>
+                        </button>
+                    </div>
+                    <div class="space-y-3">
+                        <p class="text-gray-600 text-sm line-clamp-2">Join the Reality Labs team to define the future of the Metaverse and social connection.</p>
+                        <div class="flex gap-2">
+                            <span class="text-[10px] uppercase tracking-wider font-bold text-indigo-500">AR/VR</span>
+                            <span class="text-[10px] uppercase tracking-wider font-bold text-indigo-500">Product Strategy</span>
+                        </div>
+                    </div>
+                    <div class="mt-8 pt-6 border-t border-gray-50 flex items-center justify-between">
+                        <div class="flex -space-x-2">
+                            <img class="w-8 h-8 rounded-full border-2 border-white bg-gray-200" src="https://picsum.photos/50/50?random=1">
+                            <img class="w-8 h-8 rounded-full border-2 border-white bg-gray-200" src="https://picsum.photos/50/50?random=2">
+                            <div class="w-8 h-8 rounded-full border-2 border-white bg-gray-100 flex items-center justify-center text-[10px] font-bold text-gray-400">+12 friends work here</div>
+                        </div>
+                        <button class="text-sm font-bold text-blue-600 group-hover:underline">View Details →</button>
+                    </div>
+                </div>
+            </div>
+            <p class="mt-3 text-sm text-gray-500 italic">UX Thinking: Emphasizes brand aura and social proof. "Friends work here" builds immediate trust and networking opportunities.</p>
+        </section>
+
+        <!-- Variant 4: Impact & Urgency (Apple) -->
+        <section>
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">4. Action & Urgency - Focus on Conversion</h2>
+            <div class="bg-black text-white rounded-xl p-8 flex flex-col md:flex-row items-center gap-8">
+                <div class="flex-shrink-0">
+                    <img src="https://www.google.com/s2/favicons?domain=apple.com&sz=64" class="w-16 h-16 invert">
+                </div>
+                <div class="flex-1 text-center md:text-left">
+                    <div class="inline-block px-2 py-0.5 rounded bg-red-600 text-[10px] font-black uppercase mb-2 tracking-widest">Urgent Hire</div>
+                    <h3 class="text-2xl font-light tracking-tight">Machine Learning Specialist</h3>
+                    <p class="text-gray-400 mt-1">Siri Search • Cupertino, CA</p>
+                </div>
+                <div class="flex flex-col gap-3 w-full md:w-auto">
+                    <button class="bg-white text-black font-bold py-3 px-8 rounded-full hover:bg-gray-200 transition-colors">Apply on Company Site</button>
+                    <button class="text-white border border-gray-700 font-medium py-3 px-8 rounded-full hover:bg-gray-900 transition-colors">Save for later</button>
+                </div>
+            </div>
+            <p class="mt-3 text-sm text-gray-500 italic">UX Thinking: Stark contrast and bold typography create a premium "Apple-like" feel. The "Urgent Hire" badge and prominent buttons drive quick decision-making.</p>
+        </section>
+
+        <!-- Variant 5: Information-Rich (Netflix) -->
+        <section>
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">5. Detail-Rich - Focus on Culture & Context</h2>
+            <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
+                <div class="h-24 bg-cover bg-center" style="background-image: url('https://picsum.photos/800/200?grayscale')"></div>
+                <div class="p-6 -mt-12">
+                    <div class="bg-white inline-block p-2 rounded-lg shadow-md mb-4 border border-gray-50">
+                        <img src="https://www.google.com/s2/favicons?domain=netflix.com&sz=64" class="w-12 h-12">
+                    </div>
+                    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-900">Engineering Manager, Content Systems</h3>
+                            <p class="text-gray-600">Los Gatos, CA • Remote (Global)</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xs text-gray-400 mb-1">Total Compensation</p>
+                            <p class="text-xl font-black text-red-600">$450k+</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4 py-4 border-y border-gray-50">
+                        <div>
+                            <p class="text-[10px] text-gray-400 uppercase font-bold">Team Size</p>
+                            <p class="text-sm font-semibold">12-15 People</p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] text-gray-400 uppercase font-bold">Tech Stack</p>
+                            <p class="text-sm font-semibold">Java, Node, AWS</p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] text-gray-400 uppercase font-bold">Travel</p>
+                            <p class="text-sm font-semibold">Minimal</p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] text-gray-400 uppercase font-bold">Relocation</p>
+                            <p class="text-sm font-semibold">Available</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 flex items-center justify-between">
+                        <div class="flex items-center gap-2 text-sm text-gray-600">
+                           <span class="w-2 h-2 rounded-full bg-green-500"></span>
+                           Actively recruiting
+                        </div>
+                        <button class="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-md font-bold transition-all shadow-lg hover:shadow-red-200">View Culture Memo</button>
+                    </div>
+                </div>
+            </div>
+            <p class="mt-3 text-sm text-gray-500 italic">UX Thinking: Transparency-first approach. Provides salary, team size, and relocation info upfront. A header image adds personality and "Netflix-style" drama.</p>
+        </section>
+
+    </div>
+</body>
+
+</html>

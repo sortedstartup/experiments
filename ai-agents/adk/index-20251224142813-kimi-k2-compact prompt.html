@@ -1,0 +1,516 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .compact-card {
+            transition: all 0.2s ease;
+        }
+        .compact-card:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        .status-dot {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+        .quick-view {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        .quick-view.expanded {
+            max-height: 200px;
+        }
+        .mobile-scroll {
+            overflow-x: auto;
+            scrollbar-width: thin;
+        }
+        .mobile-scroll::-webkit-scrollbar {
+            height: 4px;
+        }
+        .mobile-scroll::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 2px;
+        }
+        .mobile-scroll::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 min-h-screen p-4 md:p-8">
+    <div class="max-w-7xl mx-auto">
+        <h1 class="text-3xl font-bold text-gray-900 mb-8 text-center">Compact Job Card Layouts</h1>
+        
+        <!-- Variation 1: Ultra Compact List View -->
+        <div class="mb-12">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Variation 1: Ultra Compact List View</h2>
+            <div class="bg-white rounded-lg shadow-sm divide-y divide-gray-100">
+                
+                <!-- Job Card 1 -->
+                <div class="compact-card p-3 hover:bg-gray-50 cursor-pointer">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center min-w-0 flex-1">
+                            <img src="https://www.google.com/s2/favicons?domain=google.com&sz=32" alt="Google" class="w-8 h-8 rounded mr-3 flex-shrink-0">
+                            <div class="min-w-0 flex-1">
+                                <div class="flex items-center">
+                                    <h3 class="text-sm font-semibold text-gray-900 truncate">Senior Software Engineer</h3>
+                                    <span class="ml-2 px-2 py-0.5 bg-green-100 text-green-700 text-xs rounded-full">New</span>
+                                </div>
+                                <div class="flex items-center text-xs text-gray-500 mt-1">
+                                    <span>Google</span>
+                                    <span class="mx-1">•</span>
+                                    <span>Mountain View</span>
+                                    <span class="mx-1">•</span>
+                                    <span>$200k+</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center ml-3">
+                            <div class="w-2 h-2 bg-green-500 rounded-full status-dot mr-2" title="Actively hiring"></div>
+                            <button class="text-blue-600 hover:text-blue-700 text-sm font-medium">
+                                Apply
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Job Card 2 -->
+                <div class="compact-card p-3 hover:bg-gray-50 cursor-pointer">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center min-w-0 flex-1">
+                            <img src="https://www.google.com/s2/favicons?domain=meta.com&sz=32" alt="Meta" class="w-8 h-8 rounded mr-3 flex-shrink-0">
+                            <div class="min-w-0 flex-1">
+                                <div class="flex items-center">
+                                    <h3 class="text-sm font-semibold text-gray-900 truncate">Product Manager</h3>
+                                    <span class="ml-2 px-2 py-0.5 bg-blue-100 text-blue-700 text-xs rounded-full">Remote</span>
+                                </div>
+                                <div class="flex items-center text-xs text-gray-500 mt-1">
+                                    <span>Meta</span>
+                                    <span class="mx-1">•</span>
+                                    <span>Menlo Park</span>
+                                    <span class="mx-1">•</span>
+                                    <span>$180k+</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center ml-3">
+                            <div class="text-xs text-gray-400 mr-2">3d ago</div>
+                            <button class="text-blue-600 hover:text-blue-700 text-sm font-medium">
+n                                Apply
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Job Card 3 -->
+                <div class="compact-card p-3 hover:bg-gray-50 cursor-pointer">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center min-w-0 flex-1">
+                            <img src="https://www.google.com/s2/favicons?domain=apple.com&sz=32" alt="Apple" class="w-8 h-8 rounded mr-3 flex-shrink-0">
+                            <div class="min-w-0 flex-1">
+                                <div class="flex items-center">
+                                    <h3 class="text-sm font-semibold text-gray-900 truncate">iOS Developer</h3>
+                                    <span class="ml-2 px-2 py-0.5 bg-purple-100 text-purple-700 text-xs rounded-full">Hot</span>
+                                </div>
+                                <div class="flex items-center text-xs text-gray-500 mt-1">
+                                    <span>Apple</span>
+                                    <span class="mx-1">•</span>
+                                    <span>Cupertino</span>
+                                    <span class="mx-1">•</span>
+                                    <span>$220k+</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center ml-3">
+                            <div class="text-xs text-gray-400 mr-2">1w ago</div>
+                            <button class="text-blue-600 hover:text-blue-700 text-sm font-medium">
+                                Apply
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p class="text-gray-600 mt-3 italic text-sm">UX Thinking: Ultra-compact design maximizes information density. Perfect for mobile apps and situations where users need to scan many jobs quickly. Status dots and time stamps provide context without clutter.</p>
+        </div>
+
+        <!-- Variation 2: Grid Compact -->
+        <div class="mb-12">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Variation 2: Grid Compact</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                
+                <!-- Job Card 1 -->
+                <div class="compact-card bg-white rounded-lg shadow-sm p-4 border border-gray-200 hover:border-blue-300">
+                    <div class="flex items-start justify-between mb-3">
+                        <img src="https://www.google.com/s2/favicons?domain=amazon.com&sz=48" alt="Amazon" class="w-10 h-10 rounded">
+                        <button class="text-gray-400 hover:text-red-500">
+                            <i class="far fa-heart text-sm"></i>
+                        </button>
+                    </div>
+                    <h3 class="text-sm font-semibold text-gray-900 mb-1 line-clamp-2">Software Development Engineer II</h3>
+                    <p class="text-xs text-gray-600 mb-3">Amazon Web Services</p>
+                    <div class="flex items-center justify-between text-xs mb-3">
+                        <span class="text-gray-500">Seattle, WA</span>
+                        <span class="font-semibold text-green-700">$160k+</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs text-gray-400">2 hours ago</span>
+                        <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs font-medium">
+                            Apply
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Job Card 2 -->
+                <div class="compact-card bg-white rounded-lg shadow-sm p-4 border border-gray-200 hover:border-blue-300">
+                    <div class="flex items-start justify-between mb-3">
+                        <img src="https://www.google.com/s2/favicons?domain=netflix.com&sz=48" alt="Netflix" class="w-10 h-10 rounded">
+                        <button class="text-gray-400 hover:text-red-500">
+                            <i class="fas fa-heart text-sm text-red-500"></i>
+                        </button>
+                    </div>
+                    <h3 class="text-sm font-semibold text-gray-900 mb-1 line-clamp-2">Senior Data Scientist</h3>
+                    <p class="text-xs text-gray-600 mb-3">Content Analytics</p>
+                    <div class="flex items-center justify-between text-xs mb-3">
+                        <span class="text-gray-500">Los Gatos, CA</span>
+                        <span class="font-semibold text-green-700">$275k+</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs text-gray-400">1 day ago</span>
+                        <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs font-medium">
+                            Apply
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Job Card 3 -->
+                <div class="compact-card bg-white rounded-lg shadow-sm p-4 border border-gray-200 hover:border-blue-300">
+                    <div class="flex items-start justify-between mb-3">
+                        <img src="https://www.google.com/s2/favicons?domain=microsoft.com&sz=48" alt="Microsoft" class="w-10 h-10 rounded">
+                        <button class="text-gray-400 hover:text-red-500">
+                            <i class="far fa-heart text-sm"></i>
+                        </button>
+                    </div>
+                    <h3 class="text-sm font-semibold text-gray-900 mb-1 line-clamp-2">Principal PM Manager</h3>
+                    <p class="text-xs text-gray-600 mb-3">Azure AI Platform</p>
+                    <div class="flex items-center justify-between text-xs mb-3">
+                        <span class="text-gray-500">Redmond, WA</span>
+                        <span class="font-semibold text-green-700">$240k+</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs text-gray-400">3 days ago</span>
+                        <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs font-medium">
+                            Apply
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <p class="text-gray-600 mt-3 italic text-sm">UX Thinking: Grid layout optimizes screen real estate while maintaining readability. Heart icons for saving jobs and clear salary information help users make quick decisions. Responsive design adapts to different screen sizes.</p>
+        </div>
+
+        <!-- Variation 3: Mobile-First Horizontal Scroll -->
+        <div class="mb-12">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Variation 3: Mobile-First Horizontal Scroll</h2>
+            <div class="mobile-scroll overflow-x-auto pb-4">
+                <div class="flex space-x-4 min-w-max">
+                    
+                    <!-- Job Card 1 -->
+                    <div class="compact-card bg-white rounded-lg shadow-sm p-4 min-w-80 border border-gray-200">
+                        <div class="flex items-center mb-3">
+                            <img src="https://www.google.com/s2/favicons?domain=stripe.com&sz=40" alt="Stripe" class="w-10 h-10 rounded mr-3">
+                            <div class="min-w-0 flex-1">
+                                <h3 class="text-sm font-semibold text-gray-900 truncate">Backend Engineer</h3>
+                                <p class="text-xs text-gray-600">Stripe Payments</p>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-sm font-semibold text-green-700">$190k+</div>
+                                <div class="text-xs text-gray-400">2h ago</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded-full">Remote</span>
+                                <span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full">Fast Hire</span>
+                            </div>
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs font-medium">
+                                Apply
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Job Card 2 -->
+                    <div class="compact-card bg-white rounded-lg shadow-sm p-4 min-w-80 border border-gray-200">
+                        <div class="flex items-center mb-3">
+                            <img src="https://www.google.com/s2/favicons?domain=airbnb.com&sz=40" alt="Airbnb" class="w-10 h-10 rounded mr-3">
+                            <div class="min-w-0 flex-1">
+                                <h3 class="text-sm font-semibold text-gray-900 truncate">Senior iOS Engineer</h3>
+                                <p class="text-xs text-gray-600">Mobile Apps Team</p>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-sm font-semibold text-green-700">$215k+</div>
+                                <div class="text-xs text-gray-400">1d ago</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded-full">SF Bay</span>
+                                <span class="px-2 py-1 bg-yellow-100 text-yellow-700 text-xs rounded-full">iOS</span>
+                            </div>
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs font-medium">
+                                Apply
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Job Card 3 -->
+                    <div class="compact-card bg-white rounded-lg shadow-sm p-4 min-w-80 border border-gray-200">
+                        <div class="flex items-center mb-3">
+                            <img src="https://www.google.com/s2/favicons?domain=uber.com&sz=40" alt="Uber" class="w-10 h-10 rounded mr-3">
+                            <div class="min-w-0 flex-1">
+                                <h3 class="text-sm font-semibold text-gray-900 truncate">Data Engineer II</h3>
+                                <p class="text-xs text-gray-600">Marketplace Data</p>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-sm font-semibold text-green-700">$165k+</div>
+                                <div class="text-xs text-gray-400">3d ago</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <span class="px-2 py-1 bg-red-100 text-red-700 text-xs rounded-full">Hybrid</span>
+                                <span class="px-2 py-1 bg-indigo-100 text-indigo-700 text-xs rounded-full">Data</span>
+                            </div>
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs font-medium">
+                                Apply
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Job Card 4 -->
+                    <div class="compact-card bg-white rounded-lg shadow-sm p-4 min-w-80 border border-gray-200">
+                        <div class="flex items-center mb-3">
+                            <img src="https://www.google.com/s2/favicons?domain=pinterest.com&sz=40" alt="Pinterest" class="w-10 h-10 rounded mr-3">
+                            <div class="min-w-0 flex-1">
+                                <h3 class="text-sm font-semibold text-gray-900 truncate">Frontend Engineer</h3>
+                                <p class="text-xs text-gray-600">Growth Team</p>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-sm font-semibold text-green-700">$155k+</div>
+                                <div class="text-xs text-gray-400">5d ago</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <span class="px-2 py-1 bg-teal-100 text-teal-700 text-xs rounded-full">Remote</span>
+                                <span class="px-2 py-1 bg-pink-100 text-pink-700 text-xs rounded-full">React</span>
+                            </div>
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs font-medium">
+                                Apply
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p class="text-gray-600 mt-3 italic text-sm">UX Thinking: Horizontal scrolling mimics mobile app patterns users are familiar with. Fixed-width cards ensure consistent experience across devices, while subtle scroll indicators guide navigation.</p>
+        </div>
+
+        <!-- Variation 4: Table View -->
+        <div class="mb-12">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Variation 4: Table View</h2>
+            <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead class="bg-gray-50 border-b border-gray-200">
+                            <tr>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Company</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Salary</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Posted</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-3">
+                                    <div class="text-sm font-medium text-gray-900">Senior Software Engineer</div>
+                                    <div class="text-xs text-gray-500">Full-stack</div>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div class="flex items-center">
+                                        <img src="https://www.google.com/s2/favicons?domain=google.com&sz=24" alt="Google" class="w-5 h-5 rounded mr-2">
+                                        <span class="text-sm text-gray-900">Google</span>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-3 text-sm text-gray-900">Mountain View, CA</td>
+                                <td class="px-4 py-3">
+                                    <span class="text-sm font-semibold text-green-700">$220k+</span>
+                                </td>
+                                <td class="px-4 py-3 text-sm text-gray-500">2h ago</td>
+                                <td class="px-4 py-3">
+                                    <button class="text-blue-600 hover:text-blue-700 text-sm font-medium">
+                                        Apply
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-3">
+                                    <div class="text-sm font-medium text-gray-900">Product Manager</div>
+                                    <div class="text-xs text-gray-500">AI/ML</div>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div class="flex items-center">
+                                        <img src="https://www.google.com/s2/favicons?domain=meta.com&sz=24" alt="Meta" class="w-5 h-5 rounded mr-2">
+                                        <span class="text-sm text-gray-900">Meta</span>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-3 text-sm text-gray-900">Menlo Park, CA</td>
+                                <td class="px-4 py-3">
+                                    <span class="text-sm font-semibold text-green-700">$195k+</span>
+                                </td>
+                                <td class="px-4 py-3 text-sm text-gray-500">1d ago</td>
+                                <td class="px-4 py-3">
+                                    <button class="text-blue-600 hover:text-blue-700 text-sm font-medium">
+                                        Apply
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-3">
+                                    <div class="text-sm font-medium text-gray-900">Data Scientist</div>
+                                    <div class="text-xs text-gray-500">Analytics</div>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div class="flex items-center">
+                                        <img src="https://www.google.com/s2/favicons?domain=amazon.com&sz=24" alt="Amazon" class="w-5 h-5 rounded mr-2">
+                                        <span class="text-sm text-gray-900">Amazon</span>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-3 text-sm text-gray-900">Seattle, WA</td>
+                                <td class="px-4 py-3">
+                                    <span class="text-sm font-semibold text-green-700">$180k+</span>
+                                </td>
+                                <td class="px-4 py-3 text-sm text-gray-500">3d ago</td>
+                                <td class="px-4 py-3">
+                                    <button class="text-blue-600 hover:text-blue-700 text-sm font-medium">
+                                        Apply
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <p class="text-gray-600 mt-3 italic text-sm">UX Thinking: Table view maximizes information density for power users who need to compare multiple jobs quickly. Sortable columns and hover effects improve scannability and interaction efficiency.</p>
+        </div>
+
+        <!-- Variation 5: Collapsible Expandable -->
+        <div class="mb-12">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Variation 5: Collapsible Expandable</h2>
+            <div class="space-y-3">
+                
+                <!-- Job Card 1 -->
+                <div class="compact-card bg-white rounded-lg shadow-sm border border-gray-200">
+                    <div class="p-4 cursor-pointer" onclick="toggleQuickView(this)">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <img src="https://www.google.com/s2/favicons?domain=slack.com&sz=40" alt="Slack" class="w-10 h-10 rounded mr-3">
+                                <div>
+                                    <h3 class="text-sm font-semibold text-gray-900">Senior Backend Engineer</h3>
+                                    <p class="text-xs text-gray-600">Slack • San Francisco, CA</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <span class="text-sm font-semibold text-green-700">$185k+</span>
+                                <i class="fas fa-chevron-down text-gray-400 transform transition-transform duration-200"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="quick-view px-4 pb-4">
+                        <div class="pt-3 border-t border-gray-100">
+                            <p class="text-xs text-gray-600 mb-3">Build scalable infrastructure for millions of daily active users. Work with distributed systems and real-time messaging.</p>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-2 text-xs text-gray-500">
+                                    <span class="flex items-center"><i class="fas fa-clock mr-1"></i>2h ago</span>
+                                    <span class="flex items-center"><i class="fas fa-users mr-1"></i>45 applicants</span>
+                                </div>
+                                <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs font-medium">
+                                    Apply Now
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Job Card 2 -->
+                <div class="compact-card bg-white rounded-lg shadow-sm border border-gray-200">
+                    <div class="p-4 cursor-pointer" onclick="toggleQuickView(this)">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <img src="https://www.google.com/s2/favicons?domain=zoom.us&sz=40" alt="Zoom" class="w-10 h-10 rounded mr-3">
+                                <div>
+                                    <h3 class="text-sm font-semibold text-gray-900">Frontend Engineer II</h3>
+                                    <p class="text-xs text-gray-600">Zoom • Remote</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <span class="text-sm font-semibold text-green-700">$140k+</span>
+                                <i class="fas fa-chevron-down text-gray-400 transform transition-transform duration-200"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="quick-view px-4 pb-4">
+                        <div class="pt-3 border-t border-gray-100">
+                            <p class="text-xs text-gray-600 mb-3">Create engaging user interfaces for video conferencing. Focus on performance optimization and cross-browser compatibility.</p>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-2 text-xs text-gray-500">
+                                    <span class="flex items-center"><i class="fas fa-clock mr-1"></i>1d ago</span>
+                                    <span class="flex items-center"><i class="fas fa-users mr-1"></i>89 applicants</span>
+                                </div>
+                                <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs font-medium">
+                                    Apply Now
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p class="text-gray-600 mt-3 italic text-sm">UX Thinking: Progressive disclosure reduces initial cognitive load. Users can quickly scan basic information, then expand for details when interested. The chevron rotation provides clear affordance for interaction.</p>
+        </div>
+    </div>
+
+    <script>
+        function toggleQuickView(element) {
+            const quickView = element.nextElementSibling;
+            const chevron = element.querySelector('.fa-chevron-down');
+            
+            if (quickView.classList.contains('expanded')) {
+                quickView.classList.remove('expanded');
+                chevron.style.transform = 'rotate(0deg)';
+            } else {
+                // Close all other expanded views
+                document.querySelectorAll('.quick-view.expanded').forEach(view => {
+                    view.classList.remove('expanded');
+                });
+                document.querySelectorAll('.fa-chevron-down').forEach(icon => {
+                    icon.style.transform = 'rotate(0deg)';
+                });
+                
+                // Open this view
+                quickView.classList.add('expanded');
+                chevron.style.transform = 'rotate(180deg)';
+            }
+        }
+    </script>
+</body>
+
+</html>

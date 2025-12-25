@@ -1,0 +1,134 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        /* Utility class to make cards consistent across variants */
+        .card { @apply bg-white rounded-lg shadow-md overflow-hidden; }
+        .card-header { @apply p-4; }
+        .card-body { @apply p-4; }
+        .card-footer { @apply p-4 text-right; }
+        .btn-primary { @apply inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors; }
+    </style>
+</head>
+
+<body class="bg-gray-100 p-8">
+    <h1 class="text-3xl font-bold mb-8">Job Card Variations for a FANG Company</h1>
+
+    <!-- 1. Minimalistic Card -->
+    <section class="mb-12">
+        <h2 class="text-xl font-semibold mb-4">1. Minimalistic Card</h2>
+        <div class="card max-w-sm mx-auto">
+            <div class="card-body">
+                <h3 class="text-lg font-semibold">Software Engineer</h3>
+                <p class="text-sm text-gray-600">Google, Mountain View, CA</p>
+                <p class="mt-2 text-gray-800">$160k - $210k / yr</p>
+                <ul class="mt-3 list-disc list-inside text-sm text-gray-700">
+                    <li>Develop scalable web applications.</li>
+                    <li>Collaborate with cross-functional teams.</li>
+                </ul>
+            </div>
+            <div class="card-footer">
+                <a href="#" class="btn-primary">Apply Now</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. Card with Background Image -->
+    <section class="mb-12">
+        <h2 class="text-xl font-semibold mb-4">2. Card with Background Image</h2>
+        <div class="card max-w-sm mx-auto relative overflow-hidden">
+            <img src="https://picsum.photos/400/200" alt="Office" class="w-full h-48 object-cover opacity-70">
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black opacity-60"></div>
+            <div class="card-body absolute inset-0 flex flex-col justify-end p-4 text-white">
+                <h3 class="text-lg font-semibold">Product Manager</h3>
+                <p class="text-sm">Google, New York, NY</p>
+            </div>
+            <div class="card-footer absolute bottom-0 left-0 w-full bg-white bg-opacity-80 p-4 text-right">
+                <a href="#" class="btn-primary bg-blue-600 text-white">Apply Now</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Hover Interaction Card -->
+    <section class="mb-12">
+        <h2 class="text-xl font-semibold mb-4">3. Hover Interaction Card</h2>
+        <div class="card max-w-sm mx-auto transition-transform transform hover:-translate-y-2 hover:shadow-xl">
+            <div class="card-header flex items-center space-x-3">
+                <img src="https://www.google.com/s2/favicons?domain=google.com&sz=64" alt="Google" class="h-12 w-12">
+                <div>
+                    <h3 class="font-semibold">Data Scientist</h3>
+                    <p class="text-sm text-gray-600">Mountain View, CA</p>
+                </div>
+            </div>
+            <div class="card-body">
+                <p class="text-gray-800">$140k - $180k / yr</p>
+                <p class="mt-2 text-sm text-gray-700">Work on AI-driven search algorithms.</p>
+            </div>
+            <div class="card-footer">
+                <a href="#" class="btn-primary">Apply Now</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Card with Rating Badge -->
+    <section class="mb-12">
+        <h2 class="text-xl font-semibold mb-4">4. Card with Rating Badge</h2>
+        <div class="card max-w-sm mx-auto relative">
+            <div class="absolute top-3 left-3 bg-yellow-400 text-white text-xs px-2 py-1 rounded">4.5 ★</div>
+            <div class="card-header flex items-center space-x-3">
+                <img src="https://www.google.com/s2/favicons?domain=google.com&sz=64" alt="Google" class="h-12 w-12">
+                <div>
+                    <h3 class="font-semibold">UX Designer</h3>
+                    <p class="text-sm text-gray-600">San Francisco, CA</p>
+                </div>
+            </div>
+            <div class="card-body">
+                <p class="text-gray-800">$115k - $140k / yr</p>
+                <p class="mt-2 text-sm text-gray-700">Improve user flows across the app.</p>
+            </div>
+            <div class="card-footer">
+                <a href="#" class="btn-primary">Apply Now</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. Split Layout Card -->
+    <section class="mb-12">
+        <h2 class="text-xl font-semibold mb-4">5. Split Layout Card</h2>
+        <div class="card max-w-md mx-auto flex overflow-hidden">
+            <div class="w-1/3 bg-gray-200 flex items-center justify-center">
+                <img src="https://www.google.com/s2/favicons?domain=google.com&sz=64" alt="Google" class="h-12 w-12">
+            </div>
+            <div class="w-2/3 flex flex-col p-4">
+                <h3 class="font-semibold">Senior DevOps Engineer</h3>
+                <p class="text-sm text-gray-600">Seattle, WA</p>
+                <p class="mt-2 text-gray-800">$150k - $190k / yr</p>
+                <ul class="mt-2 list-disc list-inside text-sm text-gray-700">
+                    <li>Maintain cloud infrastructure.</li>
+                    <li>Automate deployment pipelines.</li>
+                </ul>
+                <div class="mt-auto text-right">
+                    <a href="#" class="btn-primary">Apply Now</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- UX Thinking Notes -->
+    <section class="mt-12">
+        <h2 class="text-xl font-semibold mb-4">UX Thinking Behind Each Variant</h2>
+        <ol class="list-decimal pl-6 text-sm text-gray-700">
+            <li><strong>Minimalistic Card:</strong> Prioritizes readability and quick information consumption. Clean layout with high contrast ensures job details are easy to scan, suitable for mobile-first contexts.</li>
+            <li><strong>Background Image Card:</strong> Adds visual context and brand ambience. Overlay gradients keep text legible while giving depth, appealing to users who enjoy storytelling.</li>
+            <li><strong>Hover Interaction Card:</strong> Provides subtle feedback on interaction, improving perceived responsiveness. The lift effect signals clickability, useful on desktop interfaces.</li>
+            <li><strong>Rating Badge Card:</strong> Highlights company reputation instantly, aiding trust. Badges draw the eye and can influence decision-making for candidates valuing employer culture.</li>
+            <li><strong>Split Layout Card:</strong> Efficient use of horizontal space, separates logo and details visually. Good for wider screens where side-by-side layout enhances scanning speed.</li>
+        </ol>
+    </section>
+</body>
+
+</html>

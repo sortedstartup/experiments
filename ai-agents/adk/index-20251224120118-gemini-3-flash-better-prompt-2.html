@@ -1,0 +1,243 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+    </style>
+</head>
+
+<body class="p-8 space-y-24 pb-20">
+
+    <header class="max-w-4xl mx-auto text-center space-y-4">
+        <h1 class="text-4xl font-extrabold text-slate-900">FAANG Job Card UI Variations</h1>
+        <p class="text-slate-600 text-lg">Exploring 5 different UX patterns for high-tier tech recruitment cards.</p>
+    </header>
+
+    <!-- VARIANT 1: THE CLEAN PROFESSIONAL (Apple/Google Inspired) -->
+    <section class="max-w-4xl mx-auto">
+        <div class="mb-6">
+            <h2 class="text-xl font-bold text-slate-800">1. The Clean Professional</h2>
+            <p class="text-sm text-slate-500 italic">UX Strategy: Whitespace & Hierarchy. Focuses on premium brand trust and readability.</p>
+        </div>
+        <div class="bg-white border border-slate-200 rounded-2xl p-8 hover:shadow-xl transition-shadow duration-300">
+            <div class="flex items-start justify-between">
+                <div class="flex gap-6">
+                    <div class="w-16 h-16 bg-white border border-slate-100 rounded-xl flex items-center justify-center shadow-sm">
+                        <img src="https://www.google.com/s2/favicons?domain=google.com&sz=64" alt="Google" class="w-10 h-10">
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-semibold text-slate-900 leading-tight">Senior Product Designer</h3>
+                        <p class="text-slate-500 font-medium">Google • Search & Assistant Team</p>
+                        <div class="flex items-center gap-4 mt-4 text-sm text-slate-500">
+                            <span class="flex items-center gap-1.5"><i class="fa-solid fa-location-dot"></i> Mountain View, CA</span>
+                            <span class="flex items-center gap-1.5"><i class="fa-solid fa-briefcase"></i> Full-time</span>
+                            <span class="flex items-center gap-1.5"><i class="fa-solid fa-clock"></i> Posted 2d ago</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="bg-blue-600 text-white px-6 py-2.5 rounded-full font-semibold hover:bg-blue-700 transition-colors">Apply Now</button>
+            </div>
+            <div class="mt-8 border-t border-slate-100 pt-6">
+                <p class="text-slate-600 leading-relaxed max-w-2xl">
+                    Join the team shaping the future of information discovery. You'll lead design for generative AI integrations in core Search...
+                </p>
+                <div class="flex gap-2 mt-4">
+                    <span class="px-3 py-1 bg-slate-100 text-slate-600 text-xs font-semibold rounded-md">UX Design</span>
+                    <span class="px-3 py-1 bg-slate-100 text-slate-600 text-xs font-semibold rounded-md">Figma</span>
+                    <span class="px-3 py-1 bg-slate-100 text-slate-600 text-xs font-semibold rounded-md">AI/ML</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VARIANT 2: THE SOCIAL-ENGAGEMENT FEED (Meta Inspired) -->
+    <section class="max-w-4xl mx-auto">
+        <div class="mb-6">
+            <h2 class="text-xl font-bold text-slate-800">2. The Social Engagement Feed</h2>
+            <p class="text-sm text-slate-500 italic">UX Strategy: Social Proof. Uses network connections to increase click-through rates.</p>
+        </div>
+        <div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+            <div class="p-6">
+                <div class="flex justify-between items-start">
+                    <div class="flex gap-4">
+                        <img src="https://www.google.com/s2/favicons?domain=meta.com&sz=64" class="w-12 h-12 rounded-lg">
+                        <div>
+                            <h3 class="text-xl font-bold text-slate-900">Machine Learning Engineer, Reality Labs</h3>
+                            <p class="text-blue-600 font-medium text-sm">Meta • Menlo Park, CA (Remote Friendly)</p>
+                        </div>
+                    </div>
+                    <button class="text-slate-400 hover:text-slate-600"><i class="fa-regular fa-bookmark text-xl"></i></button>
+                </div>
+                
+                <div class="mt-6 bg-blue-50 rounded-lg p-4 flex items-center justify-between border border-blue-100">
+                    <div class="flex items-center gap-3">
+                        <div class="flex -space-x-2">
+                            <img src="https://picsum.photos/100/100?random=1" class="w-8 h-8 rounded-full border-2 border-white">
+                            <img src="https://picsum.photos/100/100?random=2" class="w-8 h-8 rounded-full border-2 border-white">
+                            <img src="https://picsum.photos/100/100?random=3" class="w-8 h-8 rounded-full border-2 border-white">
+                        </div>
+                        <p class="text-sm text-blue-800"><strong>Alex, Sarah, and 4 others</strong> you know work here</p>
+                    </div>
+                    <button class="text-xs font-bold text-blue-700 uppercase tracking-wider hover:underline">Ask for referral</button>
+                </div>
+
+                <div class="mt-6 flex items-center justify-between">
+                    <div class="flex gap-4 text-sm text-slate-500">
+                        <span><strong>15</strong> applicants</span>
+                        <span>•</span>
+                        <span class="text-green-600 font-semibold">Actively hiring</span>
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="px-5 py-2 text-blue-600 font-bold hover:bg-blue-50 rounded-lg transition-colors border border-blue-200">View Details</button>
+                        <button class="px-5 py-2 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition-shadow shadow-lg shadow-blue-200">Easy Apply</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VARIANT 3: THE EFFICIENCY DASHBOARD (Amazon Inspired) -->
+    <section class="max-w-4xl mx-auto">
+        <div class="mb-6">
+            <h2 class="text-xl font-bold text-slate-800">3. The Efficiency Dashboard</h2>
+            <p class="text-sm text-slate-500 italic">UX Strategy: High Information Density. Focuses on salary, location, and technical requirements immediately.</p>
+        </div>
+        <div class="bg-white border-l-4 border-l-orange-500 border border-slate-200 rounded-r-lg shadow-sm grid grid-cols-12 overflow-hidden">
+            <div class="col-span-9 p-6">
+                <div class="flex gap-4 mb-4">
+                    <img src="https://www.google.com/s2/favicons?domain=amazon.com&sz=64" class="w-10 h-10">
+                    <div>
+                        <h3 class="font-bold text-lg text-slate-900 leading-tight">Principal Software Engineer - AWS</h3>
+                        <p class="text-sm text-slate-500 font-medium">Amazon Web Services (AWS) • Seattle, WA</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-3 gap-4 mb-6">
+                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-100">
+                        <p class="text-[10px] uppercase font-bold text-slate-400">Total Comp</p>
+                        <p class="font-bold text-slate-700">$240k - $380k</p>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-100">
+                        <p class="text-[10px] uppercase font-bold text-slate-400">Experience</p>
+                        <p class="font-bold text-slate-700">8+ Years</p>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-100">
+                        <p class="text-[10px] uppercase font-bold text-slate-400">Team Size</p>
+                        <p class="font-bold text-slate-700">12 Engineers</p>
+                    </div>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    <span class="bg-slate-100 px-2 py-1 rounded text-xs text-slate-600 font-mono">Distributed Systems</span>
+                    <span class="bg-slate-100 px-2 py-1 rounded text-xs text-slate-600 font-mono">Go/Rust</span>
+                    <span class="bg-slate-100 px-2 py-1 rounded text-xs text-slate-600 font-mono">K8s</span>
+                    <span class="bg-slate-100 px-2 py-1 rounded text-xs text-slate-600 font-mono">Serverless</span>
+                </div>
+            </div>
+            <div class="col-span-3 bg-slate-50 flex flex-col items-center justify-center gap-3 border-l border-slate-200 p-4">
+                <span class="text-xs font-bold text-slate-400">Apply before July 30</span>
+                <button class="w-full bg-orange-500 text-white py-2 rounded font-bold hover:bg-orange-600 shadow-md">Apply Now</button>
+                <button class="w-full bg-white border border-slate-300 text-slate-700 py-2 rounded font-bold hover:bg-slate-50">Save Job</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- VARIANT 4: THE CINEMATIC IMPACT (Netflix Inspired) -->
+    <section class="max-w-4xl mx-auto">
+        <div class="mb-6">
+            <h2 class="text-xl font-bold text-slate-800">4. The Cinematic Impact</h2>
+            <p class="text-sm text-slate-500 italic">UX Strategy: Immersive Brand Storytelling. Uses dark mode and visuals to create a premium feel.</p>
+        </div>
+        <div class="relative bg-black rounded-3xl overflow-hidden group h-80">
+            <img src="https://picsum.photos/800/600?tech" class="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:scale-105 transition-transform duration-700">
+            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
+            
+            <div class="absolute inset-0 p-10 flex flex-col justify-end">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-12 h-12 bg-red-600 flex items-center justify-center rounded-sm">
+                        <span class="text-white font-black text-2xl">N</span>
+                    </div>
+                    <span class="text-red-600 font-bold tracking-widest text-sm uppercase">Now Hiring</span>
+                </div>
+                <h3 class="text-4xl font-bold text-white mb-2">Senior Content Algorithms Engineer</h3>
+                <p class="text-slate-300 text-lg max-w-xl mb-6 leading-relaxed">Help us define what the world watches next. Architect the algorithms that power 200M+ global memberships.</p>
+                <div class="flex items-center gap-6">
+                    <button class="bg-white text-black px-8 py-3 rounded-md font-bold text-lg hover:bg-slate-200 flex items-center gap-2">
+                        <i class="fa-solid fa-play"></i> Apply Now
+                    </button>
+                    <button class="text-white border-2 border-white/30 px-8 py-3 rounded-md font-bold text-lg hover:bg-white/10 backdrop-blur-sm">
+                        Watch Team Video
+                    </button>
+                </div>
+            </div>
+            
+            <div class="absolute top-8 right-8 text-white/50 text-sm font-medium">
+                Los Gatos, CA • Remote (Global)
+            </div>
+        </div>
+    </section>
+
+    <!-- VARIANT 5: THE DEV-CENTRIC (GitHub/Open Source Style) -->
+    <section class="max-w-4xl mx-auto">
+        <div class="mb-6">
+            <h2 class="text-xl font-bold text-slate-800">5. The Developer-First</h2>
+            <p class="text-sm text-slate-500 italic">UX Strategy: Practical Utility. Transparent about the tech stack and open-source contributions.</p>
+        </div>
+        <div class="bg-white border border-slate-200 rounded-lg shadow-sm hover:border-slate-400 transition-colors">
+            <div class="p-6">
+                <div class="flex items-start gap-4">
+                    <div class="w-12 h-12 bg-black rounded-full flex items-center justify-center">
+                        <img src="https://www.google.com/s2/favicons?domain=apple.com&sz=64" class="w-6 h-6 invert">
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-xl font-semibold text-slate-900">Swift Runtime Engineer</h3>
+                            <span class="px-2 py-0.5 bg-green-100 text-green-700 text-xs font-bold rounded-full border border-green-200">New Opening</span>
+                        </div>
+                        <p class="text-slate-500 font-mono text-sm mt-1">Apple • Core OS Team</p>
+                    </div>
+                </div>
+
+                <div class="mt-6 flex flex-col gap-4">
+                    <div class="flex items-center gap-8 border-y border-slate-100 py-4">
+                        <div>
+                            <span class="text-[10px] text-slate-400 uppercase font-bold block mb-1">Stack</span>
+                            <div class="flex gap-2 text-slate-700">
+                                <i class="fa-brands fa-swift text-lg"></i>
+                                <i class="fa-brands fa-apple text-lg"></i>
+                                <span class="text-sm font-bold">C++, LLVM</span>
+                            </div>
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-slate-400 uppercase font-bold block mb-1">Interview</span>
+                            <span class="text-sm font-bold text-slate-700">4 Rounds • Coding Heavy</span>
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-slate-400 uppercase font-bold block mb-1">OSS</span>
+                            <span class="text-sm font-bold text-blue-600 flex items-center gap-1">
+                                apple/swift <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-4 text-sm text-slate-500">
+                            <span class="flex items-center gap-1"><i class="fa-solid fa-code-commit"></i> 142 commits this month</span>
+                        </div>
+                        <div class="flex gap-3">
+                            <button class="px-4 py-2 text-slate-600 font-semibold hover:bg-slate-100 rounded transition-colors">Clone Desc</button>
+                            <button class="px-6 py-2 bg-slate-900 text-white font-semibold rounded hover:bg-black transition-shadow">Submit Application</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</body>
+
+</html>

@@ -1,0 +1,275 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<body class="bg-slate-50 text-slate-900">
+    <div class="max-w-6xl mx-auto py-10 space-y-16">
+        <header>
+            <h1 class="text-3xl font-bold tracking-tight text-slate-900">FAANG Job Card UI Variations</h1>
+            <p class="mt-2 text-slate-600 max-w-2xl">Below are five UX variations of a job posting card for a top tech company role. Each explores different layout, hierarchy, and interaction priorities.</p>
+        </header>
+
+        <!-- Variant 1: Compact, scan-friendly list card -->
+        <section class="space-y-4">
+            <h2 class="text-xl font-semibold text-slate-900">Variant 1: Compact list card for fast scanning</h2>
+            <p class="text-sm text-slate-600 max-w-2xl">Optimized for job listing pages where candidates quickly scan many roles. Emphasis on title, company, comp, location, and key tags. Actions are subtle to reduce clutter.</p>
+
+            <div class="bg-white border border-slate-200 rounded-xl px-5 py-4 flex items-start gap-4 shadow-sm hover:shadow-md transition-shadow">
+                <div class="shrink-0 mt-1">
+                    <img src="https://www.google.com/s2/favicons?domain=facebook.com&sz=64" alt="Company logo" class="w-10 h-10 rounded-lg">
+                </div>
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-start justify-between gap-3">
+                        <div>
+                            <h3 class="text-base font-semibold text-slate-900 truncate">Senior Software Engineer, Product Experiences</h3>
+                            <p class="text-sm text-slate-600">Meta • New York, NY (Hybrid)</p>
+                        </div>
+                        <button class="shrink-0 inline-flex items-center rounded-full border border-slate-200 px-3 py-1 text-xs font-medium text-slate-700 hover:bg-slate-50">Save</button>
+                    </div>
+
+                    <div class="mt-2 flex flex-wrap items-center gap-3 text-xs text-slate-600">
+                        <span class="inline-flex items-center gap-1 font-medium text-emerald-700 bg-emerald-50 border border-emerald-100 rounded-full px-2.5 py-0.5">$260k – $340k total comp</span>
+                        <span>Level: E5</span>
+                        <span>Experience: 5–8 years</span>
+                        <span class="inline-flex items-center gap-1 text-amber-700">
+                            <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                            Actively hiring
+                        </span>
+                    </div>
+
+                    <div class="mt-3 flex flex-wrap gap-2">
+                        <span class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-700">React</span>
+                        <span class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-700">TypeScript</span>
+                        <span class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-700">System Design</span>
+                        <span class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-700">Product Engineering</span>
+                    </div>
+                </div>
+                <div class="shrink-0 flex flex-col items-end justify-between self-stretch">
+                    <button class="inline-flex items-center justify-center rounded-lg bg-slate-900 px-3.5 py-2 text-xs font-semibold text-white shadow-sm hover:bg-slate-800">Apply</button>
+                    <p class="mt-3 text-[11px] text-slate-500">Posted 2 days ago</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Variant 2: Rich, card-with-preview for highlighted roles -->
+        <section class="space-y-4">
+            <h2 class="text-xl font-semibold text-slate-900">Variant 2: Rich highlight card with role narrative</h2>
+            <p class="text-sm text-slate-600 max-w-2xl">Designed for featured roles or campaign pages. Adds a visual header and short narrative to help candidates emotionally connect with the impact of the role.</p>
+
+            <article class="bg-white overflow-hidden rounded-2xl border border-slate-200 shadow-sm hover:shadow-lg transition-shadow">
+                <div class="grid md:grid-cols-[2fr,3fr]">
+                    <div class="relative bg-slate-900 text-white p-5 flex flex-col justify-between">
+                        <div class="flex items-center gap-3">
+                            <img src="https://www.google.com/s2/favicons?domain=google.com&sz=64" alt="Google logo" class="w-10 h-10 rounded-lg bg-white/10 p-1">
+                            <div>
+                                <p class="text-xs uppercase tracking-wide text-slate-300">Google • Search</p>
+                                <h3 class="text-lg font-semibold leading-snug">Staff Software Engineer, Search Relevance</h3>
+                            </div>
+                        </div>
+                        <p class="mt-4 text-sm text-slate-200 max-w-sm">Lead the next generation of web search, improving relevance and latency for billions of daily queries worldwide.</p>
+                        <div class="mt-4 flex flex-wrap gap-3 text-xs text-slate-200/80">
+                            <span>Mountain View, CA (Onsite)</span>
+                            <span class="w-1 h-1 rounded-full bg-slate-500"></span>
+                            <span>Level: L6</span>
+                            <span class="w-1 h-1 rounded-full bg-slate-500"></span>
+                            <span>Machine Learning • Distributed Systems</span>
+                        </div>
+                    </div>
+                    <div class="p-5 flex flex-col gap-4 bg-slate-50/60">
+                        <div class="flex flex-wrap justify-between gap-3 text-sm">
+                            <div class="space-y-1">
+                                <p class="font-medium text-slate-900">Compensation</p>
+                                <p class="text-slate-700">$320k – $420k total • Equity + Bonus</p>
+                            </div>
+                            <div class="space-y-1 text-sm text-right">
+                                <p class="font-medium text-slate-900">Team</p>
+                                <p class="text-slate-700">Search Infrastructure & Relevance</p>
+                            </div>
+                        </div>
+
+                        <ul class="text-sm text-slate-700 space-y-1 list-disc list-inside">
+                            <li>Own critical ranking pipelines powering core web search.</li>
+                            <li>Collaborate with research to productionize ML models at scale.</li>
+                            <li>Mentor a team of 3–5 senior engineers.</li>
+                        </ul>
+
+                        <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-200">
+                            <div class="flex flex-wrap gap-2">
+                                <span class="inline-flex items-center rounded-full bg-white px-2.5 py-0.5 text-xs font-medium text-slate-800 border border-slate-200">C++</span>
+                                <span class="inline-flex items-center rounded-full bg-white px-2.5 py-0.5 text-xs font-medium text-slate-800 border border-slate-200">Information Retrieval</span>
+                                <span class="inline-flex items-center rounded-full bg-white px-2.5 py-0.5 text-xs font-medium text-slate-800 border border-slate-200">ML Pipelines</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button class="inline-flex items-center rounded-lg px-3 py-2 text-xs font-semibold text-slate-700 border border-slate-200 hover:bg-white">Share</button>
+                                <button class="inline-flex items-center rounded-lg px-3.5 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 shadow-sm">Apply now</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <!-- Variant 3: Minimal, mobile-first card -->
+        <section class="space-y-4">
+            <h2 class="text-xl font-semibold text-slate-900">Variant 3: Minimal, mobile-first job card</h2>
+            <p class="text-sm text-slate-600 max-w-2xl">Optimized for mobile or dense views. Uses strong typography and spacing instead of borders. Tappable area is large and primary action is clear.</p>
+
+            <button class="w-full text-left bg-white rounded-2xl px-4 py-4 shadow-sm hover:bg-slate-50 active:bg-slate-100 transition-colors">
+                <div class="flex items-start gap-3">
+                    <img src="https://www.google.com/s2/favicons?domain=amazon.com&sz=64" alt="Amazon logo" class="w-9 h-9 rounded-lg mt-0.5">
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-start justify-between gap-2">
+                            <div>
+                                <p class="text-xs uppercase tracking-wide text-amber-700">Featured • Remote friendly</p>
+                                <h3 class="mt-1 text-base font-semibold text-slate-900 leading-snug">Principal Backend Engineer, Prime Video</h3>
+                            </div>
+                            <span class="shrink-0 text-xs font-medium text-emerald-700 bg-emerald-50 border border-emerald-100 rounded-full px-2 py-0.5">$280k–$360k</span>
+                        </div>
+
+                        <p class="mt-2 text-xs text-slate-600">Build highly available, low-latency services that power global video streaming for millions of concurrent viewers.</p>
+
+                        <div class="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-slate-500">
+                            <span>Seattle, WA • US Remote</span>
+                            <span>Level: Principal</span>
+                            <span>Posted 5 days ago</span>
+                        </div>
+
+                        <div class="mt-3 flex items-center justify-between">
+                            <div class="flex flex-wrap gap-1.5">
+                                <span class="inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-700">Java</span>
+                                <span class="inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-700">Microservices</span>
+                                <span class="inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-700">AWS</span>
+                            </div>
+                            <span class="text-[11px] font-medium text-blue-600">View details ›</span>
+                        </div>
+                    </div>
+                </div>
+            </button>
+        </section>
+
+        <!-- Variant 4: Data-rich comparison-friendly card -->
+        <section class="space-y-4">
+            <h2 class="text-xl font-semibold text-slate-900">Variant 4: Data-rich card for power users</h2>
+            <p class="text-sm text-slate-600 max-w-2xl">Targets senior candidates who compare roles deeply. Presents structured data (team size, tech stack, interview stages) for quick side-by-side evaluation.</p>
+
+            <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow">
+                <div class="flex flex-wrap items-start justify-between gap-4">
+                    <div class="flex items-start gap-3">
+                        <img src="https://www.google.com/s2/favicons?domain=netflix.com&sz=64" alt="Netflix logo" class="w-10 h-10 rounded-lg mt-0.5">
+                        <div>
+                            <h3 class="text-base font-semibold text-slate-900">Engineering Manager, Playback & Encoding</h3>
+                            <p class="text-sm text-slate-600">Netflix • Los Gatos, CA (Hybrid)</p>
+                            <p class="mt-2 text-xs text-slate-600 max-w-md">Lead a cross-functional team delivering seamless playback experiences across TV, mobile, and web clients in 190+ countries.</p>
+                        </div>
+                    </div>
+                    <div class="text-right space-y-1 text-sm">
+                        <p class="font-semibold text-slate-900">$350k – $480k total comp</p>
+                        <p class="text-slate-600 text-xs">No formal leveling • High-autonomy culture</p>
+                        <button class="mt-2 inline-flex items-center justify-center rounded-lg bg-red-600 px-3.5 py-1.5 text-xs font-semibold text-white hover:bg-red-700">Fast apply</button>
+                    </div>
+                </div>
+
+                <div class="mt-4 grid gap-4 md:grid-cols-4 text-xs text-slate-700">
+                    <div>
+                        <p class="font-medium text-slate-900 mb-1">Role</p>
+                        <p>Team size: 8 engineers</p>
+                        <p>Scope: Playback quality, ABR, DRM</p>
+                    </div>
+                    <div>
+                        <p class="font-medium text-slate-900 mb-1">Tech stack</p>
+                        <p>Go, Java, Node.js</p>
+                        <p>AWS, Spinnaker, Kafka</p>
+                    </div>
+                    <div>
+                        <p class="font-medium text-slate-900 mb-1">Process</p>
+                        <p>Recruiter screen</p>
+                        <p>2 technical • 2 leadership</p>
+                    </div>
+                    <div>
+                        <p class="font-medium text-slate-900 mb-1">Signals</p>
+                        <p class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Fast response (3–5 days)</p>
+                        <p class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-sky-500"></span> Visa sponsorship available</p>
+                    </div>
+                </div>
+
+                <div class="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 pt-3">
+                    <div class="flex flex-wrap gap-2 text-[11px]">
+                        <span class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 font-medium text-slate-700">Leadership</span>
+                        <span class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 font-medium text-slate-700">Video Streaming</span>
+                        <span class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 font-medium text-slate-700">People Management</span>
+                    </div>
+                    <div class="flex items-center gap-3 text-[11px] text-slate-500">
+                        <span>Applications: ~80 this week</span>
+                        <span>Updated: Today</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Variant 5: Storytelling card with visual hero -->
+        <section class="space-y-4 pb-10">
+            <h2 class="text-xl font-semibold text-slate-900">Variant 5: Storytelling card with visual hero</h2>
+            <p class="text-sm text-slate-600 max-w-2xl">Blends marketing-style storytelling with job details. Ideal for landing pages or campaign emails where you want to inspire candidates.</p>
+
+            <article class="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-lg transition-shadow">
+                <div class="md:flex">
+                    <div class="md:w-2/5 relative">
+                        <img src="https://picsum.photos/600/500" alt="Team workspace" class="w-full h-full object-cover">
+                        <div class="absolute top-3 left-3 flex items-center gap-2 bg-black/60 text-white rounded-full px-3 py-1 text-[11px]">
+                            <img src="https://www.google.com/s2/favicons?domain=apple.com&sz=64" alt="Apple logo" class="w-4 h-4 rounded">
+                            <span>Apple • AIML</span>
+                        </div>
+                    </div>
+                    <div class="md:w-3/5 p-5 flex flex-col gap-3">
+                        <div class="flex items-start justify-between gap-3">
+                            <div>
+                                <p class="text-xs uppercase tracking-wide text-slate-500">AI & Machine Learning</p>
+                                <h3 class="mt-1 text-lg font-semibold text-slate-900">Senior Machine Learning Engineer, On‑device Intelligence</h3>
+                            </div>
+                            <span class="shrink-0 text-xs font-medium text-emerald-700 bg-emerald-50 border border-emerald-100 rounded-full px-2 py-0.5">$260k–$330k</span>
+                        </div>
+                        <p class="text-sm text-slate-700">Shape how hundreds of millions of people interact with their devices every day by bringing privacy-preserving intelligence to the edge.</p>
+
+                        <div class="grid md:grid-cols-3 gap-3 text-xs text-slate-700 mt-1">
+                            <div>
+                                <p class="font-medium text-slate-900">Location</p>
+                                <p>Cupertino, CA • Onsite 3 days</p>
+                            </div>
+                            <div>
+                                <p class="font-medium text-slate-900">Impact</p>
+                                <p>Siri, keyboard, and camera intelligence features</p>
+                            </div>
+                            <div>
+                                <p class="font-medium text-slate-900">Profile</p>
+                                <p>5+ yrs ML • Edge / on-device optimization</p>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap justify-between items-center gap-3 pt-2 border-t border-slate-200 mt-2">
+                            <div class="flex flex-wrap gap-2 text-[11px]">
+                                <span class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 font-medium text-slate-700">PyTorch</span>
+                                <span class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 font-medium text-slate-700">On‑device ML</span>
+                                <span class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 font-medium text-slate-700">Model Optimization</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-[11px] text-slate-500">
+                                <span>Portfolio or GitHub preferred</span>
+                            </div>
+                        </div>
+
+                        <div class="mt-2 flex flex-wrap items-center justify-between gap-3">
+                            <button class="inline-flex items-center rounded-lg bg-slate-900 px-3.5 py-2 text-xs font-semibold text-white hover:bg-slate-800 shadow-sm">Apply at Apple</button>
+                            <p class="text-[11px] text-slate-500">Posted 1 week ago • Interviews starting in January</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </section>
+    </div>
+</body>
+
+</html>

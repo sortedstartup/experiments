@@ -1,0 +1,246 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .mobile-frame {
+            width: 375px;
+            height: 667px;
+            border: 12px solid #111;
+            border-radius: 48px;
+            overflow: hidden;
+            position: relative;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            box-shadow: 0 50px 100px -20px rgba(0,0,0,0.5);
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .hero-gradient {
+            background: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.6) 40%, rgba(0,0,0,0) 100%);
+        }
+    </style>
+</head>
+
+<body class="bg-slate-200 p-10 flex flex-wrap justify-center gap-20">
+
+    <!-- STEP 1: ENROLLMENT (THE SELECTION) -->
+    <div class="flex flex-col items-center">
+        <h2 class="mb-4 font-black text-slate-400 uppercase tracking-tighter">Step 1: Enrollment</h2>
+        <div class="mobile-frame">
+            <img src="https://picsum.photos/400/800?random=101" class="absolute inset-0 w-full h-full object-cover">
+            <div class="absolute inset-0 hero-gradient"></div>
+            
+            <div class="relative z-10 flex flex-col h-full p-8 justify-end">
+                <span class="text-emerald-400 font-black text-xs tracking-widest mb-2">NEURO-OPTIMIZED PATH</span>
+                <h1 class="text-4xl font-black text-white leading-none mb-4 uppercase tracking-tighter">Frontend <br>Mastery</h1>
+                <p class="text-white/70 text-sm mb-8 leading-relaxed">Achieve hireability in 64 days using active recall and spaced repetition algorithms.</p>
+                
+                <div class="flex gap-4 mb-8">
+                    <div class="flex-1">
+                        <p class="text-[10px] text-white/40 uppercase font-bold">Duration</p>
+                        <p class="text-white font-bold">128 Hours</p>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-[10px] text-white/40 uppercase font-bold">Success Rate</p>
+                        <p class="text-white font-bold">94.2%</p>
+                    </div>
+                </div>
+
+                <button class="w-full bg-white text-black font-black py-5 rounded-2xl shadow-2xl active:scale-95 transition-transform uppercase tracking-widest text-sm">
+                    Begin Journey
+                </button>
+            </div>
+        </div>
+        <div class="mt-4 max-w-[300px] text-[10px] text-slate-500 italic">UX: Focuses on the "Dream" and the "Data". High contrast and immersive imagery drive conversion.</div>
+    </div>
+
+    <!-- STEP 2: DASHBOARD (THE MISSION) -->
+    <div class="flex flex-col items-center">
+        <h2 class="mb-4 font-black text-slate-400 uppercase tracking-tighter">Step 2: Dashboard</h2>
+        <div class="mobile-frame bg-neutral-950">
+            <div class="p-6 pt-10 flex justify-between items-center">
+                <div class="w-10 h-10 rounded-full border border-white/20 p-1">
+                    <img src="https://picsum.photos/100/100?random=55" class="rounded-full w-full h-full object-cover grayscale">
+                </div>
+                <div class="glass px-3 py-1 rounded-full text-[10px] text-white font-bold">Oct 24 Target</div>
+            </div>
+
+            <div class="px-6 flex-1">
+                <h2 class="text-white/40 font-bold text-xs uppercase tracking-widest mb-1">Current State</h2>
+                <h1 class="text-5xl font-black text-white tracking-tighter mb-8">84<span class="text-2xl text-white/40">%</span></h1>
+
+                <div class="space-y-4">
+                    <!-- The Mission Card -->
+                    <div class="relative group active:scale-95 transition-transform">
+                        <div class="absolute inset-0 bg-indigo-600 rounded-[32px] blur-xl opacity-20 group-hover:opacity-40 transition-opacity"></div>
+                        <div class="relative glass p-6 rounded-[32px] overflow-hidden">
+                             <div class="absolute top-0 right-0 w-24 h-24 bg-indigo-500/10 rounded-full -mr-10 -mt-10"></div>
+                             <p class="text-[10px] text-indigo-400 font-bold uppercase mb-4">Mission 01: Recall</p>
+                             <h3 class="text-xl font-bold text-white mb-2">Memory Decay Detected</h3>
+                             <p class="text-xs text-white/50 mb-6">4 topics from 'React Hooks' are falling below the 70% retention threshold.</p>
+                             <button class="bg-indigo-600 text-white font-black px-6 py-3 rounded-xl text-xs uppercase tracking-widest">
+                                Start Session
+                             </button>
+                        </div>
+                    </div>
+
+                    <!-- Secondary Task -->
+                    <div class="bg-white/5 border border-white/10 p-5 rounded-3xl flex items-center justify-between">
+                        <div>
+                            <p class="text-[10px] text-white/30 font-bold uppercase">Next Module</p>
+                            <h4 class="text-sm font-bold text-white">Advanced CSS Grid</h4>
+                        </div>
+                        <div class="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center text-white">→</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-8 flex justify-center gap-1">
+                <div class="w-12 h-1 bg-white rounded-full"></div>
+                <div class="w-4 h-1 bg-white/20 rounded-full"></div>
+                <div class="w-4 h-1 bg-white/20 rounded-full"></div>
+            </div>
+        </div>
+        <div class="mt-4 max-w-[300px] text-[10px] text-slate-500 italic">UX: Uses "Mission-based" language to gamify the neuro-scheduling. Retention decay is treated as a priority alert.</div>
+    </div>
+
+    <!-- STEP 3: THE LEARNING CARD (CONTENT) -->
+    <div class="flex flex-col items-center">
+        <h2 class="mb-4 font-black text-slate-400 uppercase tracking-tighter">Step 3: Learning Card</h2>
+        <div class="mobile-frame">
+            <div class="absolute top-0 w-full h-80">
+                <img src="https://picsum.photos/400/800?random=77" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
+                <!-- Play button overlay -->
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="w-16 h-16 glass rounded-full flex items-center justify-center">
+                        <div class="w-0 h-0 border-t-8 border-t-transparent border-l-12 border-l-white border-b-8 border-b-transparent ml-1"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex-1 mt-64 bg-black rounded-t-[40px] relative z-10 p-8 pt-10 overflow-y-auto no-scrollbar">
+                <div class="flex justify-between items-center mb-6">
+                    <span class="text-indigo-400 text-[10px] font-black tracking-widest uppercase">Topic 04: Closures</span>
+                    <span class="text-white/20 text-[10px] font-mono">08/24</span>
+                </div>
+                <h2 class="text-3xl font-black text-white mb-6 tracking-tighter leading-none">The Lexical Environment</h2>
+                <div class="space-y-6 text-white/70 text-sm leading-relaxed pb-20">
+                    <p>A closure is the combination of a function bundled together with references to its surrounding state (the lexical environment).</p>
+                    <div class="bg-white/5 border-l-2 border-indigo-500 p-4 italic text-white/90">
+                        "In JavaScript, closures are created every time a function is created, at function creation time."
+                    </div>
+                    <p>Think of it as a function that "remembers" its birthplace. This is crucial for data privacy and functional programming patterns.</p>
+                    <img src="https://picsum.photos/400/300?random=99" class="rounded-3xl border border-white/10">
+                </div>
+            </div>
+            
+            <div class="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-black to-transparent flex items-center justify-center pointer-events-none">
+                <div class="bg-white/10 backdrop-blur-md px-6 py-2 rounded-full border border-white/10 text-[10px] text-white/60 animate-bounce">
+                    Swipe up to finish
+                </div>
+            </div>
+        </div>
+        <div class="mt-4 max-w-[300px] text-[10px] text-slate-500 italic">UX: Immersive video header. Content "slides up" over the hero, keeping focus on the learning material without distractions.</div>
+    </div>
+
+    <!-- STEP 4: ACTIVE RECALL (THE TEST) -->
+    <div class="flex flex-col items-center">
+        <h2 class="mb-4 font-black text-slate-400 uppercase tracking-tighter">Step 4: Active Recall</h2>
+        <div class="mobile-frame bg-indigo-950">
+            <div class="p-8 pt-12 flex-1 flex flex-col items-center justify-center text-center">
+                <div class="w-20 h-20 bg-indigo-500/20 rounded-full flex items-center justify-center mb-8 border border-indigo-500/30">
+                    <svg class="w-10 h-10 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.364-7.364l-.707-.707m12.728 12.728l-.707-.707M6.364 17.636l-.707.707M12 21a9 9 0 110-18 9 9 0 010 18zm0 0v-8"></path></svg>
+                </div>
+                <h2 class="text-white/40 font-bold text-[10px] uppercase tracking-widest mb-4">RECALL CHALLENGE</h2>
+                <h1 class="text-2xl font-bold text-white mb-10 leading-snug">Explain how a 'Closure' prevents global scope pollution.</h1>
+                
+                <div class="w-full space-y-4">
+                    <button class="w-full bg-white/10 border border-white/10 text-white font-bold py-4 rounded-2xl hover:bg-white/20 transition-all">
+                        Reveal Answer
+                    </button>
+                </div>
+            </div>
+
+            <div class="p-8 glass m-6 rounded-[32px]">
+                 <p class="text-[10px] text-center text-white/40 uppercase font-bold mb-4">How well did you recall?</p>
+                 <div class="flex gap-2">
+                    <button class="flex-1 py-3 rounded-xl bg-red-500/20 text-red-400 text-xs font-bold border border-red-500/20">Forgot</button>
+                    <button class="flex-1 py-3 rounded-xl bg-yellow-500/20 text-yellow-400 text-xs font-bold border border-yellow-500/20">Hard</button>
+                    <button class="flex-1 py-3 rounded-xl bg-emerald-500/20 text-emerald-400 text-xs font-bold border border-emerald-500/20">Easy</button>
+                 </div>
+            </div>
+        </div>
+        <div class="mt-4 max-w-[300px] text-[10px] text-slate-500 italic">UX: High-focus environment. The "Confidence" buttons feed the neuroscience algorithm to schedule the next review.</div>
+    </div>
+
+    <!-- STEP 5: BRAIN STATE (THE MIND MAP) -->
+    <div class="flex flex-col items-center">
+        <h2 class="mb-4 font-black text-slate-400 uppercase tracking-tighter">Step 5: Evolution</h2>
+        <div class="mobile-frame bg-black">
+            <div class="p-8 pt-12 flex justify-between items-start">
+                <div>
+                    <h2 class="text-white font-black text-2xl tracking-tighter">Mind Evolution</h2>
+                    <p class="text-white/40 text-[10px] uppercase font-bold">Today's Progress: +1.4%</p>
+                </div>
+                <div class="w-12 h-12 bg-white/5 rounded-full border border-white/10 flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                </div>
+            </div>
+
+            <div class="flex-1 relative">
+                <!-- Visual Brain Network -->
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <!-- Core -->
+                    <div class="w-40 h-40 rounded-full bg-indigo-600/20 blur-3xl animate-pulse"></div>
+                    <div class="relative z-10 w-32 h-32 glass rounded-full flex items-center justify-center flex-col p-4 text-center border-indigo-500/50 shadow-2xl shadow-indigo-500/20">
+                         <span class="text-white font-black text-xl">85.4<span class="text-xs text-white/40">%</span></span>
+                         <span class="text-[8px] text-white/60 font-bold uppercase tracking-widest mt-1">Ready</span>
+                    </div>
+
+                    <!-- Skill Nodes -->
+                    <div class="absolute top-10 left-10 w-12 h-12 glass rounded-full border-emerald-500/30 flex items-center justify-center text-[8px] text-emerald-400 font-bold">REACT</div>
+                    <div class="absolute bottom-20 right-5 w-16 h-16 glass rounded-full border-white/20 flex items-center justify-center text-[8px] text-white/60 font-bold">LOGIC</div>
+                    <div class="absolute top-40 right-10 w-10 h-10 glass rounded-full border-orange-500/30 flex items-center justify-center text-[8px] text-orange-400 font-bold">API</div>
+                    <div class="absolute bottom-40 left-5 w-14 h-14 glass rounded-full border-indigo-500/30 flex items-center justify-center text-[8px] text-indigo-400 font-bold animate-pulse">RECALL</div>
+                </div>
+            </div>
+
+            <div class="p-8">
+                 <div class="bg-white/5 border border-white/10 p-4 rounded-3xl">
+                    <p class="text-[10px] text-white/40 font-bold uppercase mb-2">Interview Date Prediction</p>
+                    <div class="flex items-baseline gap-2">
+                         <span class="text-2xl font-black text-white">Oct 21</span>
+                         <span class="text-xs text-emerald-400 font-bold">↑ 3 days earlier</span>
+                    </div>
+                 </div>
+                 <button class="w-full mt-4 bg-white/5 text-white/40 font-bold py-4 rounded-2xl text-xs uppercase tracking-widest">
+                    Back to Dashboard
+                 </button>
+            </div>
+        </div>
+        <div class="mt-4 max-w-[300px] text-[10px] text-slate-500 italic">UX: The payoff. Seeing the "Interview Date" move closer based on performance provides the ultimate dopamine hit and reinforcement.</div>
+    </div>
+
+</body>
+</html>

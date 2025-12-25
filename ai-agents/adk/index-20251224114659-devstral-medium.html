@@ -1,0 +1,117 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<body class="bg-gray-100 p-8">
+    <h1 class="text-3xl font-bold text-center mb-8">Job Card UI Variations</h1>
+
+    <!-- Variant 1: Classic Card -->
+    <div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl mb-8">
+        <div class="md:flex">
+            <div class="md:shrink-0">
+                <img class="h-48 w-full object-cover md:w-48" src="https://picsum.photos/400/300" alt="Company Logo">
+            </div>
+            <div class="p-8">
+                <div class="uppercase tracking-wide text-sm text-indigo-500 font-semibold">FANG Company</div>
+                <a href="#" class="block mt-1 text-lg leading-tight font-medium text-black hover:underline">Senior Software Engineer</a>
+                <p class="mt-2 text-gray-500">Location: San Francisco, CA</p>
+                <p class="mt-2 text-gray-500">Salary: $150,000 - $180,000</p>
+                <p class="mt-2 text-gray-500">Posted: 2 days ago</p>
+                <div class="mt-4">
+                    <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">Full-time</span>
+                    <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">Remote</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Variant 2: Minimalist Card -->
+    <div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl mb-8">
+        <div class="p-8">
+            <div class="flex items-center">
+                <img class="h-12 w-12 rounded-full" src="https://www.google.com/s2/favicons?domain=github.com&sz=64" alt="Company Logo">
+                <div class="ml-4">
+                    <div class="uppercase tracking-wide text-sm text-indigo-500 font-semibold">FANG Company</div>
+                    <a href="#" class="block mt-1 text-lg leading-tight font-medium text-black hover:underline">Data Scientist</a>
+                </div>
+            </div>
+            <p class="mt-2 text-gray-500">Location: New York, NY</p>
+            <p class="mt-2 text-gray-500">Salary: $140,000 - $170,000</p>
+            <p class="mt-2 text-gray-500">Posted: 1 week ago</p>
+            <div class="mt-4">
+                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">Full-time</span>
+                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">Hybrid</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Variant 3: Modern Card -->
+    <div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl mb-8">
+        <div class="p-8">
+            <div class="flex justify-between items-center">
+                <div>
+                    <div class="uppercase tracking-wide text-sm text-indigo-500 font-semibold">FANG Company</div>
+                    <a href="#" class="block mt-1 text-lg leading-tight font-medium text-black hover:underline">Product Manager</a>
+                </div>
+                <img class="h-12 w-12 rounded-full" src="https://www.google.com/s2/favicons?domain=github.com&sz=64" alt="Company Logo">
+            </div>
+            <p class="mt-2 text-gray-500">Location: Seattle, WA</p>
+            <p class="mt-2 text-gray-500">Salary: $130,000 - $160,000</p>
+            <p class="mt-2 text-gray-500">Posted: 3 days ago</p>
+            <div class="mt-4">
+                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">Full-time</span>
+                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">On-site</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Variant 4: Compact Card -->
+    <div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl mb-8">
+        <div class="p-6">
+            <div class="flex items-center">
+                <img class="h-10 w-10 rounded-full" src="https://www.google.com/s2/favicons?domain=github.com&sz=64" alt="Company Logo">
+                <div class="ml-3">
+                    <div class="uppercase tracking-wide text-sm text-indigo-500 font-semibold">FANG Company</div>
+                    <a href="#" class="block mt-1 text-lg leading-tight font-medium text-black hover:underline">UX Designer</a>
+                </div>
+            </div>
+            <p class="mt-2 text-gray-500">Location: Austin, TX</p>
+            <p class="mt-2 text-gray-500">Salary: $120,000 - $150,000</p>
+            <p class="mt-2 text-gray-500">Posted: 5 days ago</p>
+            <div class="mt-4">
+                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">Full-time</span>
+                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">Remote</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Variant 5: Detailed Card -->
+    <div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl mb-8">
+        <div class="p-8">
+            <div class="flex justify-between items-center">
+                <div>
+                    <div class="uppercase tracking-wide text-sm text-indigo-500 font-semibold">FANG Company</div>
+                    <a href="#" class="block mt-1 text-lg leading-tight font-medium text-black hover:underline">DevOps Engineer</a>
+                </div>
+                <img class="h-12 w-12 rounded-full" src="https://www.google.com/s2/favicons?domain=github.com&sz=64" alt="Company Logo">
+            </div>
+            <p class="mt-2 text-gray-500">Location: Boston, MA</p>
+            <p class="mt-2 text-gray-500">Salary: $160,000 - $190,000</p>
+            <p class="mt-2 text-gray-500">Posted: 2 weeks ago</p>
+            <div class="mt-4">
+                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">Full-time</span>
+                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">Hybrid</span>
+            </div>
+            <div class="mt-4">
+                <p class="text-gray-700">We are looking for a DevOps Engineer to join our team and help us build scalable infrastructure.</p>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

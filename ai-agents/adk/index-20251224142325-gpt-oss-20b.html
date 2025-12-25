@@ -1,0 +1,174 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>Job Card UI Variations</title>
+</head>
+
+<body class="bg-gray-100 p-8">
+    <h1 class="text-3xl font-bold mb-8 text-center">FANG Company Job Card – 5 UX Variations</h1>
+
+    <!-- ==================== Variant 1: Minimalist ==================== -->
+    <section class="mb-12">
+        <h2 class="text-2xl font-semibold mb-4">Variant 1 – Minimalist</h2>
+        <p class="text-gray-600 mb-4">
+            A clean, whitespace‑heavy card that lets the essential info (title, location, and salary) stand out. Ideal for users who skim quickly.
+        </p>
+        <div class="max-w-sm mx-auto bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="p-6">
+                <h3 class="text-xl font-bold text-gray-900 mb-2">Senior Software Engineer – Search</h3>
+                <p class="text-gray-600 mb-1"><strong>Location:</strong> Mountain View, CA</p>
+                <p class="text-gray-600 mb-1"><strong>Team:</strong> Ads Ranking</p>
+                <p class="text-gray-600 mb-4"><strong>Salary:</strong> $180k – $220k base + equity</p>
+                <button class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">
+                    Apply Now
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== Variant 2: Visual‑Rich ==================== -->
+    <section class="mb-12">
+        <h2 class="text-2xl font-semibold mb-4">Variant 2 – Visual‑Rich</h2>
+        <p class="text-gray-600 mb-4">
+            Uses a hero image and company logo to create an emotional connection. Good for branding‑focused listings.
+        </p>
+        <div class="max-w-sm mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
+            <img src="https://picsum.photos/400/200" alt="Office view" class="w-full h-40 object-cover">
+            <div class="p-6">
+                <div class="flex items-center mb-4">
+                    <img src="https://www.google.com/s2/favicons?domain=google.com&sz=64" alt="Company logo" class="w-10 h-10 mr-3">
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900">Product Manager – Cloud AI</h3>
+                        <p class="text-gray-500 text-sm">Google</p>
+                    </div>
+                </div>
+                <p class="text-gray-600 mb-2"><strong>Location:</strong> Seattle, WA (Remote optional)</p>
+                <p class="text-gray-600 mb-2"><strong>Type:</strong> Full‑time</p>
+                <p class="text-gray-600 mb-4"><strong>Compensation:</strong> $150k – $190k + RSU</p>
+                <button class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition">
+                    Apply Now
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== Variant 3: Info‑Dense ==================== -->
+    <section class="mb-12">
+        <h2 class="text-2xl font-semibold mb-4">Variant 3 – Info‑Dense</h2>
+        <p class="text-gray-600 mb-4">
+            Packs more details (tech stack, perks, posting date) into a compact layout for power users who want all data at a glance.
+        </p>
+        <div class="max-w-lg mx-auto bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="col-span-2">
+                    <h3 class="text-xl font-bold text-gray-900 mb-1">Data Engineer – Machine Learning Platform</h3>
+                    <p class="text-gray-500 mb-2">Meta (formerly Facebook)</p>
+                </div>
+                <div>
+                    <p class="text-gray-600"><strong>Location:</strong> Menlo Park, CA</p>
+                </div>
+                <div>
+                    <p class="text-gray-600"><strong>Experience:</strong> 5+ years</p>
+                </div>
+                <div>
+                    <p class="text-gray-600"><strong>Tech Stack:</strong> Python, Spark, Airflow, Presto</p>
+                </div>
+                <div>
+                    <p class="text-gray-600"><strong>Perks:</strong> Health, 401k, 20% PTO</p>
+                </div>
+                <div class="col-span-2 flex items-center justify-between mt-4">
+                    <p class="text-gray-600"><strong>Posted:</strong> 2 days ago</p>
+                    <button class="bg-indigo-600 text-white py-1 px-4 rounded hover:bg-indigo-700 transition">
+                        Apply
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== Variant 4: Interactive ==================== -->
+    <section class="mb-12">
+        <h2 class="text-2xl font-semibold mb-4">Variant 4 – Interactive (Accordion) </h2>
+        <p class="text-gray-600 mb-4">
+            Uses an accordion to hide secondary details until the user expands, reducing visual clutter while still offering depth.
+        </p>
+        <div class="max-w-md mx-auto bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="p-4 border-b">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center">
+                        <img src="https://www.google.com/s2/favicons?domain=amazon.com&sz=64" alt="Amazon" class="w-8 h-8 mr-2">
+                        <h3 class="text-lg font-bold">Software Development Engineer – Alexa AI</h3>
+                    </div>
+                    <button class="text-gray-500" onclick="toggleDetails('details1')">
+                        <svg id="icon-details1" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                    </button>
+                </div>
+                <p class="text-gray-600 mt-1"><strong>Location:</strong> Seattle, WA</p>
+            </div>
+            <div id="details1" class="p-4 hidden">
+                <p class="text-gray-600"><strong>Team:</strong> Voice Interaction</p>
+                <p class="text-gray-600"><strong>Salary:</strong> $170k – $210k + RSU</p>
+                <p class="text-gray-600"><strong>Tech Stack:</strong> Java, Kotlin, AWS Lambda</p>
+                <p class="text-gray-600"><strong>Perks:</strong> Free meals, 18% PTO, Gym membership</p>
+                <button class="mt-2 w-full bg-orange-600 text-white py-2 rounded hover:bg-orange-700 transition">
+                    Apply Now
+                </button>
+            </div>
+        </div>
+        <script>
+            function toggleDetails(id) {
+                const el = document.getElementById(id);
+                const icon = document.getElementById('icon-' + id);
+                if (el.classList.contains('hidden')) {
+                    el.classList.remove('hidden');
+                    icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />'; // collapse icon
+                } else {
+                    el.classList.add('hidden');
+                    icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />'; // expand icon
+                }
+            }
+        </script>
+    </section>
+
+    <!-- ==================== Variant 5: Card with Action Bar ==================== -->
+    <section class="mb-12">
+        <h2 class="text-2xl font-semibold mb-4">Variant 5 – Action Bar</h2>
+        <p class="text-gray-600 mb-4">
+            Places primary actions (Save, Share, Apply) in a sticky footer bar, encouraging interaction without scrolling back.
+        </p>
+        <div class="max-w-sm mx-auto bg-white rounded-lg shadow-lg overflow-hidden flex flex-col h-96">
+            <div class="p-4 flex-1">
+                <div class="flex items-center mb-3">
+                    <img src="https://www.google.com/s2/favicons?domain=apple.com&sz=64" alt="Apple" class="w-10 h-10 mr-3">
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900">Hardware Engineer – AR/VR Team</h3>
+                        <p class="text-gray-500 text-sm">Apple</p>
+                    </div>
+                </div>
+                <p class="text-gray-600 mb-1"><strong>Location:</strong> Cupertino, CA (Hybrid)</p>
+                <p class="text-gray-600 mb-1"><strong>Compensation:</strong> $190k – $240k + stock</p>
+                <p class="text-gray-600 mb-1"><strong>Posted:</strong> 5 days ago</p>
+            </div>
+            <div class="bg-gray-50 border-t p-3 flex justify-around">
+                <button class="flex items-center text-gray-600 hover:text-gray-800">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                    Save
+                </button>
+                <button class="flex items-center text-gray-600 hover:text-gray-800">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 8a6 6 0 11-12 0 6 6 0 0112 0z" /></svg>
+                    Share
+                </button>
+                <button class="bg-blue-600 text-white py-1 px-3 rounded hover:bg-blue-700 transition">
+                    Apply
+                </button>
+            </div>
+        </div>
+    </section>
+
+</body>
+
+</html>

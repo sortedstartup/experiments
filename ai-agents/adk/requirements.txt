@@ -1,0 +1,9 @@
+# Core ADK runtime (already used by `uv run adk web`)
+google-adk==1.21.0
+
+# Required for provider-style models like "openai/gpt-4o-mini" (OpenAI-compatible endpoints)
+litellm>=1.75.5
+
+
+
+

@@ -1,0 +1,293 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+</head>
+
+<body class="bg-gray-100 p-8">
+    <div class="max-w-6xl mx-auto space-y-12">
+
+        <!-- Variant 1: Minimalist Corporate Card -->
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center space-x-4">
+                        <img src="https://www.google.com/s2/favicons?domain=meta.com&sz=64" alt="Meta Logo" class="w-12 h-12" />
+                        <div>
+                            <h2 class="text-xl font-bold text-gray-900">Software Engineer, Frontend</h2>
+                            <p class="text-gray-600">Meta | Menlo Park, CA | Hybrid</p>
+                        </div>
+                    </div>
+                    <button class="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+                        Apply Now
+                    </button>
+                </div>
+                <p class="text-gray-700 mb-4">
+                    We are looking for a passionate Frontend Engineer to join our team and help build the next generation of social connectivity platforms. Experience with React and GraphQL is required.
+                </p>
+                <div class="flex flex-wrap gap-2 mb-4">
+                    <span class="bg-gray-200 text-gray-800 px-3 py-1 rounded-full text-sm">React</span>
+                    <span class="bg-gray-200 text-gray-800 px-3 py-1 rounded-full text-sm">GraphQL</span>
+                    <span class="bg-gray-200 text-gray-800 px-3 py-1 rounded-full text-sm">JavaScript</span>
+                    <span class="bg-gray-200 text-gray-800 px-3 py-1 rounded-full text-sm">TypeScript</span>
+                </div>
+                <div class="flex items-center justify-between text-sm text-gray-500">
+                    <div class="flex items-center space-x-4">
+                        <span><i class="fas fa-clock mr-1"></i> Posted 3 days ago</span>
+                        <span><i class="fas fa-briefcase mr-1"></i> Full-time</span>
+                    </div>
+                    <span class="font-semibold text-green-600">$180,000 - $220,000</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- UX Thinking for Variant 1 -->
+        <div class="bg-gray-50 p-6 rounded-lg">
+            <h3 class="text-lg font-bold text-gray-900 mb-2">Variant 1: Minimalist Corporate Card</h3>
+            <p class="text-gray-700">
+                This design follows a <strong>minimalist corporate aesthetic</strong>, which is clean, professional, and easy to scan. The use of ample white space ensures that the user's attention is drawn to the most important details: the job title, company, and call-to-action (Apply Now).
+                <br /><br />
+                The <strong>hierarchy of information</strong> is clear, with the job title and company name prominently displayed at the top. The salary range is placed at the bottom-right, as it is a key decision-making factor but not the primary focus. The tags for skills are subtle but visible, allowing users to quickly assess if they meet the requirements.
+                <br /><br />
+                The <strong>hover effect</strong> (shadow growth) adds interactivity and feedback, making the card feel dynamic without overwhelming the user. This variant is ideal for corporate job portals where professionalism and clarity are paramount.
+            </p>
+        </div>
+
+        <!-- Variant 2: Modern Glassmorphic Card -->
+        <div class="bg-white/10 backdrop-blur-lg rounded-xl shadow-lg overflow-hidden border border-white/20 hover:shadow-2xl transition-shadow duration-300">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center space-x-4">
+                        <img src="https://www.google.com/s2/favicons?domain=google.com&sz=64" alt="Google Logo" class="w-12 h-12 bg-white/20 p-2 rounded-full" />
+                        <div>
+                            <h2 class="text-xl font-bold text-white">Data Scientist, AI Research</h2>
+                            <p class="text-white/80">Google DeepMind | Mountain View, CA | Remote</p>
+                        </div>
+                    </div>
+                    <button class="bg-white/20 text-white px-4 py-2 rounded-lg font-semibold hover:bg-white/30 transition-colors backdrop-blur-sm">
+                        Apply Now
+                    </button>
+                </div>
+                <p class="text-white/90 mb-4">
+                    Join Google DeepMind's AI Research team to push the boundaries of machine learning and artificial intelligence. We are looking for experts in deep learning, NLP, and reinforcement learning.
+                </p>
+                <div class="flex flex-wrap gap-2 mb-4">
+                    <span class="bg-white/20 text-white px-3 py-1 rounded-full text-sm">TensorFlow</span>
+                    <span class="bg-white/20 text-white px-3 py-1 rounded-full text-sm">PyTorch</span>
+                    <span class="bg-white/20 text-white px-3 py-1 rounded-full text-sm">NLP</span>
+                    <span class="bg-white/20 text-white px-3 py-1 rounded-full text-sm">Reinforcement Learning</span>
+                </div>
+                <div class="flex items-center justify-between text-sm text-white/70">
+                    <div class="flex items-center space-x-4">
+                        <span><i class="fas fa-clock mr-1"></i> Posted 1 week ago</span>
+                        <span><i class="fas fa-briefcase mr-1"></i> Full-time</span>
+                    </div>
+                    <span class="font-semibold text-white">$200,000 - $250,000</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- UX Thinking for Variant 2 -->
+        <div class="bg-gray-50 p-6 rounded-lg">
+            <h3 class="text-lg font-bold text-gray-900 mb-2">Variant 2: Modern Glassmorphic Card</h3>
+            <p class="text-gray-700">
+                This variant leverages the <strong>glassmorphism</strong> design trend, which creates a futuristic and premium feel. The use of transparency, blur effects, and subtle borders gives the card a modern, cutting-edge look that aligns well with tech companies like Google DeepMind.
+                <br /><br />
+                The <strong>color scheme</strong> is dark and sleek, which reduces eye strain and adds a sense of sophistication. The white text with varying opacity ensures readability while maintaining the glass-like aesthetic. The call-to-action button blends into the design but stands out enough to be clickable.
+                <br /><br />
+                This design is ideal for <strong>tech-savvy audiences</strong> and companies that want to emphasize innovation and modernity. The glassmorphic effect also creates a sense of depth, making the card feel more engaging and interactive.
+            </p>
+        </div>
+
+        <!-- Variant 3: Bold and High-Contrast Card -->
+        <div class="bg-black rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300">
+            <div class="p-6 text-white">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center space-x-4">
+                        <img src="https://www.google.com/s2/favicons?domain=netflix.com&sz=64" alt="Netflix Logo" class="w-12 h-12 bg-red-600 p-2 rounded" />
+                        <div>
+                            <h2 class="text-xl font-bold">Senior Backend Engineer</h2>
+                            <p class="text-gray-400">Netflix | Los Gatos, CA | Hybrid</p>
+                        </div>
+                    </div>
+                    <button class="bg-red-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-700 transition-colors">
+                        Apply Now
+                    </button>
+                </div>
+                <p class="text-gray-300 mb-4">
+                    Netflix is seeking a Senior Backend Engineer to join our Content Delivery team. You will work on scaling our infrastructure to support millions of users worldwide. Experience with distributed systems and cloud computing is required.
+                </p>
+                <div class="flex flex-wrap gap-2 mb-4">
+                    <span class="bg-gray-800 text-white px-3 py-1 rounded-full text-sm">AWS</span>
+                    <span class="bg-gray-800 text-white px-3 py-1 rounded-full text-sm">Distributed Systems</span>
+                    <span class="bg-gray-800 text-white px-3 py-1 rounded-full text-sm">Go</span>
+                    <span class="bg-gray-800 text-white px-3 py-1 rounded-full text-sm">Kubernetes</span>
+                </div>
+                <div class="flex items-center justify-between text-sm text-gray-400">
+                    <div class="flex items-center space-x-4">
+                        <span><i class="fas fa-clock mr-1"></i> Posted 5 days ago</span>
+                        <span><i class="fas fa-briefcase mr-1"></i> Full-time</span>
+                    </div>
+                    <span class="font-semibold text-white">$220,000 - $260,000</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- UX Thinking for Variant 3 -->
+        <div class="bg-gray-50 p-6 rounded-lg">
+            <h3 class="text-lg font-bold text-gray-900 mb-2">Variant 3: Bold and High-Contrast Card</h3>
+            <p class="text-gray-700">
+                This design uses a <strong>bold and high-contrast</strong> approach, with a black background and bright accent colors (e.g., Netflix's signature red). This creates a striking visual impact that immediately draws attention, making it ideal for companies with strong brand identities.
+                <br /><br />
+                The <strong>high contrast</strong> ensures readability and accessibility, even for users with visual impairments. The use of a dark background also reduces eye strain in low-light environments, which is a common scenario for users browsing job listings.
+                <br /><br />
+                The <strong>call-to-action button</strong> is designed to stand out with a bright red color, which is Netflix's brand color. This reinforces brand recognition and creates a sense of urgency. This variant is perfect for companies that want to make a bold statement and leave a lasting impression.
+            </p>
+        </div>
+
+        <!-- Variant 4: Warm and Inviting Card -->
+        <div class="bg-gradient-to-r from-orange-100 to-pink-100 rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center space-x-4">
+                        <img src="https://www.google.com/s2/favicons?domain=amazon.com&sz=64" alt="Amazon Logo" class="w-12 h-12 bg-orange-500 p-2 rounded-full" />
+                        <div>
+                            <h2 class="text-xl font-bold text-gray-900">UX Designer, Amazon Web Services</h2>
+                            <p class="text-gray-700">Amazon | Seattle, WA | Hybrid</p>
+                        </div>
+                    </div>
+                    <button class="bg-orange-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-orange-600 transition-colors">
+                        Apply Now
+                    </button>
+                </div>
+                <p class="text-gray-700 mb-4">
+                    Join Amazon Web Services as a UX Designer and shape the future of cloud computing. We are looking for designers who are passionate about creating intuitive and delightful user experiences. Experience with Figma and user research is a plus.
+                </p>
+                <div class="flex flex-wrap gap-2 mb-4">
+                    <span class="bg-white text-gray-800 px-3 py-1 rounded-full text-sm">Figma</span>
+                    <span class="bg-white text-gray-800 px-3 py-1 rounded-full text-sm">User Research</span>
+                    <span class="bg-white text-gray-800 px-3 py-1 rounded-full text-sm">Wireframing</span>
+                    <span class="bg-white text-gray-800 px-3 py-1 rounded-full text-sm">Prototyping</span>
+                </div>
+                <div class="flex items-center justify-between text-sm text-gray-600">
+                    <div class="flex items-center space-x-4">
+                        <span><i class="fas fa-clock mr-1"></i> Posted 2 weeks ago</span>
+                        <span><i class="fas fa-briefcase mr-1"></i> Full-time</span>
+                    </div>
+                    <span class="font-semibold text-gray-900">$150,000 - $190,000</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- UX Thinking for Variant 4 -->
+        <div class="bg-gray-50 p-6 rounded-lg">
+            <h3 class="text-lg font-bold text-gray-900 mb-2">Variant 4: Warm and Inviting Card</h3>
+            <p class="text-gray-700">
+                This variant uses a <strong>warm and inviting</strong> color palette, with soft gradients and earthy tones. The goal is to create a friendly and approachable feel, which is particularly effective for roles in design and creative fields.
+                <br /><br />
+                The <strong>gradient background</strong> adds visual interest without overwhelming the content. The use of white for tags and text ensures readability, while the orange accent color (Amazon's brand color) adds a touch of vibrancy.
+                <br /><br />
+                This design is ideal for <strong>user-centric roles</strong> like UX Designers, as it reflects the empathy and creativity required for such positions. The warm tones evoke a sense of comfort and inclusivity, making the job listing feel more welcoming to a diverse range of candidates.
+            </p>
+        </div>
+
+        <!-- Variant 5: Interactive Card with Expandable Details -->
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300" id="interactive-card">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center space-x-4">
+                        <img src="https://www.google.com/s2/favicons?domain=apple.com&sz=64" alt="Apple Logo" class="w-12 h-12 bg-gray-900 p-2 rounded-full" />
+                        <div>
+                            <h2 class="text-xl font-bold text-gray-900">Machine Learning Engineer</h2>
+                            <p class="text-gray-600">Apple | Cupertino, CA | Onsite</p>
+                        </div>
+                    </div>
+                    <button class="bg-gray-900 text-white px-4 py-2 rounded-lg font-semibold hover:bg-gray-800 transition-colors" onclick="toggleDetails()">
+                        <i class="fas fa-chevron-down mr-2" id="chevron-icon"></i> Details
+                    </button>
+                </div>
+                <p class="text-gray-700 mb-4" id="short-desc">
+                    Apple is looking for a Machine Learning Engineer to join our AI/ML team. You will work on cutting-edge projects that redefine user experiences across our ecosystem.
+                </p>
+                <div class="hidden overflow-hidden transition-all duration-300" id="full-desc">
+                    <p class="text-gray-700 mb-4">
+                        As a Machine Learning Engineer at Apple, you will collaborate with cross-functional teams to develop and deploy machine learning models that power features in products like Siri, Camera, and Apple Watch. We are looking for candidates with expertise in deep learning, computer vision, and natural language processing.
+                        <br /><br />
+                        Key Responsibilities:
+                        <ul class="list-disc list-inside ml-4 mt-2">
+                            <li>Develop and train machine learning models for Apple's products and services.</li>
+                            <li>Collaborate with software engineers to integrate models into production systems.</li>
+                            <li>Optimize models for performance, scalability, and efficiency.</li>
+                            <li>Stay up-to-date with the latest advancements in AI/ML research.</li>
+                        </ul>
+                        <br />
+                        Qualifications:
+                        <ul class="list-disc list-inside ml-4">
+                            <li>PhD or Master's degree in Computer Science, Machine Learning, or a related field.</li>
+                            <li>Experience with TensorFlow, PyTorch, or similar frameworks.</li>
+                            <li>Strong programming skills in Python, Swift, or C++.</li>
+                            <li>Published research in top-tier AI/ML conferences is a plus.</li>
+                        </ul>
+                    </p>
+                </div>
+                <div class="flex flex-wrap gap-2 mb-4" id="tags">
+                    <span class="bg-gray-200 text-gray-800 px-3 py-1 rounded-full text-sm">TensorFlow</span>
+                    <span class="bg-gray-200 text-gray-800 px-3 py-1 rounded-full text-sm">PyTorch</span>
+                    <span class="bg-gray-200 text-gray-800 px-3 py-1 rounded-full text-sm">Computer Vision</span>
+                </div>
+                <div class="flex items-center justify-between text-sm text-gray-500">
+                    <div class="flex items-center space-x-4">
+                        <span><i class="fas fa-clock mr-1"></i> Posted 1 day ago</span>
+                        <span><i class="fas fa-briefcase mr-1"></i> Full-time</span>
+                    </div>
+                    <span class="font-semibold text-green-600">$210,000 - $270,000</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- UX Thinking for Variant 5 -->
+        <div class="bg-gray-50 p-6 rounded-lg">
+            <h3 class="text-lg font-bold text-gray-900 mb-2">Variant 5: Interactive Card with Expandable Details</h3>
+            <p class="text-gray-700">
+                This variant introduces <strong>interactivity</strong> to the job card, allowing users to expand and collapse details as needed. This is particularly useful for job listings with lengthy descriptions or multiple sections, as it prevents overwhelming the user with too much information upfront.
+                <br /><br />
+                The <strong>progressive disclosure</strong> pattern ensures that the card remains clean and scannable while still providing access to all the necessary details. The chevron icon provides a visual cue that the card is interactive, and the smooth transition effect enhances the user experience.
+                <br /><br />
+                This design is ideal for <strong>complex or senior roles</strong> where additional context (e.g., responsibilities, qualifications) is critical for candidates to assess their fit. It balances simplicity with depth, making it suitable for both quick scans and in-depth reviews.
+            </p>
+        </div>
+
+    </div>
+    
+    <script>
+        function toggleDetails() {
+            const fullDesc = document.getElementById('full-desc');
+            const chevronIcon = document.getElementById('chevron-icon');
+            const shortDesc = document.getElementById('short-desc');
+            const tags = document.getElementById('tags');
+            
+            if (fullDesc.classList.contains('hidden')) {
+                fullDesc.classList.remove('hidden');
+                fullDesc.classList.add('block');
+                chevronIcon.classList.remove('fa-chevron-down');
+                chevronIcon.classList.add('fa-chevron-up');
+                shortDesc.classList.add('hidden');
+                tags.classList.add('hidden');
+            } else {
+                fullDesc.classList.add('hidden');
+                fullDesc.classList.remove('block');
+                chevronIcon.classList.remove('fa-chevron-up');
+                chevronIcon.classList.add('fa-chevron-down');
+                shortDesc.classList.remove('hidden');
+                tags.classList.remove('hidden');
+            }
+        }
+    </script>
+
+</body>
+
+</html>

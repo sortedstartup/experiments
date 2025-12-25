@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>Job Card Variations - FANG</title>
+</head>
+
+<body class="bg-gray-100 p-8 font-sans">
+
+    <div class="max-w-6xl mx-auto space-y-12">
+        <header class="text-center mb-12">
+            <h1 class="text-4xl font-extrabold text-gray-900">FANG Job Card UX Variations</h1>
+            <p class="text-gray-600 mt-2">Exploring different design patterns for premium tech job listings.</p>
+        </header>
+
+        <!-- Variation 1: Minimalist & Clean -->
+        <section>
+            <h2 class="text-2xl font-bold mb-4 text-gray-800">1. Minimalist & Clean (Skimmable)</h2>
+            <p class="text-sm text-gray-600 mb-6 max-w-2xl">
+                <strong>UX Thinking:</strong> Designed for high-frequency searchers. It reduces cognitive load by stripping away non-essential elements. Clear hierarchy puts the title and company front and center.
+            </p>
+            <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow max-w-md">
+                <div class="flex items-start justify-between">
+                    <div class="flex items-center space-x-4">
+                        <img src="https://www.google.com/s2/favicons?domain=google.com&sz=64" alt="Google Logo" class="w-12 h-12 rounded-lg border p-1">
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-900 leading-tight">Senior Software Engineer</h3>
+                            <p class="text-gray-600 text-sm">Google • Mountain View, CA</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4 flex items-center justify-between">
+                    <span class="text-gray-800 font-medium">$180k - $250k</span>
+                    <button class="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-semibold hover:bg-blue-700 transition">Apply Now</button>
+                </div>
+            </div>
+        </section>
+
+        <hr class="border-gray-300">
+
+        <!-- Variation 2: Feature-Rich & Informative -->
+        <section>
+            <h2 class="text-2xl font-bold mb-4 text-gray-800">2. Feature-Rich (Contextual)</h2>
+            <p class="text-sm text-gray-600 mb-6 max-w-2xl">
+                <strong>UX Thinking:</strong> Aimed at passive candidates who need more "hooks" to engage. Includes tags for remote work, benefits, and the specific team to help candidates assess fit immediately.
+            </p>
+            <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-lg max-w-lg">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="flex items-center space-x-4">
+                        <img src="https://www.google.com/s2/favicons?domain=meta.com&sz=64" alt="Meta Logo" class="w-12 h-12 rounded-full border">
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900">Product Designer</h3>
+                            <p class="text-blue-600 text-sm font-medium">Meta • Reality Labs</p>
+                        </div>
+                    </div>
+                    <button class="text-gray-400 hover:text-red-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="flex flex-wrap gap-2 mb-4">
+                    <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-medium">Remote</span>
+                    <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-medium">Relocation Asst.</span>
+                    <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-medium">Hiring Fast</span>
+                </div>
+                <p class="text-gray-600 text-sm mb-4 line-clamp-2">Help us build the future of the metaverse. You'll work on immersive experiences across VR and AR...</p>
+                <div class="flex items-center justify-between pt-4 border-t border-gray-100">
+                    <span class="text-gray-500 text-xs italic">Posted 2 days ago</span>
+                    <a href="#" class="text-blue-600 font-bold hover:underline">View Details →</a>
+                </div>
+            </div>
+        </section>
+
+        <hr class="border-gray-300">
+
+        <!-- Variation 3: Brand-Centric (Visual) -->
+        <section>
+            <h2 class="text-2xl font-bold mb-4 text-gray-800">3. Brand-Centric (Immersive)</h2>
+            <p class="text-sm text-gray-600 mb-6 max-w-2xl">
+                <strong>UX Thinking:</strong> Uses imagery to convey company culture and prestige. This creates an emotional connection and makes the listing feel premium, like the company itself.
+            </p>
+            <div class="bg-white rounded-2xl overflow-hidden shadow-xl max-w-md group">
+                <div class="relative h-32 overflow-hidden">
+                    <img src="https://picsum.photos/seed/amazon/400/300" alt="Amazon Office" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
+                         <img src="https://www.google.com/s2/favicons?domain=amazon.com&sz=64" alt="Amazon Logo" class="w-16 h-16 bg-white rounded-xl p-2 shadow-lg">
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-extrabold text-gray-900 mb-1">AWS Solutions Architect</h3>
+                    <p class="text-orange-600 font-semibold mb-4 italic text-sm italic">Amazon • Seattle, WA</p>
+                    <ul class="text-sm text-gray-600 space-y-2 mb-6">
+                        <li class="flex items-center">
+                            <svg class="w-4 h-4 mr-2 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                            Comprehensive Benefits
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-4 h-4 mr-2 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                            Stock Options (RSUs)
+                        </li>
+                    </ul>
+                    <button class="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-3 rounded-lg transition">Apply with Amazon</button>
+                </div>
+            </div>
+        </section>
+
+        <hr class="border-gray-300">
+
+        <!-- Variation 4: Action-Oriented (Conversion Focused) -->
+        <section>
+            <h2 class="text-2xl font-bold mb-4 text-gray-800">4. Action-Oriented (High Conversion)</h2>
+            <p class="text-sm text-gray-600 mb-6 max-w-2xl">
+                <strong>UX Thinking:</strong> Simplifies the decision-making process by highlighting a single primary action and one secondary action. The contrast between the dark background and light CTA drives the user's eye to "Apply."
+            </p>
+            <div class="bg-zinc-900 text-white rounded-2xl p-8 max-w-md shadow-2xl">
+                <div class="flex items-center space-x-4 mb-6">
+                    <img src="https://www.google.com/s2/favicons?domain=apple.com&sz=64" alt="Apple Logo" class="w-10 h-10 invert brightness-0">
+                    <div>
+                        <p class="text-zinc-400 text-xs uppercase tracking-widest font-bold">New Opening</p>
+                        <h3 class="text-2xl font-bold">iOS Frameworks Engineer</h3>
+                    </div>
+                </div>
+                <p class="text-zinc-300 text-sm mb-8">Join the Core OS team at Apple. Shape the future of macOS, iOS, and visionOS by building high-performance frameworks.</p>
+                <div class="grid grid-cols-2 gap-4">
+                    <button class="bg-white text-black font-bold py-3 rounded-xl hover:bg-zinc-200 transition">Apply Now</button>
+                    <button class="bg-zinc-800 text-white font-bold py-3 rounded-xl hover:bg-zinc-700 transition">Save Job</button>
+                </div>
+            </div>
+        </section>
+
+        <hr class="border-gray-300">
+
+        <!-- Variation 5: Compact/Mobile-First -->
+        <section>
+            <h2 class="text-2xl font-bold mb-4 text-gray-800">5. Compact (Space Efficient)</h2>
+            <p class="text-sm text-gray-600 mb-6 max-w-2xl">
+                <strong>UX Thinking:</strong> Horizontal layout optimized for feed-style interfaces or mobile screens. Information density is high but maintainable through clear separation.
+            </p>
+            <div class="bg-white border-l-4 border-red-600 rounded-r-lg p-4 shadow-sm flex items-center justify-between max-w-2xl hover:bg-gray-50 transition cursor-pointer">
+                <div class="flex items-center space-x-4">
+                    <img src="https://www.google.com/s2/favicons?domain=netflix.com&sz=64" alt="Netflix Logo" class="w-10 h-10">
+                    <div>
+                        <h3 class="font-bold text-gray-900">Machine Learning Research Scientist</h3>
+                        <p class="text-sm text-gray-500">Netflix • Los Gatos • $250k+</p>
+                    </div>
+                </div>
+                <div class="hidden sm:flex items-center space-x-2">
+                    <span class="bg-red-50 text-red-600 px-2 py-1 rounded text-[10px] font-bold uppercase tracking-tight">Full-time</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-400">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <footer class="text-center py-20 text-gray-400 text-xs">
+        &copy; 2025 Job Widget Designer Agent. Built with Tailwind CSS.
+    </footer>
+
+</body>
+
+</html>

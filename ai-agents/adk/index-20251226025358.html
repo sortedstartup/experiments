@@ -1,0 +1,289 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        .mobile-frame {
+            width: 375px;
+            height: 667px;
+            border: 8px solid #333;
+            border-radius: 40px;
+            overflow: hidden;
+            position: relative;
+            background: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 p-10 flex flex-wrap gap-10 justify-center">
+
+    <!-- Variation 1: The Clean Academic -->
+    <div class="flex flex-col items-center">
+        <h2 class="mb-4 font-bold text-xl">1. The Clean Academic</h2>
+        <div class="mobile-frame bg-white shadow-2xl">
+            <!-- Header -->
+            <div class="p-4 border-b flex justify-between items-center bg-white sticky top-0 z-10">
+                <div>
+                    <p class="text-xs text-blue-600 font-bold uppercase tracking-wider">Module 2: Basics</p>
+                    <h1 class="text-lg font-bold">Introduction to UI</h1>
+                </div>
+                <div class="text-xs font-mono bg-gray-100 px-2 py-1 rounded">Card 3/12</div>
+            </div>
+            <!-- Progress Bar -->
+            <div class="w-full h-1 bg-gray-200">
+                <div class="bg-blue-600 h-full w-1/4"></div>
+            </div>
+            <!-- Scrollable Content -->
+            <div class="flex-1 overflow-y-auto p-5 space-y-4">
+                <p class="text-gray-700 leading-relaxed">
+                    UI Design is the process designers use to build interfaces in software or computerized devices, focusing on looks or style.
+                </p>
+                <img src="https://picsum.photos/400/300?random=1" class="rounded-lg w-full shadow-sm" alt="UI Design">
+                <p class="text-gray-700 leading-relaxed">
+                    Designers aim to create interfaces which users find easy to use and pleasurable. UI design refers to graphical user interfaces and other forms—e.g., voice-controlled interfaces.
+                </p>
+                <div class="relative rounded-lg overflow-hidden bg-black aspect-video flex items-center justify-center">
+                     <span class="text-white text-sm">Video: Principles of Layout</span>
+                     <div class="absolute inset-0 bg-black/20 flex items-center justify-center">
+                        <div class="w-12 h-12 bg-white/30 rounded-full flex items-center justify-center backdrop-blur-sm">
+                            <div class="w-0 h-0 border-t-8 border-t-transparent border-l-12 border-l-white border-b-8 border-b-transparent ml-1"></div>
+                        </div>
+                     </div>
+                </div>
+                <p class="text-gray-700 leading-relaxed">
+                    Let's look at how spacing affects readability in mobile environments.
+                </p>
+            </div>
+            <!-- Footer/Swipe Indicator -->
+            <div class="p-4 text-center text-gray-400 text-xs border-t">
+                Swipe left to continue
+            </div>
+        </div>
+        <div class="mt-4 max-w-[375px] text-sm text-gray-600">
+            <strong>UX Thinking:</strong> High readability focus. Uses a fixed header for context (Module/Topic) and a persistent progress bar to reduce cognitive load. The clean white space mimics a textbook but with modern digital affordances.
+        </div>
+    </div>
+
+    <!-- Variation 2: Immersive Media-First -->
+    <div class="flex flex-col items-center">
+        <h2 class="mb-4 font-bold text-xl">2. Immersive Media-First</h2>
+        <div class="mobile-frame bg-gray-900 text-white shadow-2xl">
+            <!-- Hero Image/Video -->
+            <div class="h-1/2 relative">
+                <img src="https://picsum.photos/400/600?random=2" class="w-full h-full object-cover opacity-80" alt="Background">
+                <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent"></div>
+                <div class="absolute bottom-4 left-5 right-5">
+                    <span class="bg-yellow-400 text-black text-[10px] font-bold px-2 py-0.5 rounded-full mb-2 inline-block">VIDEO LESSON</span>
+                    <h1 class="text-2xl font-black">Composition Rules</h1>
+                </div>
+                <div class="absolute top-4 right-4 bg-white/20 backdrop-blur-md rounded-full w-10 h-10 flex items-center justify-center text-xs border border-white/30">
+                    4/10
+                </div>
+            </div>
+            <!-- Scrollable Content -->
+            <div class="flex-1 overflow-y-auto p-6 space-y-4 -mt-2 relative z-10">
+                <p class="text-gray-300 text-lg font-light leading-snug">
+                    Great composition is the foundation of any visual work. It guides the eye.
+                </p>
+                <div class="border-l-4 border-yellow-400 pl-4 py-1 italic text-gray-400">
+                    "Design is thinking made visual." — Saul Bass
+                </div>
+                <p class="text-gray-300">
+                    In this card, we explore the 'Rule of Thirds' and how it applies to mobile interface hierarchy. Notice how the hero image above uses the top half of your screen.
+                </p>
+                <div class="p-4 bg-white/5 rounded-xl border border-white/10">
+                    <h4 class="font-bold mb-2">Key Takeaway</h4>
+                    <p class="text-sm text-gray-400">Balance is not about symmetry, but about visual weight distribution.</p>
+                </div>
+            </div>
+             <!-- Swipe Hint -->
+             <div class="h-12 flex justify-center items-center gap-1 pb-4">
+                <div class="w-2 h-2 rounded-full bg-white"></div>
+                <div class="w-2 h-2 rounded-full bg-white/20"></div>
+                <div class="w-2 h-2 rounded-full bg-white/20"></div>
+            </div>
+        </div>
+        <div class="mt-4 max-w-[375px] text-sm text-gray-600">
+            <strong>UX Thinking:</strong> Designed for visual learners. It uses a "Snap" header that feels premium and cinematic. Dark mode reduces eye strain for long reading sessions. Pagination dots at the bottom provide clear navigation feedback.
+        </div>
+    </div>
+
+    <!-- Variation 3: The Micro-Learning Bit -->
+    <div class="flex flex-col items-center">
+        <h2 class="mb-4 font-bold text-xl">3. The Interactive Bit</h2>
+        <div class="mobile-frame bg-indigo-50 shadow-2xl">
+            <!-- Top Nav -->
+            <div class="p-6 flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <img src="https://www.google.com/s2/favicons?domain=duolingo.com&sz=64" class="w-6 h-6">
+                    <span class="font-bold text-indigo-900">Logic Pro</span>
+                </div>
+                <button class="text-indigo-400">✕</button>
+            </div>
+            
+            <div class="flex-1 flex flex-col p-6">
+                <!-- Content Card (Floated) -->
+                <div class="bg-white rounded-3xl shadow-xl flex-1 flex flex-col overflow-hidden border-b-4 border-indigo-200">
+                    <div class="p-6 overflow-y-auto flex-1">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Boolean Logic</h3>
+                        <p class="text-gray-600 mb-6">In programming, a boolean is a data type that has one of two possible values: <span class="font-mono bg-yellow-100 px-1">true</span> or <span class="font-mono bg-yellow-100 px-1">false</span>.</p>
+                        
+                        <div class="bg-indigo-50 p-4 rounded-2xl mb-4">
+                            <p class="text-xs font-bold text-indigo-400 mb-2 uppercase">Think about it</p>
+                            <p class="text-sm text-indigo-900">Is a light switch a boolean? Yes! It is either ON or OFF.</p>
+                        </div>
+
+                        <img src="https://picsum.photos/400/300?random=3" class="rounded-2xl w-full mb-4" alt="Logic">
+                    </div>
+                    
+                    <!-- Quick Action -->
+                    <div class="p-6 bg-white border-t border-gray-100">
+                        <button class="w-full bg-indigo-600 text-white font-bold py-4 rounded-2xl shadow-lg shadow-indigo-200 active:transform active:scale-95 transition-all">
+                            GOT IT!
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="h-8 flex items-center justify-center">
+                <div class="w-1/3 h-1.5 bg-indigo-200 rounded-full"></div>
+            </div>
+        </div>
+        <div class="mt-4 max-w-[375px] text-sm text-gray-600">
+            <strong>UX Thinking:</strong> Inspired by Duolingo. Each card is a "task". It uses a floating card UI to make the content feel lightweight and manageable. The big "Got It" button acts as a psychological checkpoint.
+        </div>
+    </div>
+
+    <!-- Variation 4: Glassmorphic Modern -->
+    <div class="flex flex-col items-center">
+        <h2 class="mb-4 font-bold text-xl">4. Glassmorphic Modern</h2>
+        <div class="mobile-frame bg-gradient-to-br from-purple-500 via-pink-500 to-orange-400 shadow-2xl border-none">
+            <!-- Background Decoration -->
+            <div class="absolute top-20 -left-10 w-40 h-40 bg-white/20 rounded-full blur-3xl"></div>
+            <div class="absolute bottom-20 -right-10 w-40 h-40 bg-blue-400/30 rounded-full blur-3xl"></div>
+
+            <!-- Header -->
+            <div class="p-6 flex justify-between items-center text-white z-10">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-lg bg-white/20 backdrop-blur-md flex items-center justify-center">
+                         <img src="https://www.google.com/s2/favicons?domain=apple.com&sz=64" class="w-4 h-4 invert">
+                    </div>
+                    <span class="text-sm font-medium">Design Systems</span>
+                </div>
+                <span class="text-xs opacity-70">Step 08</span>
+            </div>
+
+            <!-- Main Content Container -->
+            <div class="flex-1 mx-4 mb-20 bg-white/10 backdrop-blur-xl border border-white/20 rounded-[32px] overflow-hidden flex flex-col shadow-2xl">
+                <div class="p-6 overflow-y-auto flex-1 text-white">
+                    <h2 class="text-2xl font-semibold mb-4">Color Variables</h2>
+                    <p class="text-white/80 mb-6 leading-relaxed">
+                        Design systems use tokens to manage color at scale. Instead of hard-coding hex values, we use semantic names.
+                    </p>
+                    
+                    <div class="space-y-3 mb-6">
+                        <div class="flex items-center gap-3 bg-white/10 p-3 rounded-xl">
+                            <div class="w-10 h-10 rounded-lg bg-blue-500 border border-white/20"></div>
+                            <div>
+                                <div class="text-xs text-white/50">Primary / Main</div>
+                                <div class="text-sm font-mono">#3B82F6</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3 bg-white/10 p-3 rounded-xl">
+                            <div class="w-10 h-10 rounded-lg bg-purple-500 border border-white/20"></div>
+                            <div>
+                                <div class="text-xs text-white/50">Primary / Accent</div>
+                                <div class="text-sm font-mono">#A855F7</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p class="text-white/80 leading-relaxed">
+                        This allows for easy theme switching (Dark/Light) without touching the component layer.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Bottom Swipe Tab -->
+            <div class="absolute bottom-0 left-0 right-0 h-16 flex flex-col items-center justify-center text-white/60">
+                <div class="w-12 h-1.5 bg-white/30 rounded-full mb-2"></div>
+                <span class="text-[10px] font-bold tracking-widest uppercase">Swipe Up to Complete</span>
+            </div>
+        </div>
+        <div class="mt-4 max-w-[375px] text-sm text-gray-600">
+            <strong>UX Thinking:</strong> Trendy and engaging. The glassmorphic panel provides separation from the vibrant background while maintaining a sense of depth. Uses "Swipe Up" affordance common in social media apps (like Instagram stories).
+        </div>
+    </div>
+
+    <!-- Variation 5: The Structured Workshop -->
+    <div class="flex flex-col items-center">
+        <h2 class="mb-4 font-bold text-xl">5. The Structured Workshop</h2>
+        <div class="mobile-frame bg-gray-50 shadow-2xl border-gray-200">
+            <!-- Timeline/Progress vertical -->
+            <div class="p-4 bg-white flex items-center border-b">
+                <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden flex">
+                    <div class="w-1/3 bg-emerald-500"></div>
+                    <div class="w-1/3 bg-emerald-200 border-l border-white"></div>
+                    <div class="w-1/3 bg-gray-100 border-l border-white"></div>
+                </div>
+                <span class="ml-4 text-[10px] font-bold text-gray-400">33%</span>
+            </div>
+
+            <div class="flex-1 overflow-y-auto">
+                <div class="p-6">
+                    <h1 class="text-2xl font-serif text-gray-900 mb-2">Typography Basics</h1>
+                    <p class="text-sm text-emerald-600 font-medium mb-6">5 min read • Intermediate</p>
+                    
+                    <div class="prose prose-sm text-gray-600 space-y-4">
+                        <p>Typography is the art and technique of arranging type to make written language legible, readable and appealing when displayed.</p>
+                        
+                        <div class="relative group">
+                            <img src="https://picsum.photos/400/300?random=5" class="rounded shadow-md" alt="Typography">
+                            <div class="absolute bottom-2 left-2 bg-black/50 text-[10px] text-white px-2 py-1 rounded">Fig 1.1: Kerning Example</div>
+                        </div>
+
+                        <h3 class="font-bold text-gray-800 pt-4">Why it matters?</h3>
+                        <p>The arrangement of type involves selecting typefaces, point sizes, line lengths, line-spacing, and letter-spacing, and adjusting the space between pairs of letters.</p>
+                        
+                        <!-- Mini Quiz Widget -->
+                        <div class="bg-emerald-50 border border-emerald-100 rounded-xl p-4 mt-8">
+                            <p class="font-bold text-emerald-900 mb-2 text-xs uppercase tracking-tight">Quick Check</p>
+                            <p class="text-sm text-emerald-800 mb-3">Which term describes the space between two specific characters?</p>
+                            <div class="space-y-2">
+                                <button class="w-full text-left p-2 rounded bg-white border border-emerald-200 text-xs text-emerald-700">A) Leading</button>
+                                <button class="w-full text-left p-2 rounded bg-white border border-emerald-200 text-xs text-emerald-700">B) Kerning</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nav Bar -->
+            <div class="p-4 bg-white border-t flex justify-between items-center">
+                <button class="flex items-center gap-1 text-gray-400 text-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                    Prev
+                </button>
+                <div class="flex gap-1">
+                    <div class="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
+                    <div class="w-1.5 h-1.5 rounded-full bg-gray-200"></div>
+                    <div class="w-1.5 h-1.5 rounded-full bg-gray-200"></div>
+                </div>
+                <button class="flex items-center gap-1 text-emerald-600 font-bold text-sm">
+                    Next
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </button>
+            </div>
+        </div>
+        <div class="mt-4 max-w-[375px] text-sm text-gray-600">
+            <strong>UX Thinking:</strong> Professional and structured. Uses a serif font for the title to evoke "Learning" and "Authority". Includes an embedded micro-quiz to reinforce the card's content before moving to the next one, making it a "Module" based learning experience.
+        </div>
+    </div>
+
+</body>
+
+</html>

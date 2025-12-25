@@ -1,0 +1,225 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+</head>
+
+<body class="bg-gray-50 p-6">
+    <div class="max-w-6xl mx-auto space-y-12">
+
+        <!-- Variant 1: Minimalist Card with Logo and Key Details -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 max-w-2xl">
+            <div class="flex items-center gap-4 mb-4">
+                <img src="https://www.google.com/s2/favicons?domain=apple.com&sz=64" alt="Apple Logo" class="w-12 h-12" />
+                <div>
+                    <h2 class="text-xl font-semibold text-gray-900">Software Engineer, AI/ML</h2>
+                    <p class="text-gray-600">Apple • Cupertino, CA • Full-time</p>
+                </div>
+            </div>
+            <p class="text-gray-700 mb-4">
+                Join Apple's AI/ML team to develop cutting-edge machine learning models for our next-generation products. Work with a team of experts to push the boundaries of what's possible.
+            </p>
+            <div class="flex flex-wrap gap-2 mb-4">
+                <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">Python</span>
+                <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">TensorFlow</span>
+                <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">PyTorch</span>
+                <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">AI/ML</span>
+            </div>
+            <div class="flex justify-between items-center">
+                <span class="text-sm text-gray-500">Posted 3 days ago</span>
+                <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">Apply Now</button>
+            </div>
+        </div>
+        <p class="text-sm text-gray-600 max-w-2xl">
+            <strong>UX Thinking:</strong> This variant focuses on simplicity and clarity. The minimalist design ensures that the user's attention is drawn to the most critical information: the job title, company, location, and a brief description. The use of tags helps quickly convey the required skills, and the "Apply Now" button is prominently placed to encourage action.
+        </p>
+
+        <!-- Variant 2: Detailed Card with Company Insights -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 max-w-2xl">
+            <div class="flex items-center gap-4 mb-4">
+                <img src="https://www.google.com/s2/favicons?domain=google.com&sz=64" alt="Google Logo" class="w-12 h-12" />
+                <div>
+                    <h2 class="text-xl font-semibold text-gray-900">Senior Data Scientist</h2>
+                    <p class="text-gray-600">Google • Remote • Full-time</p>
+                </div>
+            </div>
+            <p class="text-gray-700 mb-4">
+                Lead data science initiatives at Google to drive insights and innovation. Collaborate with cross-functional teams to build scalable data solutions that impact millions of users worldwide.
+            </p>
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                    <h3 class="font-medium text-gray-900">Salary</h3>
+                    <p class="text-gray-600">$180,000 - $220,000</p>
+                </div>
+                <div>
+                    <h3 class="font-medium text-gray-900">Equity</h3>
+                    <p class="text-gray-600">0.05% - 0.1%</p>
+                </div>
+                <div>
+                    <h3 class="font-medium text-gray-900">Benefits</h3>
+                    <p class="text-gray-600">Health, Dental, 401k, Stock Options</p>
+                </div>
+                <div>
+                    <h3 class="font-medium text-gray-900">Team Size</h3>
+                    <p class="text-gray-600">10-15 members</p>
+                </div>
+            </div>
+            <div class="flex flex-wrap gap-2 mb-4">
+                <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">Python</span>
+                <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">SQL</span>
+                <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">BigQuery</span>
+                <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">Machine Learning</span>
+            </div>
+            <div class="flex justify-between items-center">
+                <span class="text-sm text-gray-500">Posted 1 week ago</span>
+                <div class="flex gap-2">
+                    <button class="border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition">Save</button>
+                    <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">Apply Now</button>
+                </div>
+            </div>
+        </div>
+        <p class="text-sm text-gray-600 max-w-2xl">
+            <strong>UX Thinking:</strong> This variant is designed for users who want more detailed information upfront. It includes salary, equity, benefits, and team size, which are critical factors for job seekers. The grid layout ensures that this additional information is organized and easy to scan. The "Save" button caters to users who may want to revisit the job later.
+        </p>
+
+        <!-- Variant 3: Visual Card with Company Culture -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 max-w-2xl">
+            <div class="flex items-center gap-4 mb-4">
+                <img src="https://www.google.com/s2/favicons?domain=netflix.com&sz=64" alt="Netflix Logo" class="w-12 h-12" />
+                <div>
+                    <h2 class="text-xl font-semibold text-gray-900">Product Designer</h2>
+                    <p class="text-gray-600">Netflix • Los Gatos, CA • Full-time</p>
+                </div>
+            </div>
+            <img src="https://picsum.photos/400/200" alt="Netflix Office" class="rounded-lg mb-4 w-full h-48 object-cover" />
+            <p class="text-gray-700 mb-4">
+                Join Netflix's design team to create intuitive and engaging user experiences for millions of users. Work in a fast-paced environment with a focus on innovation and creativity.
+            </p>
+            <div class="flex flex-wrap gap-2 mb-4">
+                <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">UI/UX Design</span>
+                <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">Figma</span>
+                <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">Prototyping</span>
+                <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">User Research</span>
+            </div>
+            <div class="flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <div class="flex text-yellow-400">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                    <span class="text-sm text-gray-600">4.7 (120 reviews)</span>
+                </div>
+                <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">Apply Now</button>
+            </div>
+        </div>
+        <p class="text-sm text-gray-600 max-w-2xl">
+            <strong>UX Thinking:</strong> This variant leverages visuals to create an emotional connection with the user. The image of the office or team gives a glimpse into the company culture, making the job opportunity feel more tangible and appealing. The inclusion of a rating system adds social proof, which can build trust and credibility.
+        </p>
+
+        <!-- Variant 4: Compact Card for Mobile Users -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 max-w-xs">
+            <div class="flex items-center gap-3 mb-3">
+                <img src="https://www.google.com/s2/favicons?domain=amazon.com&sz=64" alt="Amazon Logo" class="w-10 h-10" />
+                <div>
+                    <h2 class="text-lg font-semibold text-gray-900">Frontend Developer</h2>
+                    <p class="text-gray-600 text-sm">Amazon • Seattle, WA • Full-time</p>
+                </div>
+            </div>
+            <p class="text-gray-700 text-sm mb-3">
+                Build scalable and responsive web applications for Amazon's e-commerce platform. Collaborate with backend teams to deliver seamless user experiences.
+            </p>
+            <div class="flex flex-wrap gap-1 mb-3">
+                <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded-full text-xs">JavaScript</span>
+                <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded-full text-xs">React</span>
+                <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded-full text-xs">AWS</span>
+            </div>
+            <div class="flex justify-between items-center">
+                <span class="text-xs text-gray-500">Posted 5 days ago</span>
+                <button class="bg-blue-600 text-white px-3 py-1 rounded-lg text-sm hover:bg-blue-700 transition">Apply</button>
+            </div>
+        </div>
+        <p class="text-sm text-gray-600 max-w-2xl">
+            <strong>UX Thinking:</strong> This variant is optimized for mobile users, where screen space is limited. The compact design ensures that all essential information is visible without overwhelming the user. The smaller font sizes and reduced padding make the card easy to read and interact with on smaller screens.
+        </p>
+
+        <!-- Variant 5: Interactive Card with Expandable Details -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 max-w-2xl">
+            <div class="flex items-center gap-4 mb-4">
+                <img src="https://www.google.com/s2/favicons?domain=microsoft.com&sz=64" alt="Microsoft Logo" class="w-12 h-12" />
+                <div>
+                    <h2 class="text-xl font-semibold text-gray-900">DevOps Engineer</h2>
+                    <p class="text-gray-600">Microsoft • Redmond, WA • Full-time</p>
+                </div>
+            </div>
+            <p class="text-gray-700 mb-4">
+                Join Microsoft's DevOps team to automate and optimize our cloud infrastructure. Work with Azure to ensure scalability, reliability, and security for millions of users.
+            </p>
+            <div class="flex flex-wrap gap-2 mb-4">
+                <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">Azure</span>
+                <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">Kubernetes</span>
+                <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">Docker</span>
+                <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">CI/CD</span>
+            </div>
+            <div class="mb-4">
+                <button id="expand-btn" class="flex items-center gap-2 text-blue-600 hover:text-blue-700 transition" onclick="toggleDetails()">
+                    <span>Show More</span>
+                    <i id="expand-icon" class="fas fa-chevron-down"></i>
+                </button>
+                <div id="details" class="hidden mt-2">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <h3 class="font-medium text-gray-900">Salary</h3>
+                            <p class="text-gray-600">$160,000 - $200,000</p>
+                        </div>
+                        <div>
+                            <h3 class="font-medium text-gray-900">Equity</h3>
+                            <p class="text-gray-600">0.03% - 0.08%</p>
+                        </div>
+                        <div>
+                            <h3 class="font-medium text-gray-900">Benefits</h3>
+                            <p class="text-gray-600">Health, Dental, 401k, Stock Options</p>
+                        </div>
+                        <div>
+                            <h3 class="font-medium text-gray-900">Team Size</h3>
+                            <p class="text-gray-600">8-12 members</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-between items-center">
+                <span class="text-sm text-gray-500">Posted 2 weeks ago</span>
+                <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">Apply Now</button>
+            </div>
+        </div>
+        <p class="text-sm text-gray-600 max-w-2xl">
+            <strong>UX Thinking:</strong> This variant uses an interactive approach to manage information density. Users can expand the card to view additional details like salary, equity, and benefits, which keeps the initial view clean and uncluttered. This pattern is particularly useful for users who want to quickly scan multiple job listings without being overwhelmed by too much information at once.
+        </p>
+
+    </div>
+
+    <script>
+        function toggleDetails() {
+            const details = document.getElementById('details');
+            const button = document.getElementById('expand-btn');
+            const icon = document.getElementById('expand-icon');
+            
+            if (details.classList.contains('hidden')) {
+                details.classList.remove('hidden');
+                button.innerHTML = '<span>Show Less</span> <i id="expand-icon" class="fas fa-chevron-up"></i>';
+            } else {
+                details.classList.add('hidden');
+                button.innerHTML = '<span>Show More</span> <i id="expand-icon" class="fas fa-chevron-down"></i>';
+            }
+        }
+    </script>
+
+</body>
+
+</html>

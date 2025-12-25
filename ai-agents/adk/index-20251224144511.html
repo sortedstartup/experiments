@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<body>
+    <!-- Variant 1: Simple Card -->
+    <div class="max-w-sm rounded overflow-hidden shadow-lg m-4">
+        <img class="w-full" src="https://picsum.photos/400/300" alt="Job Image">
+        <div class="px-6 py-4">
+            <div class="font-bold text-xl mb-2">Software Engineer</div>
+            <p class="text-gray-700 text-base">Meta</p>
+            <p class="text-gray-700 text-base">San Francisco, CA</p>
+            <p class="text-gray-700 text-base">$150,000 - $200,000 per year</p>
+        </div>
+    </div>
+
+    <!-- Variant 2: Card with Logo -->
+    <div class="max-w-sm rounded overflow-hidden shadow-lg m-4">
+        <img class="w-full" src="https://picsum.photos/400/300" alt="Job Image">
+        <div class="px-6 py-4">
+            <div class="font-bold text-xl mb-2">Software Engineer</div>
+            <div class="flex items-center">
+                <img src="https://www.google.com/s2/favicons?domain=meta.com&sz=64" alt="Company Logo" class="w-8 h-8 mr-2">
+                <p class="text-gray-700 text-base">Meta</p>
+            </div>
+            <p class="text-gray-700 text-base">San Francisco, CA</p>
+            <p class="text-gray-700 text-base">$150,000 - $200,000 per year</p>
+        </div>
+    </div>
+
+    <!-- Variant 3: Card with Call-to-Action -->
+    <div class="max-w-sm rounded overflow-hidden shadow-lg m-4">
+        <img class="w-full" src="https://picsum.photos/400/300" alt="Job Image">
+        <div class="px-6 py-4">
+            <div class="font-bold text-xl mb-2">Software Engineer</div>
+            <p class="text-gray-700 text-base">Meta</p>
+            <p class="text-gray-700 text-base">San Francisco, CA</p>
+            <p class="text-gray-700 text-base">$150,000 - $200,000 per year</p>
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Apply Now</button>
+        </div>
+    </div>
+
+    <!-- Variant 4: Card with Detailed Description -->
+    <div class="max-w-sm rounded overflow-hidden shadow-lg m-4">
+        <img class="w-full" src="https://picsum.photos/400/300" alt="Job Image">
+        <div class="px-6 py-4">
+            <div class="font-bold text-xl mb-2">Software Engineer</div>
+            <p class="text-gray-700 text-base">Meta</p>
+            <p class="text-gray-700 text-base">San Francisco, CA</p>
+            <p class="text-gray-700 text-base">$150,000 - $200,000 per year</p>
+            <p class="text-gray-700 text-base">We're looking for a talented Software Engineer to join our team. You'll be working on cutting-edge projects and collaborating with top engineers in the industry.</p>
+        </div>
+    </div>
+
+    <!-- Variant 5: Card with Salary Range Slider -->
+    <div class="max-w-sm rounded overflow-hidden shadow-lg m-4">
+        <img class="w-full" src="https://picsum.photos/400/300" alt="Job Image">
+        <div class="px-6 py-4">
+            <div class="font-bold text-xl mb-2">Software Engineer</div>
+            <p class="text-gray-700 text-base">Meta</p>
+            <p class="text-gray-700 text-base">San Francisco, CA</p>
+            <input type="range" min="100000" max="250000" value="175000" class="w-full">
+            <p class="text-gray-700 text-base">$100,000 - $250,000 per year</p>
+        </div>
+    </div>
+</body>
+
+</html>

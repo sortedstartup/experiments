@@ -1,0 +1,217 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+</head>
+
+<body class="bg-gray-100 p-8">
+    <div class="max-w-6xl mx-auto space-y-12">
+
+        <!-- Variant 1: Minimalist Card -->
+        <div class="bg-white rounded-lg shadow-md p-6 max-w-sm">
+            <div class="flex items-center gap-4">
+                <img src="https://www.google.com/s2/favicons?domain=meta.com&sz=64" alt="Meta Logo" class="w-12 h-12" />
+                <div>
+                    <h2 class="text-xl font-semibold text-gray-800">Software Engineer</h2>
+                    <p class="text-gray-600">Meta • Menlo Park, CA</p>
+                </div>
+            </div>
+            <p class="text-gray-700 mt-4">
+                Join our team to build the next generation of social connectivity tools. We are looking for engineers with experience in React and GraphQL.
+            </p>
+            <div class="mt-4 flex gap-2 text-sm text-gray-500">
+                <span class="bg-gray-200 px-2 py-1 rounded">Remote</span>
+                <span class="bg-gray-200 px-2 py-1 rounded">Full-time</span>
+            </div>
+            <button class="mt-6 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
+                Apply Now
+            </button>
+        </div>
+        <p class="text-sm text-gray-600 max-w-sm">
+            <strong>UX Thinking:</strong> This variant focuses on simplicity and clarity. The minimalist design ensures the user's attention is drawn to the most critical information: job title, company, location, and a brief description. The use of subtle colors and ample white space reduces cognitive load.
+        </p>
+
+        <!-- Variant 2: Detailed Card with Icons -->
+        <div class="bg-white rounded-lg shadow-md p-6 max-w-sm">
+            <div class="flex items-center gap-4">
+                <img src="https://www.google.com/s2/favicons?domain=google.com&sz=64" alt="Google Logo" class="w-12 h-12" />
+                <div>
+                    <h2 class="text-xl font-semibold text-gray-800">Data Scientist</h2>
+                    <p class="text-gray-600">Google • Mountain View, CA</p>
+                </div>
+            </div>
+            <p class="text-gray-700 mt-4">
+                Lead data-driven decision making in our Ads team. Experience with Python, TensorFlow, and large datasets is required.
+            </p>
+            <div class="mt-4 space-y-2">
+                <div class="flex items-center gap-2 text-gray-600">
+                    <i class="fas fa-clock text-blue-600"></i>
+                    <span>Full-time</span>
+                </div>
+                <div class="flex items-center gap-2 text-gray-600">
+                    <i class="fas fa-dollar-sign text-green-600"></i>
+                    <span>Competitive Salary</span>
+                </div>
+                <div class="flex items-center gap-2 text-gray-600">
+                    <i class="fas fa-map-marker-alt text-red-600"></i>
+                    <span>Hybrid</span>
+                </div>
+            </div>
+            <button class="mt-6 w-full bg-gray-800 text-white py-2 rounded-lg hover:bg-gray-900 transition flex items-center justify-center gap-2">
+                <i class="fas fa-paper-plane"></i>
+                Apply Now
+            </button>
+        </div>
+        <p class="text-sm text-gray-600 max-w-sm">
+            <strong>UX Thinking:</strong> This variant adds icons and more detailed information to create a richer user experience. Icons are used to visually represent key details like job type, salary, and location, making the card more scannable. This is ideal for users who want quick insights without reading through text.
+        </p>
+
+        <!-- Variant 3: Card with Image Background -->
+        <div class="relative bg-white rounded-lg shadow-md p-6 max-w-sm overflow-hidden">
+            <div class="absolute inset-0 bg-cover bg-center opacity-10" style="background-image: url('https://picsum.photos/400/300')"></div>
+            <div class="relative z-10">
+                <div class="flex items-center gap-4">
+                    <img src="https://www.google.com/s2/favicons?domain=amazon.com&sz=64" alt="Amazon Logo" class="w-12 h-12" />
+                    <div>
+                        <h2 class="text-xl font-semibold text-gray-800">Product Manager</h2>
+                        <p class="text-gray-600">Amazon • Seattle, WA</p>
+                    </div>
+                </div>
+                <p class="text-gray-700 mt-4">
+                    Drive the vision for our e-commerce platform. We need leaders with a passion for customer experience and a track record of delivering results.
+                </p>
+                <div class="mt-4 flex gap-2 text-sm text-gray-600">
+                    <span class="bg-white bg-opacity-70 px-2 py-1 rounded">On-site</span>
+                    <span class="bg-white bg-opacity-70 px-2 py-1 rounded">Full-time</span>
+                </div>
+                <button class="mt-6 w-full bg-orange-600 text-white py-2 rounded-lg hover:bg-orange-700 transition">
+                    Learn More
+                </button>
+            </div>
+        </div>
+        <p class="text-sm text-gray-600 max-w-sm">
+            <strong>UX Thinking:</strong> This variant uses a subtle background image to create visual interest and draw attention. The image adds context and personality to the card without overwhelming the content. This approach is great for roles where company culture or brand identity is a key selling point.
+        </p>
+
+        <!-- Variant 4: Card with Stats and Progress -->
+        <div class="bg-white rounded-lg shadow-md p-6 max-w-sm">
+            <div class="flex items-center gap-4">
+                <img src="https://www.google.com/s2/favicons?domain=netflix.com&sz=64" alt="Netflix Logo" class="w-12 h-12" />
+                <div>
+                    <h2 class="text-xl font-semibold text-gray-800">UX Designer</h2>
+                    <p class="text-gray-600">Netflix • Los Gatos, CA</p>
+                </div>
+            </div>
+            <p class="text-gray-700 mt-4">
+                Shape the future of entertainment by designing intuitive and engaging user experiences for millions of users worldwide.
+            </p>
+            <div class="mt-4 space-y-3">
+                <div>
+                    <div class="flex justify-between text-sm text-gray-600">
+                        <span>Applications</span>
+                        <span>120</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2 mt-1">
+                        <div class="bg-red-600 h-2 rounded-full" style="width: 70%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex justify-between text-sm text-gray-600">
+                        <span>Hiring Urgency</span>
+                        <span>High</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2 mt-1">
+                        <div class="bg-yellow-500 h-2 rounded-full" style="width: 90%"></div>
+                    </div>
+                </div>
+            </div>
+            <button class="mt-6 w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition flex items-center justify-center gap-2">
+                <i class="fas fa-bolt"></i>
+                Apply Fast
+            </button>
+        </div>
+        <p class="text-sm text-gray-600 max-w-sm">
+            <strong>UX Thinking:</strong> This variant introduces stats and progress bars to create a sense of urgency and competition. It appeals to users who are motivated by data and want to understand the hiring landscape. The progress bars provide visual feedback about the role's popularity and urgency.
+        </p>
+
+        <!-- Variant 5: Interactive Card with Tabs -->
+        <div class="bg-white rounded-lg shadow-md p-6 max-w-sm" id="interactive-card">
+            <div class="flex items-center gap-4">
+                <img src="https://www.google.com/s2/favicons?domain=apple.com&sz=64" alt="Apple Logo" class="w-12 h-12" />
+                <div>
+                    <h2 class="text-xl font-semibold text-gray-800">Machine Learning Engineer</h2>
+                    <p class="text-gray-600">Apple • Cupertino, CA</p>
+                </div>
+            </div>
+            <div class="mt-4 border-b border-gray-200">
+                <nav class="flex gap-6" id="tabs">
+                    <button class="tab-button py-2 px-1 border-b-2 border-blue-600 text-blue-600 font-medium" data-tab="description">Description</button>
+                    <button class="tab-button py-2 px-1 border-b-2 border-transparent text-gray-500 hover:text-gray-700" data-tab="requirements">Requirements</button>
+                    <button class="tab-button py-2 px-1 border-b-2 border-transparent text-gray-500 hover:text-gray-700" data-tab="benefits">Benefits</button>
+                </nav>
+            </div>
+            <div class="mt-4">
+                <div id="description" class="tab-content">
+                    <p class="text-gray-700">
+                        Join Apple's ML team to develop cutting-edge algorithms for our devices. Work on projects that redefine user experiences.
+                    </p>
+                </div>
+                <div id="requirements" class="tab-content hidden">
+                    <ul class="list-disc list-inside text-gray-700 space-y-1">
+                        <li>PhD in Computer Science or related field</li>
+                        <li>3+ years of experience in ML</li>
+                        <li>Proficiency in Python and TensorFlow</li>
+                    </ul>
+                </div>
+                <div id="benefits" class="tab-content hidden">
+                    <ul class="list-disc list-inside text-gray-700 space-y-1">
+                        <li>Health and dental insurance</li>
+                        <li>Stock options</li>
+                        <li>Flexible work hours</li>
+                    </ul>
+                </div>
+            </div>
+            <button class="mt-6 w-full bg-gray-800 text-white py-2 rounded-lg hover:bg-gray-900 transition">
+                Apply Now
+            </button>
+        </div>
+        <p class="text-sm text-gray-600 max-w-sm">
+            <strong>UX Thinking:</strong> This variant uses tabs to organize information, making it ideal for roles with extensive details. It allows users to explore different sections (description, requirements, benefits) without feeling overwhelmed. This approach is user-friendly and keeps the card compact while accommodating more content.
+        </p>
+    </div>
+
+    <script>
+        // Tab functionality for Variant 5
+        const tabButtons = document.querySelectorAll('#interactive-card .tab-button');
+        const tabContents = document.querySelectorAll('#interactive-card .tab-content');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const tab = button.getAttribute('data-tab');
+
+                // Update active tab button
+                tabButtons.forEach(btn => {
+                    btn.classList.remove('border-blue-600', 'text-blue-600', 'font-medium');
+                    btn.classList.add('border-transparent', 'text-gray-500');
+                });
+                button.classList.add('border-blue-600', 'text-blue-600', 'font-medium');
+                button.classList.remove('border-transparent', 'text-gray-500');
+
+                // Update tab content
+                tabContents.forEach(content => {
+                    if (content.id === tab) {
+                        content.classList.remove('hidden');
+                    } else {
+                        content.classList.add('hidden');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FAANG Jobs Filter Variations</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body class="p-8 space-y-24 pb-40">
+
+    <header class="max-w-6xl mx-auto text-center space-y-4">
+        <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">FAANG Career Portal Filters</h1>
+        <p class="text-slate-500 text-lg">Exploring 5 UX variations for a high-performance job search interface.</p>
+    </header>
+
+    <!-- VARIANT 1: CLEAN & MINIMALIST -->
+    <section class="max-w-5xl mx-auto">
+        <div class="flex items-center gap-3 mb-6">
+            <span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-2.5 py-1 rounded uppercase tracking-wider">Variant 1</span>
+            <h2 class="text-2xl font-bold text-slate-800">Clean & Minimalist</h2>
+        </div>
+        
+        <div class="bg-white rounded-3xl p-10 border border-slate-200 shadow-sm space-y-12">
+            <!-- Row 1: Companies -->
+            <div class="flex flex-wrap justify-center gap-6">
+                <button class="group flex flex-col items-center p-4 bg-slate-50 rounded-2xl border-2 border-transparent hover:border-blue-500 hover:bg-white transition-all w-28">
+                    <img src="https://www.google.com/s2/favicons?domain=meta.com&sz=64" class="w-10 h-10 mb-3" alt="Meta">
+                    <span class="text-xs font-bold text-slate-900">Meta</span>
+                    <span class="text-[10px] text-slate-400 mt-1">1.2K Jobs</span>
+                </button>
+                <button class="group flex flex-col items-center p-4 bg-slate-50 rounded-2xl border-2 border-transparent hover:border-blue-500 hover:bg-white transition-all w-28">
+                    <img src="https://www.google.com/s2/favicons?domain=apple.com&sz=64" class="w-10 h-10 mb-3" alt="Apple">
+                    <span class="text-xs font-bold text-slate-900">Apple</span>
+                    <span class="text-[10px] text-slate-400 mt-1">890 Jobs</span>
+                </button>
+                <button class="group flex flex-col items-center p-4 bg-white rounded-2xl border-2 border-blue-500 shadow-lg w-28 ring-4 ring-blue-50">
+                    <img src="https://www.google.com/s2/favicons?domain=google.com&sz=64" class="w-10 h-10 mb-3" alt="Google">
+                    <span class="text-xs font-bold text-slate-900">Google</span>
+                    <span class="text-[10px] text-blue-500 font-semibold mt-1">1.5K Jobs</span>
+                </button>
+                <button class="group flex flex-col items-center p-4 bg-slate-50 rounded-2xl border-2 border-transparent hover:border-blue-500 hover:bg-white transition-all w-28">
+                    <img src="https://www.google.com/s2/favicons?domain=amazon.com&sz=64" class="w-10 h-10 mb-3" alt="Amazon">
+                    <span class="text-xs font-bold text-slate-900">Amazon</span>
+                    <span class="text-[10px] text-slate-400 mt-1">3.1K Jobs</span>
+                </button>
+                <button class="group flex flex-col items-center p-4 bg-slate-50 rounded-2xl border-2 border-transparent hover:border-blue-500 hover:bg-white transition-all w-28">
+                    <img src="https://www.google.com/s2/favicons?domain=netflix.com&sz=64" class="w-10 h-10 mb-3" alt="Netflix">
+                    <span class="text-xs font-bold text-slate-900">Netflix</span>
+                    <span class="text-[10px] text-slate-400 mt-1">120 Jobs</span>
+                </button>
+            </div>
+
+            <!-- Row 2: Roles -->
+            <div class="flex flex-wrap justify-center gap-3">
+                <button class="px-5 py-2.5 rounded-full bg-slate-100 text-slate-600 font-medium text-sm hover:bg-slate-200 flex items-center gap-2">SDE I <span class="bg-slate-200 text-[10px] px-1.5 py-0.5 rounded text-slate-500">450</span></button>
+                <button class="px-5 py-2.5 rounded-full bg-blue-600 text-white font-medium text-sm shadow-md flex items-center gap-2">SDE II <span class="bg-blue-500 text-[10px] px-1.5 py-0.5 rounded">820</span></button>
+                <button class="px-5 py-2.5 rounded-full bg-slate-100 text-slate-600 font-medium text-sm hover:bg-slate-200 flex items-center gap-2">SDE III <span class="bg-slate-200 text-[10px] px-1.5 py-0.5 rounded text-slate-500">310</span></button>
+                <button class="px-5 py-2.5 rounded-full bg-slate-100 text-slate-600 font-medium text-sm hover:bg-slate-200 flex items-center gap-2">Manager <span class="bg-slate-200 text-[10px] px-1.5 py-0.5 rounded text-slate-500">150</span></button>
+                <button class="px-5 py-2.5 rounded-full bg-slate-100 text-slate-600 font-medium text-sm hover:bg-slate-200 flex items-center gap-2">Director <span class="bg-slate-200 text-[10px] px-1.5 py-0.5 rounded text-slate-500">42</span></button>
+            </div>
+
+            <!-- Row 3: Countries -->
+            <div class="flex flex-wrap justify-center gap-10">
+                <div class="flex items-center gap-3">
+                    <span class="text-3xl">🇺🇸</span>
+                    <div class="flex flex-col">
+                        <span class="text-xs font-bold text-slate-800">USA</span>
+                        <span class="text-[10px] text-slate-500">2.4k jobs</span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3 opacity-40 hover:opacity-100 cursor-pointer transition-opacity">
+                    <span class="text-3xl">🇮🇳</span>
+                    <div class="flex flex-col">
+                        <span class="text-xs font-bold text-slate-800">India</span>
+                        <span class="text-[10px] text-slate-500">840 jobs</span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3 opacity-40 hover:opacity-100 cursor-pointer transition-opacity">
+                    <span class="text-3xl">🇬🇧</span>
+                    <div class="flex flex-col">
+                        <span class="text-xs font-bold text-slate-800">UK</span>
+                        <span class="text-[10px] text-slate-500">320 jobs</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p class="mt-4 text-sm text-slate-500 italic">UX Thinking: A clean, standard approach with clear visual hierarchy. It uses subtle shadows and border highlights to indicate selection. The job counts are tucked into badges or small text to avoid clutter.</p>
+    </section>
+
+    <!-- VARIANT 2: MODERN DARK MODE -->
+    <section class="max-w-5xl mx-auto">
+        <div class="flex items-center gap-3 mb-6">
+            <span class="bg-purple-100 text-purple-700 text-xs font-bold px-2.5 py-1 rounded uppercase tracking-wider">Variant 2</span>
+            <h2 class="text-2xl font-bold text-slate-800">Cyber Dark Tech</h2>
+        </div>
+        
+        <div class="bg-slate-950 rounded-3xl p-10 shadow-2xl space-y-12 overflow-hidden relative">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-blue-600/10 blur-[120px]"></div>
+            <div class="absolute bottom-0 left-0 w-64 h-64 bg-purple-600/10 blur-[120px]"></div>
+
+            <!-- Row 1: Companies -->
+            <div class="flex flex-wrap justify-center gap-4 relative z-10">
+                <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl w-32 flex flex-col items-center gap-3 hover:border-blue-500 transition-colors group cursor-pointer">
+                    <div class="p-2 bg-slate-800 rounded-lg group-hover:bg-blue-500/10 transition-colors">
+                        <img src="https://www.google.com/s2/favicons?domain=meta.com&sz=64" class="w-8 h-8" alt="Meta">
+                    </div>
+                    <div class="text-center">
+                        <p class="text-slate-300 font-bold text-xs">Meta</p>
+                        <p class="text-[9px] text-blue-400 font-mono mt-0.5">COUNT: 1,204</p>
+                    </div>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl w-32 flex flex-col items-center gap-3 hover:border-blue-500 transition-colors group cursor-pointer">
+                    <div class="p-2 bg-slate-800 rounded-lg group-hover:bg-blue-500/10 transition-colors">
+                        <img src="https://www.google.com/s2/favicons?domain=apple.com&sz=64" class="w-8 h-8" alt="Apple">
+                    </div>
+                    <div class="text-center">
+                        <p class="text-slate-300 font-bold text-xs">Apple</p>
+                        <p class="text-[9px] text-blue-400 font-mono mt-0.5">COUNT: 890</p>
+                    </div>
+                </div>
+                <div class="bg-blue-600/20 border-2 border-blue-500 p-5 rounded-xl w-32 flex flex-col items-center gap-3 shadow-[0_0_20px_rgba(59,130,246,0.3)]">
+                    <div class="p-2 bg-blue-500 rounded-lg">
+                        <img src="https://www.google.com/s2/favicons?domain=google.com&sz=64" class="w-8 h-8 brightness-0 invert" alt="Google">
+                    </div>
+                    <div class="text-center">
+                        <p class="text-white font-bold text-xs">Google</p>
+                        <p class="text-[9px] text-blue-300 font-mono mt-0.5">COUNT: 1,510</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Row 2: Roles -->
+            <div class="flex flex-wrap justify-center gap-2 relative z-10">
+                <button class="px-4 py-2 border border-slate-800 text-slate-400 text-xs font-mono uppercase tracking-widest hover:bg-slate-800 transition-colors">SDE I // 450</button>
+                <button class="px-4 py-2 border border-blue-500 text-blue-400 text-xs font-mono uppercase tracking-widest bg-blue-500/10">SDE II // 820</button>
+                <button class="px-4 py-2 border border-slate-800 text-slate-400 text-xs font-mono uppercase tracking-widest hover:bg-slate-800 transition-colors">SDE III // 310</button>
+                <button class="px-4 py-2 border border-slate-800 text-slate-400 text-xs font-mono uppercase tracking-widest hover:bg-slate-800 transition-colors">Manager // 150</button>
+            </div>
+
+            <!-- Row 3: Countries -->
+            <div class="grid grid-cols-3 gap-6 max-w-lg mx-auto relative z-10">
+                <div class="flex items-center justify-center gap-2 px-4 py-2 bg-slate-900 rounded-full border border-slate-800">
+                    <span class="text-lg">🇺🇸</span>
+                    <span class="text-[10px] font-bold text-slate-400">USA: 2.4k</span>
+                </div>
+                <div class="flex items-center justify-center gap-2 px-4 py-2 bg-slate-900 rounded-full border border-slate-800">
+                    <span class="text-lg">🇮🇳</span>
+                    <span class="text-[10px] font-bold text-slate-400">IND: 840</span>
+                </div>
+                <div class="flex items-center justify-center gap-2 px-4 py-2 bg-slate-900 rounded-full border border-slate-800">
+                    <span class="text-lg">🇬🇧</span>
+                    <span class="text-[10px] font-bold text-slate-400">UK: 320</span>
+                </div>
+            </div>
+        </div>
+        <p class="mt-4 text-sm text-slate-500 italic">UX Thinking: Aimed at tech enthusiasts. Uses a "cyberpunk-lite" aesthetic with monospaced fonts for data points and glowing highlights. High contrast makes it easy to spot active filters.</p>
+    </section>
+
+    <!-- VARIANT 3: SOFT PLAYFUL UI -->
+    <section class="max-w-5xl mx-auto">
+        <div class="flex items-center gap-3 mb-6">
+            <span class="bg-blue-100 text-blue-700 text-xs font-bold px-2.5 py-1 rounded uppercase tracking-wider">Variant 3</span>
+            <h2 class="text-2xl font-bold text-slate-800">Soft Playful UI</h2>
+        </div>
+        
+        <div class="bg-white rounded-[40px] p-12 border-2 border-dashed border-blue-100 relative shadow-xl shadow-blue-50/50">
+            <!-- Row 1: Companies -->
+            <div class="flex flex-wrap justify-center gap-8 mb-16">
+                <div class="group relative">
+                    <div class="w-24 h-24 bg-white rounded-3xl shadow-[0_10px_30px_-10px_rgba(0,0,0,0.1)] flex flex-col items-center justify-center gap-2 border border-slate-100 group-hover:scale-110 transition-transform cursor-pointer">
+                        <img src="https://www.google.com/s2/favicons?domain=meta.com&sz=64" class="w-8 h-8" alt="Meta">
+                        <span class="text-[10px] font-black text-slate-800">Meta</span>
+                    </div>
+                    <span class="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-blue-50 text-blue-600 text-[9px] font-bold px-2 py-0.5 rounded-full border border-blue-100">1.2K</span>
+                </div>
+                <div class="group relative">
+                    <div class="w-24 h-24 bg-white rounded-3xl shadow-[0_10px_30px_-10px_rgba(0,0,0,0.1)] flex flex-col items-center justify-center gap-2 border border-slate-100 group-hover:scale-110 transition-transform cursor-pointer">
+                        <img src="https://www.google.com/s2/favicons?domain=apple.com&sz=64" class="w-8 h-8" alt="Apple">
+                        <span class="text-[10px] font-black text-slate-800">Apple</span>
+                    </div>
+                    <span class="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-slate-50 text-slate-400 text-[9px] font-bold px-2 py-0.5 rounded-full border border-slate-100">890</span>
+                </div>
+                <div class="group relative">
+                    <div class="w-28 h-28 bg-indigo-600 rounded-3xl shadow-[0_20px_40px_-10px_rgba(79,70,229,0.4)] flex flex-col items-center justify-center gap-2 ring-4 ring-indigo-100 -mt-2 scale-110">
+                        <img src="https://www.google.com/s2/favicons?domain=google.com&sz=64" class="w-10 h-10 brightness-0 invert" alt="Google">
+                        <span class="text-[10px] font-black text-white">Google</span>
+                        <span class="bg-indigo-500 text-white text-[9px] font-bold px-2 py-0.5 rounded-full">1.5K</span>
+                    </div>
+                </div>
+                <div class="group relative">
+                    <div class="w-24 h-24 bg-white rounded-3xl shadow-[0_10px_30px_-10px_rgba(0,0,0,0.1)] flex flex-col items-center justify-center gap-2 border border-slate-100 group-hover:scale-110 transition-transform cursor-pointer">
+                        <img src="https://www.google.com/s2/favicons?domain=amazon.com&sz=64" class="w-8 h-8" alt="Amazon">
+                        <span class="text-[10px] font-black text-slate-800">Amazon</span>
+                    </div>
+                    <span class="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-orange-50 text-orange-600 text-[9px] font-bold px-2 py-0.5 rounded-full border border-orange-100">3.1K</span>
+                </div>
+            </div>
+
+            <!-- Row 2: Roles -->
+            <div class="flex flex-wrap justify-center gap-4 mb-12">
+                <div class="px-6 py-4 bg-white shadow-lg shadow-slate-200/50 rounded-2xl flex items-center gap-3 border border-slate-50 cursor-pointer hover:bg-slate-50 transition-colors">
+                    <span class="font-bold text-slate-700">SDE I</span>
+                    <span class="text-blue-400 font-medium">450</span>
+                </div>
+                <div class="px-6 py-4 bg-white shadow-lg shadow-slate-200/50 rounded-2xl flex items-center gap-3 border border-slate-50 cursor-pointer hover:bg-slate-50 transition-colors">
+                    <span class="font-bold text-slate-700">SDE II</span>
+                    <span class="text-blue-400 font-medium">820</span>
+                </div>
+                <div class="px-6 py-4 bg-white shadow-lg shadow-slate-200/50 rounded-2xl flex items-center gap-3 border border-slate-50 cursor-pointer hover:bg-slate-50 transition-colors">
+                    <span class="font-bold text-slate-700">SDE III</span>
+                    <span class="text-blue-400 font-medium">310</span>
+                </div>
+                <div class="px-6 py-4 bg-white shadow-lg shadow-slate-200/50 rounded-2xl flex items-center gap-3 border border-slate-50 cursor-pointer hover:bg-slate-50 transition-colors">
+                    <span class="font-bold text-slate-700">Manager</span>
+                    <span class="text-blue-400 font-medium">150</span>
+                </div>
+            </div>
+
+            <!-- Row 3: Countries -->
+            <div class="flex flex-wrap justify-center gap-8">
+                <div class="flex flex-col items-center gap-1 group cursor-pointer">
+                    <div class="w-14 h-14 rounded-full border-4 border-slate-50 overflow-hidden shadow-md group-hover:scale-110 transition-transform">
+                        <img src="https://img.icons8.com/color/96/usa.png" class="w-full h-full object-cover" alt="USA">
+                    </div>
+                    <span class="text-[10px] font-bold text-slate-800 uppercase mt-1">USA</span>
+                    <span class="text-[9px] text-slate-400">2.4k jobs</span>
+                </div>
+                <div class="flex flex-col items-center gap-1 group cursor-pointer">
+                    <div class="w-14 h-14 rounded-full border-4 border-slate-50 overflow-hidden shadow-md group-hover:scale-110 transition-transform">
+                        <img src="https://img.icons8.com/color/96/india.png" class="w-full h-full object-cover" alt="India">
+                    </div>
+                    <span class="text-[10px] font-bold text-slate-800 uppercase mt-1">India</span>
+                    <span class="text-[9px] text-slate-400">840 jobs</span>
+                </div>
+                <div class="flex flex-col items-center gap-1 group cursor-pointer">
+                    <div class="w-14 h-14 rounded-full border-4 border-slate-50 overflow-hidden shadow-md group-hover:scale-110 transition-transform">
+                        <img src="https://img.icons8.com/color/96/great-britain.png" class="w-full h-full object-cover" alt="UK">
+                    </div>
+                    <span class="text-[10px] font-bold text-slate-800 uppercase mt-1">UK</span>
+                    <span class="text-[9px] text-slate-400">320 jobs</span>
+                </div>
+            </div>
+        </div>
+        <p class="mt-4 text-sm text-slate-500 italic">UX Thinking: A softer, more "approachable" design using shadows and large rounded corners (border-radius: 3xl+). It highlights selection through scaling and distinct color changes. This variant feels premium but friendly.</p>
+    </section>
+
+    <!-- VARIANT 4: COMPACT DATA DENSE -->
+    <section class="max-w-5xl mx-auto">
+        <div class="flex items-center gap-3 mb-6">
+            <span class="bg-amber-100 text-amber-700 text-xs font-bold px-2.5 py-1 rounded uppercase tracking-wider">Variant 4</span>
+            <h2 class="text-2xl font-bold text-slate-800">Compact Dashboard</h2>
+        </div>
+        
+        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col md:flex-row gap-8">
+            <!-- Sidebar like Column 1 (Companies) -->
+            <div class="w-full md:w-48 space-y-2">
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-2 mb-2">Company</p>
+                <div class="flex flex-col gap-1">
+                    <button class="flex items-center justify-between px-3 py-2 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors">
+                        <div class="flex items-center gap-2">
+                            <img src="https://www.google.com/s2/favicons?domain=meta.com&sz=64" class="w-4 h-4" alt="Meta">
+                            <span class="text-xs font-medium text-slate-700">Meta</span>
+                        </div>
+                        <span class="text-[10px] text-slate-400">1.2K</span>
+                    </button>
+                    <button class="flex items-center justify-between px-3 py-2 bg-blue-600 rounded-lg text-white">
+                        <div class="flex items-center gap-2">
+                            <img src="https://www.google.com/s2/favicons?domain=google.com&sz=64" class="w-4 h-4 brightness-0 invert" alt="Google">
+                            <span class="text-xs font-medium">Google</span>
+                        </div>
+                        <span class="text-[10px] opacity-80">1.5K</span>
+                    </button>
+                    <button class="flex items-center justify-between px-3 py-2 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors">
+                        <div class="flex items-center gap-2">
+                            <img src="https://www.google.com/s2/favicons?domain=amazon.com&sz=64" class="w-4 h-4" alt="Amazon">
+                            <span class="text-xs font-medium text-slate-700">Amazon</span>
+                        </div>
+                        <span class="text-[10px] text-slate-400">3.1K</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex-1 space-y-6">
+                <!-- Roles as Pills -->
+                <div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1 mb-3">Job Level</p>
+                    <div class="flex flex-wrap gap-2">
+                        <button class="text-xs font-semibold px-4 py-2 bg-white border border-slate-200 rounded-md hover:border-blue-500 hover:text-blue-500">SDE I <span class="ml-1 opacity-40 font-normal">450</span></button>
+                        <button class="text-xs font-semibold px-4 py-2 bg-white border border-slate-200 rounded-md hover:border-blue-500 hover:text-blue-500">SDE II <span class="ml-1 opacity-40 font-normal">820</span></button>
+                        <button class="text-xs font-semibold px-4 py-2 bg-blue-50 border border-blue-200 text-blue-600 rounded-md">SDE III <span class="ml-1 opacity-70 font-normal">310</span></button>
+                        <button class="text-xs font-semibold px-4 py-2 bg-white border border-slate-200 rounded-md hover:border-blue-500 hover:text-blue-500">Manager <span class="ml-1 opacity-40 font-normal">150</span></button>
+                    </div>
+                </div>
+
+                <!-- Countries as List -->
+                <div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1 mb-3">Regions</p>
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="flex items-center gap-2 p-2 rounded-lg border border-slate-100">
+                            <span class="text-xl">🇺🇸</span>
+                            <div>
+                                <p class="text-[11px] font-bold text-slate-800">USA</p>
+                                <p class="text-[9px] text-slate-500">2,410 open</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 p-2 rounded-lg border border-slate-100 bg-slate-50">
+                            <span class="text-xl">🇮🇳</span>
+                            <div>
+                                <p class="text-[11px] font-bold text-slate-800">India</p>
+                                <p class="text-[9px] text-slate-500">840 open</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 p-2 rounded-lg border border-slate-100 bg-slate-50">
+                            <span class="text-xl">🇬🇧</span>
+                            <div>
+                                <p class="text-[11px] font-bold text-slate-800">UK</p>
+                                <p class="text-[9px] text-slate-500">320 open</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p class="mt-4 text-sm text-slate-500 italic">UX Thinking: Designed for power users. It moves away from the "top row" paradigm into a more layout-efficient grid/sidebar hybrid. Everything is scannable at a glance with minimal mouse travel needed.</p>
+    </section>
+
+    <!-- VARIANT 5: INTERACTIVE GLASS-CARD -->
+    <section class="max-w-5xl mx-auto">
+        <div class="flex items-center gap-3 mb-6">
+            <span class="bg-rose-100 text-rose-700 text-xs font-bold px-2.5 py-1 rounded uppercase tracking-wider">Variant 5</span>
+            <h2 class="text-2xl font-bold text-slate-800">Glassmorphism Floating</h2>
+        </div>
+        
+        <div class="relative min-h-[500px] flex items-center justify-center rounded-[3rem] overflow-hidden">
+            <!-- Background Image -->
+            <img src="https://picsum.photos/seed/tech/1200/800" class="absolute inset-0 w-full h-full object-cover" alt="Background">
+            <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"></div>
+
+            <div class="relative z-10 glass p-10 rounded-[2.5rem] w-full max-w-4xl border border-white/30 shadow-2xl space-y-8">
+                <!-- Companies -->
+                <div class="flex flex-wrap justify-between items-end gap-4">
+                    <div class="flex gap-4">
+                        <div class="w-16 h-16 bg-white/10 hover:bg-white/20 border border-white/20 rounded-2xl flex items-center justify-center backdrop-blur-md cursor-pointer transition-all">
+                            <img src="https://www.google.com/s2/favicons?domain=meta.com&sz=64" class="w-8 h-8" alt="Meta">
+                        </div>
+                        <div class="w-16 h-16 bg-white border-2 border-rose-500 rounded-2xl flex items-center justify-center shadow-lg shadow-rose-500/20 cursor-pointer">
+                            <img src="https://www.google.com/s2/favicons?domain=google.com&sz=64" class="w-8 h-8" alt="Google">
+                        </div>
+                        <div class="w-16 h-16 bg-white/10 hover:bg-white/20 border border-white/20 rounded-2xl flex items-center justify-center backdrop-blur-md cursor-pointer transition-all">
+                            <img src="https://www.google.com/s2/favicons?domain=amazon.com&sz=64" class="w-8 h-8" alt="Amazon">
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <span class="block text-[10px] text-white/60 font-bold uppercase tracking-widest">Active Company</span>
+                        <span class="text-2xl font-black text-white">Google</span>
+                        <span class="block text-rose-400 text-sm font-bold">1,510 Opportunities</span>
+                    </div>
+                </div>
+
+                <!-- Roles -->
+                <div class="flex flex-wrap gap-2">
+                    <button class="px-5 py-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/10 text-white text-xs font-semibold backdrop-blur-md">SDE I <span class="ml-2 text-white/40">450</span></button>
+                    <button class="px-5 py-2 rounded-full bg-white text-slate-900 border border-white text-xs font-bold shadow-xl">SDE II <span class="ml-2 text-slate-400">820</span></button>
+                    <button class="px-5 py-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/10 text-white text-xs font-semibold backdrop-blur-md">SDE III <span class="ml-2 text-white/40">310</span></button>
+                    <button class="px-5 py-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/10 text-white text-xs font-semibold backdrop-blur-md">Manager <span class="ml-2 text-white/40">150</span></button>
+                </div>
+
+                <!-- Divider -->
+                <div class="h-px bg-white/10"></div>
+
+                <!-- Countries -->
+                <div class="flex justify-around items-center">
+                    <div class="group flex flex-col items-center gap-2 cursor-pointer">
+                        <span class="text-4xl group-hover:scale-125 transition-transform">🇺🇸</span>
+                        <span class="text-[10px] text-white font-bold opacity-70 group-hover:opacity-100">USA (2.4k)</span>
+                    </div>
+                    <div class="group flex flex-col items-center gap-2 cursor-pointer">
+                        <span class="text-4xl group-hover:scale-125 transition-transform">🇮🇳</span>
+                        <span class="text-[10px] text-white font-bold opacity-70 group-hover:opacity-100">IND (840)</span>
+                    </div>
+                    <div class="group flex flex-col items-center gap-2 cursor-pointer">
+                        <span class="text-4xl group-hover:scale-125 transition-transform">🇬🇧</span>
+                        <span class="text-[10px] text-white font-bold opacity-70 group-hover:opacity-100">UK (320)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p class="mt-4 text-sm text-slate-500 italic">UX Thinking: A highly visual, immersive design. It uses transparency and background blur (glassmorphism) to feel integrated into a larger context. It prioritizes "feeling" and "brand" over raw information density.</p>
+    </section>
+
+</body>
+</html>

@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FAANG Job Board Filters</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9fafb;
+        }
+    </style>
+</head>
+
+<body class="p-8 space-y-24 pb-40">
+
+    <header class="text-center max-w-4xl mx-auto space-y-4">
+        <h1 class="text-4xl font-extrabold text-gray-900 tracking-tight">FAANG Jobs Dashboard</h1>
+        <p class="text-gray-500">Explore open opportunities at the world's leading technology companies.</p>
+    </header>
+
+    <!-- VARIANT 1: THE CLEAN PROFESSIONAL -->
+    <section>
+        <div class="mb-6">
+            <h2 class="text-xl font-semibold text-gray-800">1. Variant: Professional Clean</h2>
+            <p class="text-sm text-gray-600 italic">UX Thinking: Focuses on standard grid patterns and high legibility. Uses white cards on a light background with subtle borders to establish a clear hierarchy without overwhelming the user.</p>
+        </div>
+        
+        <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-100 space-y-8">
+            <!-- Row 1: Companies -->
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                <div class="border border-gray-200 rounded-lg p-4 flex flex-col items-center justify-center hover:border-blue-500 hover:bg-blue-50 transition cursor-pointer relative group">
+                    <span class="absolute top-2 right-2 text-xs font-medium text-gray-400 group-hover:text-blue-600">1.2k</span>
+                    <img src="https://www.google.com/s2/favicons?domain=meta.com&sz=64" class="w-10 h-10 mb-3" alt="Meta">
+                    <span class="text-sm font-semibold text-gray-700">Meta</span>
+                </div>
+                <div class="border border-gray-200 rounded-lg p-4 flex flex-col items-center justify-center hover:border-blue-500 hover:bg-blue-50 transition cursor-pointer relative group">
+                    <span class="absolute top-2 right-2 text-xs font-medium text-gray-400 group-hover:text-blue-600">850</span>
+                    <img src="https://www.google.com/s2/favicons?domain=apple.com&sz=64" class="w-10 h-10 mb-3" alt="Apple">
+                    <span class="text-sm font-semibold text-gray-700">Apple</span>
+                </div>
+                <div class="border border-gray-200 rounded-lg p-4 flex flex-col items-center justify-center border-blue-500 bg-blue-50 ring-1 ring-blue-500 transition cursor-pointer relative group">
+                    <span class="absolute top-2 right-2 text-xs font-medium text-blue-600">2.4k</span>
+                    <img src="https://www.google.com/s2/favicons?domain=amazon.com&sz=64" class="w-10 h-10 mb-3" alt="Amazon">
+                    <span class="text-sm font-semibold text-gray-700">Amazon</span>
+                </div>
+                <div class="border border-gray-200 rounded-lg p-4 flex flex-col items-center justify-center hover:border-blue-500 hover:bg-blue-50 transition cursor-pointer relative group">
+                    <span class="absolute top-2 right-2 text-xs font-medium text-gray-400 group-hover:text-blue-600">420</span>
+                    <img src="https://www.google.com/s2/favicons?domain=netflix.com&sz=64" class="w-10 h-10 mb-3" alt="Netflix">
+                    <span class="text-sm font-semibold text-gray-700">Netflix</span>
+                </div>
+                <div class="border border-gray-200 rounded-lg p-4 flex flex-col items-center justify-center hover:border-blue-500 hover:bg-blue-50 transition cursor-pointer relative group">
+                    <span class="absolute top-2 right-2 text-xs font-medium text-gray-400 group-hover:text-blue-600">1.8k</span>
+                    <img src="https://www.google.com/s2/favicons?domain=google.com&sz=64" class="w-10 h-10 mb-3" alt="Google">
+                    <span class="text-sm font-semibold text-gray-700">Google</span>
+                </div>
+            </div>
+
+            <!-- Row 2: Job Titles -->
+            <div class="flex flex-wrap gap-3 items-center justify-center">
+                <button class="px-5 py-2 rounded-full border border-gray-200 text-sm font-medium hover:bg-gray-50 transition">SDE I <span class="ml-1 text-gray-400 text-xs">430</span></button>
+                <button class="px-5 py-2 rounded-full bg-black text-white text-sm font-medium transition">SDE II <span class="ml-1 text-gray-400 text-xs">820</span></button>
+                <button class="px-5 py-2 rounded-full border border-gray-200 text-sm font-medium hover:bg-gray-50 transition">SDE III <span class="ml-1 text-gray-400 text-xs">210</span></button>
+                <button class="px-5 py-2 rounded-full border border-gray-200 text-sm font-medium hover:bg-gray-50 transition">Manager <span class="ml-1 text-gray-400 text-xs">95</span></button>
+                <button class="px-5 py-2 rounded-full border border-gray-200 text-sm font-medium hover:bg-gray-50 transition">Director <span class="ml-1 text-gray-400 text-xs">12</span></button>
+                <button class="px-5 py-2 rounded-full border border-gray-200 text-sm font-medium hover:bg-gray-50 transition">Others <span class="ml-1 text-gray-400 text-xs">1.1k</span></button>
+            </div>
+
+            <!-- Row 3: Countries -->
+            <div class="flex justify-between items-center px-4 overflow-x-auto gap-8 no-scrollbar">
+                <div class="flex items-center space-x-2 whitespace-nowrap opacity-60 hover:opacity-100 cursor-pointer">
+                    <span class="text-xl">🇺🇸</span>
+                    <span class="text-sm font-medium">USA</span>
+                    <span class="bg-gray-100 px-2 py-0.5 rounded text-[10px] font-bold">4.2k</span>
+                </div>
+                <div class="flex items-center space-x-2 whitespace-nowrap hover:text-blue-600 cursor-pointer">
+                    <span class="text-xl">🇬🇧</span>
+                    <span class="text-sm font-medium underline underline-offset-4 decoration-2 decoration-blue-500">United Kingdom</span>
+                    <span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-[10px] font-bold">1.1k</span>
+                </div>
+                <div class="flex items-center space-x-2 whitespace-nowrap opacity-60 hover:opacity-100 cursor-pointer">
+                    <span class="text-xl">🇨🇦</span>
+                    <span class="text-sm font-medium">Canada</span>
+                    <span class="bg-gray-100 px-2 py-0.5 rounded text-[10px] font-bold">800</span>
+                </div>
+                <div class="flex items-center space-x-2 whitespace-nowrap opacity-60 hover:opacity-100 cursor-pointer">
+                    <span class="text-xl">🇩🇪</span>
+                    <span class="text-sm font-medium">Germany</span>
+                    <span class="bg-gray-100 px-2 py-0.5 rounded text-[10px] font-bold">450</span>
+                </div>
+                <div class="flex items-center space-x-2 whitespace-nowrap opacity-60 hover:opacity-100 cursor-pointer">
+                    <span class="text-xl">🇮🇳</span>
+                    <span class="text-sm font-medium">India</span>
+                    <span class="bg-gray-100 px-2 py-0.5 rounded text-[10px] font-bold">2.3k</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VARIANT 2: SOFT MODERN (PASTELS) -->
+    <section>
+        <div class="mb-6 text-right">
+            <h2 class="text-xl font-semibold text-gray-800">2. Variant: Soft Playful</h2>
+            <p class="text-sm text-gray-600 italic">UX Thinking: Uses softer rounded corners (2xl) and light background fills instead of borders. This reduces visual noise and makes the interface feel more approachable and modern.</p>
+        </div>
+        
+        <div class="bg-blue-50/30 p-10 rounded-3xl space-y-10">
+            <!-- Row 1: Companies -->
+            <div class="flex flex-wrap justify-center gap-6">
+                <div class="w-32 h-32 bg-white rounded-2xl shadow-lg shadow-blue-900/5 flex flex-col items-center justify-center p-4 hover:scale-105 transition-transform cursor-pointer">
+                    <img src="https://www.google.com/s2/favicons?domain=meta.com&sz=64" class="w-12 h-12 mb-auto" alt="Meta">
+                    <div class="text-center">
+                        <p class="text-[10px] font-bold text-blue-500 uppercase tracking-wider">1204 Jobs</p>
+                        <p class="text-xs font-bold text-gray-800">Meta</p>
+                    </div>
+                </div>
+                <div class="w-32 h-32 bg-white rounded-2xl shadow-lg shadow-blue-900/5 flex flex-col items-center justify-center p-4 hover:scale-105 transition-transform cursor-pointer border-2 border-blue-400">
+                    <img src="https://www.google.com/s2/favicons?domain=apple.com&sz=64" class="w-12 h-12 mb-auto" alt="Apple">
+                    <div class="text-center">
+                        <p class="text-[10px] font-bold text-blue-500 uppercase tracking-wider">850 Jobs</p>
+                        <p class="text-xs font-bold text-gray-800">Apple</p>
+                    </div>
+                </div>
+                <div class="w-32 h-32 bg-white rounded-2xl shadow-lg shadow-blue-900/5 flex flex-col items-center justify-center p-4 hover:scale-105 transition-transform cursor-pointer">
+                    <img src="https://www.google.com/s2/favicons?domain=amazon.com&sz=64" class="w-12 h-12 mb-auto" alt="Amazon">
+                    <div class="text-center">
+                        <p class="text-[10px] font-bold text-blue-500 uppercase tracking-wider">2430 Jobs</p>
+                        <p class="text-xs font-bold text-gray-800">Amazon</p>
+                    </div>
+                </div>
+                <div class="w-32 h-32 bg-white rounded-2xl shadow-lg shadow-blue-900/5 flex flex-col items-center justify-center p-4 hover:scale-105 transition-transform cursor-pointer">
+                    <img src="https://www.google.com/s2/favicons?domain=netflix.com&sz=64" class="w-12 h-12 mb-auto" alt="Netflix">
+                    <div class="text-center">
+                        <p class="text-[10px] font-bold text-blue-500 uppercase tracking-wider">420 Jobs</p>
+                        <p class="text-xs font-bold text-gray-800">Netflix</p>
+                    </div>
+                </div>
+                <div class="w-32 h-32 bg-white rounded-2xl shadow-lg shadow-blue-900/5 flex flex-col items-center justify-center p-4 hover:scale-105 transition-transform cursor-pointer">
+                    <img src="https://www.google.com/s2/favicons?domain=google.com&sz=64" class="w-12 h-12 mb-auto" alt="Google">
+                    <div class="text-center">
+                        <p class="text-[10px] font-bold text-blue-500 uppercase tracking-wider">1850 Jobs</p>
+                        <p class="text-xs font-bold text-gray-800">Google</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Row 2: Titles as Bubbles -->
+            <div class="flex flex-wrap justify-center gap-3">
+                <div class="bg-white px-6 py-2 rounded-full shadow-sm text-sm font-medium text-gray-600 cursor-pointer hover:bg-gray-100">SDE I <span class="text-blue-400 font-bold ml-1">43</span></div>
+                <div class="bg-blue-600 px-6 py-2 rounded-full shadow-md text-sm font-medium text-white cursor-pointer">SDE II <span class="text-blue-200 font-bold ml-1">102</span></div>
+                <div class="bg-white px-6 py-2 rounded-full shadow-sm text-sm font-medium text-gray-600 cursor-pointer hover:bg-gray-100">SDE III <span class="text-blue-400 font-bold ml-1">21</span></div>
+                <div class="bg-white px-6 py-2 rounded-full shadow-sm text-sm font-medium text-gray-600 cursor-pointer hover:bg-gray-100">Manager <span class="text-blue-400 font-bold ml-1">15</span></div>
+                <div class="bg-white px-6 py-2 rounded-full shadow-sm text-sm font-medium text-gray-600 cursor-pointer hover:bg-gray-100">Director <span class="text-blue-400 font-bold ml-1">4</span></div>
+                <div class="bg-white px-6 py-2 rounded-full shadow-sm text-sm font-medium text-gray-600 cursor-pointer hover:bg-gray-100">Others <span class="text-blue-400 font-bold ml-1">88</span></div>
+            </div>
+
+            <!-- Row 3: Country Chips -->
+            <div class="flex flex-wrap justify-center gap-4">
+                <button class="flex items-center bg-gray-100/50 hover:bg-white px-4 py-2 rounded-xl transition shadow-sm">
+                    <span class="mr-2">🇺🇸</span> <span class="text-xs font-bold mr-2 text-gray-500">4200</span> <span class="text-xs font-semibold">USA</span>
+                </button>
+                <button class="flex items-center bg-gray-100/50 hover:bg-white px-4 py-2 rounded-xl transition shadow-sm">
+                    <span class="mr-2">🇬🇧</span> <span class="text-xs font-bold mr-2 text-gray-500">1100</span> <span class="text-xs font-semibold">UK</span>
+                </button>
+                <button class="flex items-center bg-gray-100/50 hover:bg-white px-4 py-2 rounded-xl transition shadow-sm">
+                    <span class="mr-2">🇨🇦</span> <span class="text-xs font-bold mr-2 text-gray-500">800</span> <span class="text-xs font-semibold">Canada</span>
+                </button>
+                <button class="flex items-center bg-gray-100/50 hover:bg-white px-4 py-2 rounded-xl transition shadow-sm">
+                    <span class="mr-2">🇮🇳</span> <span class="text-xs font-bold mr-2 text-gray-500">2300</span> <span class="text-xs font-semibold">India</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- VARIANT 3: DARK MINIMALIST -->
+    <section>
+        <div class="mb-6">
+            <h2 class="text-xl font-semibold text-gray-800">3. Variant: Dark Contrast</h2>
+            <p class="text-sm text-gray-600 italic">UX Thinking: High contrast and focus on data. The dark background makes company logos and job counts pop. This is often preferred by engineers who spend time in IDEs.</p>
+        </div>
+        
+        <div class="bg-gray-900 p-8 rounded-2xl space-y-8">
+            <!-- Row 1: Company Squares -->
+            <div class="grid grid-cols-5 gap-3">
+                <div class="aspect-square bg-gray-800 rounded-xl flex flex-col items-center justify-center border border-gray-700 hover:border-blue-500 transition cursor-pointer">
+                    <img src="https://www.google.com/s2/favicons?domain=meta.com&sz=64" class="w-8 h-8 mb-2 grayscale group-hover:grayscale-0">
+                    <span class="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Meta</span>
+                    <span class="mt-2 text-xs font-mono text-blue-400">1,204</span>
+                </div>
+                <div class="aspect-square bg-gray-800 rounded-xl flex flex-col items-center justify-center border border-gray-700 hover:border-blue-500 transition cursor-pointer">
+                    <img src="https://www.google.com/s2/favicons?domain=apple.com&sz=64" class="w-8 h-8 mb-2">
+                    <span class="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Apple</span>
+                    <span class="mt-2 text-xs font-mono text-blue-400">850</span>
+                </div>
+                <div class="aspect-square bg-gray-800 rounded-xl flex flex-col items-center justify-center border-2 border-blue-500 transition cursor-pointer">
+                    <img src="https://www.google.com/s2/favicons?domain=amazon.com&sz=64" class="w-8 h-8 mb-2">
+                    <span class="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Amazon</span>
+                    <span class="mt-2 text-xs font-mono text-blue-400">2,430</span>
+                </div>
+                <div class="aspect-square bg-gray-800 rounded-xl flex flex-col items-center justify-center border border-gray-700 hover:border-blue-500 transition cursor-pointer">
+                    <img src="https://www.google.com/s2/favicons?domain=netflix.com&sz=64" class="w-8 h-8 mb-2">
+                    <span class="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Netflix</span>
+                    <span class="mt-2 text-xs font-mono text-blue-400">420</span>
+                </div>
+                <div class="aspect-square bg-gray-800 rounded-xl flex flex-col items-center justify-center border border-gray-700 hover:border-blue-500 transition cursor-pointer">
+                    <img src="https://www.google.com/s2/favicons?domain=google.com&sz=64" class="w-8 h-8 mb-2">
+                    <span class="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Google</span>
+                    <span class="mt-2 text-xs font-mono text-blue-400">1,850</span>
+                </div>
+            </div>
+
+            <!-- Row 2: Job Titles -->
+            <div class="flex justify-between border-y border-gray-800 py-4">
+                <div class="text-center group cursor-pointer">
+                    <p class="text-xs text-gray-500 mb-1 group-hover:text-blue-400">SDE I</p>
+                    <p class="text-lg font-bold text-white">430</p>
+                </div>
+                <div class="text-center group cursor-pointer">
+                    <p class="text-xs text-gray-500 mb-1 group-hover:text-blue-400">SDE II</p>
+                    <p class="text-lg font-bold text-blue-500">820</p>
+                </div>
+                <div class="text-center group cursor-pointer">
+                    <p class="text-xs text-gray-500 mb-1 group-hover:text-blue-400">SDE III</p>
+                    <p class="text-lg font-bold text-white">210</p>
+                </div>
+                <div class="text-center group cursor-pointer">
+                    <p class="text-xs text-gray-500 mb-1 group-hover:text-blue-400">Manager</p>
+                    <p class="text-lg font-bold text-white">95</p>
+                </div>
+                <div class="text-center group cursor-pointer">
+                    <p class="text-xs text-gray-500 mb-1 group-hover:text-blue-400">Director</p>
+                    <p class="text-lg font-bold text-white">12</p>
+                </div>
+                <div class="text-center group cursor-pointer">
+                    <p class="text-xs text-gray-500 mb-1 group-hover:text-blue-400">Others</p>
+                    <p class="text-lg font-bold text-white">1.1k</p>
+                </div>
+            </div>
+
+            <!-- Row 3: Countries -->
+            <div class="flex gap-4 overflow-x-auto pb-2 no-scrollbar">
+                <div class="flex-shrink-0 bg-gray-800 px-4 py-3 rounded-lg flex items-center gap-3 cursor-pointer hover:bg-gray-700">
+                    <span class="text-lg">🇺🇸</span>
+                    <div>
+                        <p class="text-[10px] text-gray-500 font-bold uppercase">USA</p>
+                        <p class="text-xs font-bold text-white">4,203 Jobs</p>
+                    </div>
+                </div>
+                <div class="flex-shrink-0 bg-gray-800 px-4 py-3 rounded-lg flex items-center gap-3 border border-blue-500/50">
+                    <span class="text-lg">🇬🇧</span>
+                    <div>
+                        <p class="text-[10px] text-blue-400 font-bold uppercase">UK</p>
+                        <p class="text-xs font-bold text-white">1,120 Jobs</p>
+                    </div>
+                </div>
+                <div class="flex-shrink-0 bg-gray-800 px-4 py-3 rounded-lg flex items-center gap-3 cursor-pointer hover:bg-gray-700">
+                    <span class="text-lg">🇨🇦</span>
+                    <div>
+                        <p class="text-[10px] text-gray-500 font-bold uppercase">Canada</p>
+                        <p class="text-xs font-bold text-white">840 Jobs</p>
+                    </div>
+                </div>
+                <div class="flex-shrink-0 bg-gray-800 px-4 py-3 rounded-lg flex items-center gap-3 cursor-pointer hover:bg-gray-700">
+                    <span class="text-lg">🇮🇳</span>
+                    <div>
+                        <p class="text-[10px] text-gray-500 font-bold uppercase">India</p>
+                        <p class="text-xs font-bold text-white">2,310 Jobs</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VARIANT 4: BENTO BOX STYLE -->
+    <section>
+        <div class="mb-6 text-right">
+            <h2 class="text-xl font-semibold text-gray-800">4. Variant: Bento Grid</h2>
+            <p class="text-sm text-gray-600 italic">UX Thinking: Uses the "Bento" layout style where elements have varying importance. It creates a visually interesting and structured dashboard look that feels very premium.</p>
+        </div>
+        
+        <div class="grid grid-cols-12 gap-4">
+            <!-- Companies Row (Large) -->
+            <div class="col-span-12 grid grid-cols-5 gap-4">
+                <div class="bg-white border border-gray-100 p-6 rounded-3xl flex flex-col items-center justify-center hover:shadow-xl transition-all cursor-pointer group">
+                    <img src="https://www.google.com/s2/favicons?domain=meta.com&sz=64" class="w-12 h-12 mb-4 group-hover:scale-110 transition">
+                    <h3 class="font-bold text-gray-800 text-sm">Meta</h3>
+                    <p class="text-[10px] font-bold text-blue-600 mt-1">1,200 OPEN</p>
+                </div>
+                <div class="bg-white border border-gray-100 p-6 rounded-3xl flex flex-col items-center justify-center hover:shadow-xl transition-all cursor-pointer group">
+                    <img src="https://www.google.com/s2/favicons?domain=apple.com&sz=64" class="w-12 h-12 mb-4 group-hover:scale-110 transition">
+                    <h3 class="font-bold text-gray-800 text-sm">Apple</h3>
+                    <p class="text-[10px] font-bold text-blue-600 mt-1">850 OPEN</p>
+                </div>
+                <div class="bg-black p-6 rounded-3xl flex flex-col items-center justify-center shadow-xl shadow-black/20 group">
+                    <img src="https://www.google.com/s2/favicons?domain=amazon.com&sz=64" class="w-12 h-12 mb-4 group-hover:scale-110 transition">
+                    <h3 class="font-bold text-white text-sm">Amazon</h3>
+                    <p class="text-[10px] font-bold text-orange-400 mt-1">2,400 OPEN</p>
+                </div>
+                <div class="bg-white border border-gray-100 p-6 rounded-3xl flex flex-col items-center justify-center hover:shadow-xl transition-all cursor-pointer group">
+                    <img src="https://www.google.com/s2/favicons?domain=netflix.com&sz=64" class="w-12 h-12 mb-4 group-hover:scale-110 transition">
+                    <h3 class="font-bold text-gray-800 text-sm">Netflix</h3>
+                    <p class="text-[10px] font-bold text-blue-600 mt-1">420 OPEN</p>
+                </div>
+                <div class="bg-white border border-gray-100 p-6 rounded-3xl flex flex-col items-center justify-center hover:shadow-xl transition-all cursor-pointer group">
+                    <img src="https://www.google.com/s2/favicons?domain=google.com&sz=64" class="w-12 h-12 mb-4 group-hover:scale-110 transition">
+                    <h3 class="font-bold text-gray-800 text-sm">Google</h3>
+                    <p class="text-[10px] font-bold text-blue-600 mt-1">1,800 OPEN</p>
+                </div>
+            </div>
+
+            <!-- Job Titles Row -->
+            <div class="col-span-8 bg-white border border-gray-100 p-6 rounded-3xl flex items-center justify-around">
+                <div class="text-center"><p class="text-2xl font-bold">430</p><p class="text-[10px] font-bold text-gray-400">SDE I</p></div>
+                <div class="h-8 w-[1px] bg-gray-100"></div>
+                <div class="text-center"><p class="text-2xl font-bold text-blue-600">820</p><p class="text-[10px] font-bold text-gray-400">SDE II</p></div>
+                <div class="h-8 w-[1px] bg-gray-100"></div>
+                <div class="text-center"><p class="text-2xl font-bold">210</p><p class="text-[10px] font-bold text-gray-400">SDE III</p></div>
+                <div class="h-8 w-[1px] bg-gray-100"></div>
+                <div class="text-center"><p class="text-2xl font-bold">95</p><p class="text-[10px] font-bold text-gray-400">MANAGER</p></div>
+                <div class="h-8 w-[1px] bg-gray-100"></div>
+                <div class="text-center"><p class="text-2xl font-bold">12</p><p class="text-[10px] font-bold text-gray-400">DIRECTOR</p></div>
+            </div>
+
+            <!-- Country Highlight (Small Bento piece) -->
+            <div class="col-span-4 bg-blue-600 p-6 rounded-3xl flex flex-col justify-center text-white">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-bold opacity-80 uppercase">Top Location</span>
+                    <span class="text-lg">🇺🇸</span>
+                </div>
+                <p class="text-2xl font-bold">United States</p>
+                <p class="text-xs opacity-80 mt-1">4,203 open positions total</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- VARIANT 5: NEOMORPHIC/GLASS HYBRID -->
+    <section>
+        <div class="mb-6">
+            <h2 class="text-xl font-semibold text-gray-800">5. Variant: Minimalist List-Card</h2>
+            <p class="text-sm text-gray-600 italic">UX Thinking: A more linear approach. By aligning filters vertically in a tight row, it maximizes space for the actual job listings below (not shown). Good for power users.</p>
+        </div>
+        
+        <div class="bg-white rounded-xl divide-y divide-gray-100 border border-gray-100 shadow-sm">
+            <!-- Row 1: Companies -->
+            <div class="p-4 flex items-center gap-6 overflow-x-auto no-scrollbar">
+                <span class="text-xs font-bold text-gray-400 uppercase w-20 flex-shrink-0">Company</span>
+                <div class="flex gap-2">
+                    <div class="flex items-center gap-2 bg-gray-50 px-3 py-1.5 rounded-lg border border-transparent hover:border-gray-200 cursor-pointer">
+                        <img src="https://www.google.com/s2/favicons?domain=meta.com&sz=16" class="w-4 h-4">
+                        <span class="text-sm font-medium">Meta</span>
+                        <span class="text-[10px] bg-white px-1.5 py-0.5 rounded shadow-sm font-bold text-gray-500">1.2k</span>
+                    </div>
+                    <div class="flex items-center gap-2 bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-200 cursor-pointer">
+                        <img src="https://www.google.com/s2/favicons?domain=apple.com&sz=16" class="w-4 h-4">
+                        <span class="text-sm font-medium text-blue-700">Apple</span>
+                        <span class="text-[10px] bg-white px-1.5 py-0.5 rounded shadow-sm font-bold text-blue-600">850</span>
+                    </div>
+                    <div class="flex items-center gap-2 bg-gray-50 px-3 py-1.5 rounded-lg border border-transparent hover:border-gray-200 cursor-pointer">
+                        <img src="https://www.google.com/s2/favicons?domain=amazon.com&sz=16" class="w-4 h-4">
+                        <span class="text-sm font-medium">Amazon</span>
+                        <span class="text-[10px] bg-white px-1.5 py-0.5 rounded shadow-sm font-bold text-gray-500">2.4k</span>
+                    </div>
+                    <div class="flex items-center gap-2 bg-gray-50 px-3 py-1.5 rounded-lg border border-transparent hover:border-gray-200 cursor-pointer">
+                        <img src="https://www.google.com/s2/favicons?domain=netflix.com&sz=16" class="w-4 h-4">
+                        <span class="text-sm font-medium">Netflix</span>
+                        <span class="text-[10px] bg-white px-1.5 py-0.5 rounded shadow-sm font-bold text-gray-500">420</span>
+                    </div>
+                    <div class="flex items-center gap-2 bg-gray-50 px-3 py-1.5 rounded-lg border border-transparent hover:border-gray-200 cursor-pointer">
+                        <img src="https://www.google.com/s2/favicons?domain=google.com&sz=16" class="w-4 h-4">
+                        <span class="text-sm font-medium">Google</span>
+                        <span class="text-[10px] bg-white px-1.5 py-0.5 rounded shadow-sm font-bold text-gray-500">1.8k</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Row 2: Levels -->
+            <div class="p-4 flex items-center gap-6 overflow-x-auto no-scrollbar">
+                <span class="text-xs font-bold text-gray-400 uppercase w-20 flex-shrink-0">Level</span>
+                <div class="flex gap-4">
+                    <label class="flex items-center gap-2 cursor-pointer group">
+                        <div class="w-4 h-4 rounded border border-gray-300 group-hover:border-blue-500 transition"></div>
+                        <span class="text-sm text-gray-600">SDE I (430)</span>
+                    </label>
+                    <label class="flex items-center gap-2 cursor-pointer group">
+                        <div class="w-4 h-4 rounded bg-blue-600 flex items-center justify-center">
+                            <svg class="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg>
+                        </div>
+                        <span class="text-sm text-gray-900 font-semibold">SDE II (820)</span>
+                    </label>
+                    <label class="flex items-center gap-2 cursor-pointer group">
+                        <div class="w-4 h-4 rounded border border-gray-300 group-hover:border-blue-500 transition"></div>
+                        <span class="text-sm text-gray-600">SDE III (210)</span>
+                    </label>
+                    <label class="flex items-center gap-2 cursor-pointer group">
+                        <div class="w-4 h-4 rounded border border-gray-300 group-hover:border-blue-500 transition"></div>
+                        <span class="text-sm text-gray-600">Manager (95)</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Row 3: Geography -->
+            <div class="p-4 flex items-center gap-6 overflow-x-auto no-scrollbar">
+                <span class="text-xs font-bold text-gray-400 uppercase w-20 flex-shrink-0">Region</span>
+                <div class="flex items-center gap-4">
+                    <div class="text-sm font-medium text-gray-700 bg-gray-100 px-3 py-1 rounded flex items-center gap-2">
+                        <span>🇺🇸</span> USA <span class="text-xs text-gray-400">4.2k</span>
+                    </div>
+                    <div class="text-sm font-medium text-gray-400 hover:text-gray-700 cursor-pointer flex items-center gap-2">
+                        <span>🇬🇧</span> UK <span class="text-xs">1.1k</span>
+                    </div>
+                    <div class="text-sm font-medium text-gray-400 hover:text-gray-700 cursor-pointer flex items-center gap-2">
+                        <span>🇨🇦</span> Canada <span class="text-xs">800</span>
+                    </div>
+                    <div class="text-sm font-medium text-gray-400 hover:text-gray-700 cursor-pointer flex items-center gap-2">
+                        <span>🇮🇳</span> India <span class="text-xs">2.3k</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</body>
+
+</html>

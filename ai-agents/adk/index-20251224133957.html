@@ -1,0 +1,307 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<body class="bg-slate-100 text-slate-900">
+    <main class="max-w-6xl mx-auto py-10 space-y-12">
+        <header>
+            <h1 class="text-3xl font-bold tracking-tight">FAANG Job Card UI Variations</h1>
+            <p class="mt-2 text-slate-600 max-w-2xl">Five UX/visual variants of a job card for a FAANG-style company. Each card shows a job at a large tech company with slightly different layout and emphasis.</p>
+        </header>
+
+        <!-- Variant 1: Compact List-Friendly Card -->
+        <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 space-y-4">
+            <header class="flex items-start justify-between gap-4">
+                <div class="flex gap-3">
+                    <img src="https://www.google.com/s2/favicons?domain=google.com&sz=64" alt="Company logo" class="w-10 h-10 rounded-xl">
+                    <div>
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <h2 class="text-lg font-semibold leading-tight">Senior Software Engineer</h2>
+                            <span class="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-medium text-emerald-700 border border-emerald-100">Actively hiring</span>
+                        </div>
+                        <p class="text-sm text-slate-600">Google • Search Infrastructure</p>
+                        <p class="mt-1 text-xs text-slate-500">Sunnyvale, CA (Hybrid)</p>
+                    </div>
+                </div>
+                <button class="text-slate-400 hover:text-slate-700">
+                    <span class="sr-only">Save job</span>
+                    ★
+                </button>
+            </header>
+
+            <div class="grid grid-cols-2 gap-4 text-xs">
+                <div class="space-y-1">
+                    <div class="text-slate-500">Compensation</div>
+                    <div class="font-medium text-slate-900">$260k – $340k total / year</div>
+                    <div class="text-slate-500">Level: L5</div>
+                </div>
+                <div class="space-y-1">
+                    <div class="text-slate-500">Posted</div>
+                    <div class="font-medium text-slate-900">3 days ago • 120 applicants</div>
+                    <div class="text-amber-600 font-medium">Your profile matches 80%</div>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 pt-3">
+                <div class="flex flex-wrap gap-2 text-xs">
+                    <span class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-slate-700">Distributed Systems</span>
+                    <span class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-slate-700">Java</span>
+                    <span class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-slate-700">Kubernetes</span>
+                    <span class="inline-flex items-center rounded-full bg-slate-50 px-2 py-0.5 text-slate-500">+3 more</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button class="rounded-full border border-slate-200 px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50">View details</button>
+                    <button class="rounded-full bg-slate-900 px-4 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-slate-800">Apply</button>
+                </div>
+            </div>
+
+            <p class="text-xs text-slate-500">Designed for list views: dense, scannable, with key info surfaced (title, company, compensation, match). Secondary details are tucked into subtle text and chips.</p>
+        </section>
+
+        <!-- Variant 2: Spacious Highlight Card -->
+        <section class="bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 text-slate-50 rounded-3xl p-7 shadow-lg border border-slate-800 space-y-5">
+            <header class="flex items-start justify-between gap-4">
+                <div class="flex gap-3">
+                    <div class="shrink-0 flex items-center justify-center w-11 h-11 rounded-2xl bg-white/5 ring-1 ring-white/10">
+                        <img src="https://www.google.com/s2/favicons?domain=amazon.com&sz=64" alt="Company logo" class="w-7 h-7 rounded-lg">
+                    </div>
+                    <div>
+                        <p class="text-xs uppercase tracking-[0.15em] text-amber-300/80">Featured role • Prime Video</p>
+                        <h2 class="mt-1 text-2xl font-semibold leading-tight">Principal Machine Learning Engineer</h2>
+                        <p class="mt-1 text-sm text-slate-300">Amazon • Personalization & Recommendations • Remote (US)</p>
+                    </div>
+                </div>
+                <div class="text-right space-y-2">
+                    <p class="text-xs text-slate-300">Base range</p>
+                    <p class="text-lg font-semibold">$290k – $360k</p>
+                    <p class="text-xs text-slate-400">+ stock & sign-on bonus</p>
+                </div>
+            </header>
+
+            <div class="flex flex-wrap gap-6 text-xs">
+                <div class="space-y-1 min-w-[140px]">
+                    <p class="text-slate-400">Team impact</p>
+                    <p class="text-slate-100">Design large-scale ranking models powering 100M+ daily recommendations.</p>
+                </div>
+                <div class="space-y-1 min-w-[140px]">
+                    <p class="text-slate-400">Experience</p>
+                    <p class="text-slate-100">8+ yrs ML, 3+ yrs leading teams, deep experience with recommendation systems.</p>
+                </div>
+                <div class="space-y-1 min-w-[140px]">
+                    <p class="text-slate-400">Tech stack</p>
+                    <p class="text-slate-100">Python, Scala, PyTorch/TensorFlow, Spark, AWS (SageMaker, EMR, Kinesis).</p>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-between gap-4 pt-3 border-t border-white/5">
+                <div class="flex flex-wrap gap-2 text-[11px]">
+                    <span class="inline-flex items-center rounded-full bg-emerald-400/10 px-2.5 py-0.5 text-emerald-300 border border-emerald-500/20">High compensation</span>
+                    <span class="inline-flex items-center rounded-full bg-sky-400/10 px-2.5 py-0.5 text-sky-200 border border-sky-500/20">Remote-friendly</span>
+                    <span class="inline-flex items-center rounded-full bg-amber-400/10 px-2.5 py-0.5 text-amber-200 border border-amber-500/20">Leadership</span>
+                </div>
+                <div class="flex items-center gap-2 text-[11px]">
+                    <button class="rounded-full bg-white text-slate-900 px-4 py-1.5 font-semibold shadow-sm hover:bg-slate-100">Fast apply</button>
+                    <button class="rounded-full border border-white/15 px-3 py-1.5 font-medium text-slate-100/90 hover:bg-white/5">Save</button>
+                </div>
+            </div>
+
+            <p class="text-xs text-slate-400">Designed to spotlight a single, high-value role. Uses contrast and breathing room to feel premium and reduce cognitive load. Great for featured or sponsored jobs.</p>
+        </section>
+
+        <!-- Variant 3: Info-Dense Dashboard Card -->
+        <section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-4">
+            <header class="flex items-start justify-between gap-4">
+                <div class="space-y-1">
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <h2 class="text-base font-semibold leading-tight">Staff Frontend Engineer</h2>
+                        <span class="inline-flex items-center rounded-full bg-indigo-50 px-2 py-0.5 text-[11px] font-medium text-indigo-700 border border-indigo-100">Top match</span>
+                        <span class="inline-flex items-center rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-medium text-emerald-700 border border-emerald-100">Referral available</span>
+                    </div>
+                    <p class="text-sm text-slate-600">Meta • Feed & Stories Experience • Menlo Park, CA</p>
+                    <div class="flex flex-wrap items-center gap-3 text-xs text-slate-500 mt-1">
+                        <span>Hybrid • 3 days onsite</span>
+                        <span class="w-1 h-1 rounded-full bg-slate-300"></span>
+                        <span>Visa sponsorship offered</span>
+                        <span class="w-1 h-1 rounded-full bg-slate-300"></span>
+                        <span>Open to relocation</span>
+                    </div>
+                </div>
+                <div class="text-right text-xs space-y-1 min-w-[140px]">
+                    <p class="text-slate-500">Comp range</p>
+                    <p class="text-sm font-semibold text-slate-900">$280k – $330k</p>
+                    <p class="text-slate-500">Base • level E7</p>
+                    <p class="mt-2 text-emerald-600 font-medium">You meet 6 of 8 requirements</p>
+                </div>
+            </header>
+
+            <div class="grid grid-cols-3 gap-4 text-[11px]">
+                <div class="space-y-1">
+                    <p class="text-slate-500">Key responsibilities</p>
+                    <ul class="list-disc list-inside text-slate-700 space-y-0.5">
+                        <li>Lead performance strategy for Feed surface.</li>
+                        <li>Mentor 4–6 engineers across teams.</li>
+                        <li>Drive frontend architecture decisions.</li>
+                    </ul>
+                </div>
+                <div class="space-y-1">
+                    <p class="text-slate-500">Must-have skills</p>
+                    <div class="flex flex-wrap gap-1">
+                        <span class="rounded bg-slate-100 px-2 py-0.5">React</span>
+                        <span class="rounded bg-slate-100 px-2 py-0.5">TypeScript</span>
+                        <span class="rounded bg-slate-100 px-2 py-0.5">GraphQL</span>
+                        <span class="rounded bg-slate-100 px-2 py-0.5">Performance</span>
+                    </div>
+                    <p class="text-emerald-600 mt-1">You match: React, TypeScript, GraphQL</p>
+                </div>
+                <div class="space-y-2">
+                    <p class="text-slate-500">Process</p>
+                    <ol class="list-decimal list-inside text-slate-700 space-y-0.5">
+                        <li>Recruiter screen</li>
+                        <li>Technical screen</li>
+                        <li>Onsite (3 rounds)</li>
+                    </ol>
+                    <p class="text-slate-500">Average time to offer: <span class="font-medium text-slate-800">21 days</span></p>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between gap-3 pt-3 border-t border-slate-100 text-[11px]">
+                <div class="flex items-center gap-3 text-slate-500">
+                    <span>Posted 5 days ago</span>
+                    <span class="w-1 h-1 rounded-full bg-slate-300"></span>
+                    <span>86 applicants</span>
+                    <span class="w-1 h-1 rounded-full bg-slate-300"></span>
+                    <span>Last active: 4 hours ago</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button class="rounded-full border border-slate-200 px-3 py-1.5 font-medium text-slate-700 hover:bg-slate-50">Share</button>
+                    <button class="rounded-full bg-indigo-600 px-4 py-1.5 font-semibold text-white shadow-sm hover:bg-indigo-500">Start application</button>
+                </div>
+            </div>
+
+            <p class="text-xs text-slate-500">Designed for power users in a dashboard context. High information density with clear grouping so advanced candidates can evaluate quickly without extra clicks.</p>
+        </section>
+
+        <!-- Variant 4: Timeline / Progress-Oriented Card -->
+        <section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
+            <header class="flex items-start justify-between gap-4">
+                <div class="flex gap-3">
+                    <img src="https://www.google.com/s2/favicons?domain=netflix.com&sz=64" alt="Company logo" class="w-10 h-10 rounded-xl">
+                    <div>
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <h2 class="text-lg font-semibold leading-tight">Senior Data Engineer, Content Analytics</h2>
+                            <span class="inline-flex items-center rounded-full bg-sky-50 px-2.5 py-0.5 text-xs font-medium text-sky-700 border border-sky-100">In process</span>
+                        </div>
+                        <p class="text-sm text-slate-600">Netflix • Data Science & Engineering • Los Gatos, CA or Remote (US)</p>
+                    </div>
+                </div>
+                <div class="text-right text-xs space-y-1">
+                    <p class="text-slate-500">Your stage</p>
+                    <p class="font-semibold text-slate-900">Portfolio review scheduled</p>
+                    <p class="text-slate-500">Jan 12, 10:00 AM</p>
+                </div>
+            </header>
+
+            <div class="grid grid-cols-[1fr,2fr] gap-6 text-xs">
+                <div class="space-y-2">
+                    <p class="text-slate-500 font-medium">Application progress</p>
+                    <ol class="relative border-l border-slate-200 pl-4 space-y-3">
+                        <li class="relative">
+                            <span class="absolute -left-2 top-0 w-3 h-3 rounded-full bg-emerald-500 ring-4 ring-emerald-100"></span>
+                            <p class="font-medium text-slate-900">Applied</p>
+                            <p class="text-slate-500">Dec 18</p>
+                        </li>
+                        <li class="relative">
+                            <span class="absolute -left-2 top-0 w-3 h-3 rounded-full bg-emerald-500 ring-4 ring-emerald-100"></span>
+                            <p class="font-medium text-slate-900">Recruiter screen</p>
+                            <p class="text-slate-500">Completed • Dec 22</p>
+                        </li>
+                        <li class="relative">
+                            <span class="absolute -left-2 top-0 w-3 h-3 rounded-full bg-sky-500 ring-4 ring-sky-100"></span>
+                            <p class="font-medium text-slate-900">Portfolio review</p>
+                            <p class="text-slate-500">Upcoming • Jan 12</p>
+                        </li>
+                        <li class="relative">
+                            <span class="absolute -left-2 top-0 w-3 h-3 rounded-full bg-slate-300 ring-4 ring-slate-100"></span>
+                            <p class="font-medium text-slate-400">Onsite interviews</p>
+                            <p class="text-slate-400">Pending</p>
+                        </li>
+                    </ol>
+                </div>
+                <div class="space-y-3">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-1">
+                            <p class="text-slate-500">Compensation philosophy</p>
+                            <p class="text-slate-800 font-medium">No fixed bands • depends on experience</p>
+                            <p class="text-slate-500">Recent offers: $270k – $380k</p>
+                        </div>
+                        <div class="space-y-1">
+                            <p class="text-slate-500">Role focus</p>
+                            <p class="text-slate-800">Build data models powering content green-light decisions and slate planning.</p>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <p class="text-slate-500">Prep suggestions</p>
+                        <ul class="list-disc list-inside text-slate-700 space-y-1">
+                            <li>Review recent content launch case studies.</li>
+                            <li>Prepare examples of complex data pipelines you've owned.</li>
+                            <li>Highlight collaboration with analytics and content teams.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between gap-3 pt-3 border-t border-slate-100 text-xs">
+                <div class="text-slate-500">Recruiter typically responds within <span class="font-medium text-slate-800">3 business days</span>.</div>
+                <div class="flex items-center gap-2">
+                    <button class="rounded-full border border-slate-200 px-3 py-1.5 font-medium text-slate-700 hover:bg-slate-50">Reschedule</button>
+                    <button class="rounded-full bg-slate-900 px-4 py-1.5 font-semibold text-white shadow-sm hover:bg-slate-800">View interview guide</button>
+                </div>
+            </div>
+
+            <p class="text-xs text-slate-500">Designed for candidates already in process. The timeline view reduces anxiety by clarifying where you are, what's next, and how to prepare.</p>
+        </section>
+
+        <!-- Variant 5: Minimal, Mobile-First Card -->
+        <section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-3 max-w-md">
+            <header class="flex items-center gap-3">
+                <img src="https://www.google.com/s2/favicons?domain=apple.com&sz=64" alt="Company logo" class="w-9 h-9 rounded-xl">
+                <div class="flex-1 min-w-0">
+                    <h2 class="text-base font-semibold leading-tight truncate">iOS Engineer, Developer Experience</h2>
+                    <p class="text-xs text-slate-600 truncate">Apple • Xcode & Developer Tools • Cupertino, CA</p>
+                </div>
+            </header>
+
+            <div class="flex justify-between items-center text-xs mt-1">
+                <div class="space-y-0.5">
+                    <p class="text-slate-500">Total compensation</p>
+                    <p class="font-medium text-slate-900">$220k – $260k / year</p>
+                </div>
+                <div class="text-right space-y-0.5">
+                    <p class="text-slate-500">Type</p>
+                    <p class="font-medium text-slate-900">Full-time • Onsite</p>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap gap-1.5 text-[11px] mt-2">
+                <span class="rounded-full bg-slate-100 px-2 py-0.5 text-slate-700">Swift</span>
+                <span class="rounded-full bg-slate-100 px-2 py-0.5 text-slate-700">UIKit / SwiftUI</span>
+                <span class="rounded-full bg-slate-100 px-2 py-0.5 text-slate-700">IDE Tooling</span>
+                <span class="rounded-full bg-slate-50 px-2 py-0.5 text-slate-500">+2 more</span>
+            </div>
+
+            <div class="flex items-center justify-between gap-3 mt-2 text-[11px]">
+                <p class="text-slate-500">Posted 1 day ago • 24 applicants</p>
+                <button class="rounded-full bg-slate-900 px-3 py-1.5 font-semibold text-white shadow-sm hover:bg-slate-800">Quick apply</button>
+            </div>
+
+            <p class="text-[11px] text-slate-500 mt-2">Designed for mobile and small cards. Prioritizes truncation-safe layout, single-line key info, and a single strong CTA.</p>
+        </section>
+    </main>
+</body>
+
+</html>

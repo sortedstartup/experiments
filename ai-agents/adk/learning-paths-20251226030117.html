@@ -1,0 +1,137 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        .mobile-frame {
+            width: 375px;
+            height: 667px;
+            border: 8px solid #333;
+            border-radius: 40px;
+            overflow: hidden;
+            position: relative;
+            background: #FFFFFF;
+            display: flex;
+            flex-direction: column;
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+
+<body class="bg-gray-100 p-10 flex flex-col items-center gap-10">
+
+    <h2 class="font-bold text-2xl text-gray-800">File 2: Enrollment / Learning Paths</h2>
+
+    <div class="mobile-frame shadow-2xl">
+        <!-- Header Section -->
+        <div class="bg-indigo-600 p-8 pt-12 text-white rounded-b-[40px] shadow-lg relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-10 -mt-10"></div>
+            <h1 class="text-3xl font-black mb-2 relative z-10">Choose Your Path</h1>
+            <p class="text-indigo-100 text-sm opacity-80">Neuro-optimized schedules for long-term mastery.</p>
+        </div>
+
+        <!-- Filter Chips -->
+        <div class="flex gap-3 px-6 py-6 overflow-x-auto no-scrollbar">
+            <span class="bg-indigo-600 text-white px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap">All Careers</span>
+            <span class="bg-gray-100 text-gray-500 px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap">Engineering</span>
+            <span class="bg-gray-100 text-gray-500 px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap">Design</span>
+            <span class="bg-gray-100 text-gray-500 px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap">Data Science</span>
+        </div>
+
+        <!-- Paths List -->
+        <div class="flex-1 overflow-y-auto px-6 space-y-4 pb-8">
+            
+            <!-- Path Card 1 (Enrolled) -->
+            <div class="bg-white border-2 border-indigo-500 p-5 rounded-3xl relative">
+                <div class="absolute top-4 right-4 bg-indigo-500 text-white text-[8px] font-bold px-2 py-0.5 rounded-full uppercase">Current</div>
+                <div class="flex items-start gap-4 mb-4">
+                    <div class="w-12 h-12 bg-indigo-50 rounded-2xl flex items-center justify-center">
+                        <img src="https://www.google.com/s2/favicons?domain=reactjs.org&sz=64" class="w-8 h-8">
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-gray-900">Frontend Engineering</h3>
+                        <p class="text-[10px] text-gray-400">42 Modules • 120 Topics</p>
+                    </div>
+                </div>
+                <div class="space-y-3 mb-4">
+                    <div class="flex justify-between text-[10px] font-bold">
+                        <span class="text-gray-400 uppercase">Interview Readiness</span>
+                        <span class="text-indigo-600">84%</span>
+                    </div>
+                    <div class="w-full h-1.5 bg-gray-100 rounded-full">
+                        <div class="w-5/6 h-full bg-indigo-500 rounded-full"></div>
+                    </div>
+                </div>
+                <button class="w-full bg-indigo-600 text-white font-bold py-3 rounded-xl text-sm shadow-md">
+                    Resume Learning
+                </button>
+            </div>
+
+            <!-- Path Card 2 (Available) -->
+            <div class="bg-gray-50 border border-gray-100 p-5 rounded-3xl group active:scale-95 transition-all">
+                <div class="flex items-start gap-4 mb-4">
+                    <div class="w-12 h-12 bg-white rounded-2xl border border-gray-100 flex items-center justify-center">
+                        <img src="https://www.google.com/s2/favicons?domain=python.org&sz=64" class="w-8 h-8">
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-gray-800">Backend Architect</h3>
+                        <p class="text-[10px] text-gray-400">38 Modules • 95 Topics</p>
+                    </div>
+                </div>
+                <div class="bg-white rounded-2xl p-3 border border-gray-100 flex justify-between items-center mb-4">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-full bg-green-50 flex items-center justify-center">
+                            <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"></path></svg>
+                        </div>
+                        <span class="text-[10px] text-gray-500 leading-tight">Mastery in <br><strong class="text-gray-800">75 Days</strong></span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center">
+                            <svg class="w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"></path></svg>
+                        </div>
+                        <span class="text-[10px] text-gray-500 leading-tight">Join <br><strong class="text-gray-800">12.4k others</strong></span>
+                    </div>
+                </div>
+                <button class="w-full bg-gray-900 text-white font-bold py-3 rounded-xl text-sm">
+                    View Path Detail
+                </button>
+            </div>
+
+             <!-- Path Card 3 (Available) -->
+             <div class="bg-gray-50 border border-gray-100 p-5 rounded-3xl opacity-60">
+                <div class="flex items-start gap-4 mb-4">
+                    <div class="w-12 h-12 bg-white rounded-2xl border border-gray-100 flex items-center justify-center">
+                        <img src="https://www.google.com/s2/favicons?domain=apple.com&sz=64" class="w-8 h-8">
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-gray-800">iOS Development</h3>
+                        <p class="text-[10px] text-gray-400">Coming soon</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Floating Action Button -->
+        <div class="absolute bottom-8 right-8">
+            <button class="w-14 h-14 bg-indigo-600 rounded-full shadow-xl shadow-indigo-200 text-white flex items-center justify-center active:scale-90 transition-transform">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            </button>
+        </div>
+    </div>
+
+    <div class="max-w-[375px] text-sm text-gray-600 bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+        <h3 class="font-bold text-gray-900 mb-2">UX Thinking: Learning Paths</h3>
+        <ul class="list-disc ml-5 space-y-2">
+            <li><strong>Path-as-a-Commitment:</strong> Instead of simple courses, these are "Paths" with specific career outcome data.</li>
+            <li><strong>Decision Metrics:</strong> For each path, the UI explicitly calls out the "Mastery Duration" (e.g., 75 days) and social proof to reduce choice paralysis.</li>
+            <li><strong>State Awareness:</strong> The Enrolled path is visually distinct (Indigo border) and replaces the action button with "Resume" to minimize friction.</li>
+        </ul>
+    </div>
+
+</body>
+</html>

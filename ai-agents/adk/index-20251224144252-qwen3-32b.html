@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="p-8 bg-gray-50">
+
+<h2 class="text-2xl font-bold mb-6">Job Card UX Variations</h2>
+
+<!-- Variant 1: Minimalist Design -->
+<div class="p-4 max-w-sm rounded-lg bg-white shadow-md mb-6">
+  <div class="flex items-center mb-3">
+    <img src="https://www.google.com/s2/favicons?domain=google.com&sz=32" alt="Google" class="w-8 h-8 mr-2">
+    <h3 class="text-lg font-bold">Senior Software Engineer</h3>
+  </div>
+  <p class="text-gray-600 mb-2">Mountain View, CA</p>
+  <div class="grid grid-cols-2 gap-2 text-sm text-gray-500">
+    <div class="bg-gray-100 px-2 rounded">$150-180k</div>
+    <div class="bg-amber-50 px-2 rounded">Remote</div>
+  </div>
+</div>
+
+<!-- Variant 2: Interactive Hover Card -->
+<div class="p-4 max-w-sm rounded-lg bg-white hover:bg-blue-50 transition-colors mb-6">
+  <div class="flex justify-between">
+    <div class="flex items-center">
+      <img src="https://www.google.com/s2/favicons?domain=amazon.com&sz=32" alt="Amazon" class="w-8 h-8 mr-2">
+      <h3 class="font-bold">DevOps Engineer</h3>
+    </div>
+    <div class="text-sm italic hidden group-hover:block">Apply by Dec 31</div>
+  </div>
+  <p class="text-gray-600 mb-2">Seattle, WA</p>
+  <div class="space-x-2 text-xs">
+    <span class="px-2 py-1 bg-green-100 text-green-800 rounded">Remote</span>
+    <span class="px-2 py-1 bg-yellow-100 text-yellow-800 rounded">Fast-Track</span>
+  </div>
+</div>
+
+<!-- Variant 3: Split View -->
+<div class="max-w-sm rounded-lg bg-white mb-6 overflow-hidden">
+  <div class="md:flex">
+    <img src="https://picsum.photos/200/120" class="w-full md:w-1/3" alt="">
+    <div class="p-4">
+      <div class="font-medium text-gray-800">Netflix</div>
+      <h3 class="text-xl font-bold mb-1">Cloud Architect</h3>
+      <p class="text-gray-600">Austin, TX</p>
+      <div class="flex flex-wrap mt-2">
+        <span class="px-3 py-1 mr-2 mb-1 bg-blue-100 text-blue-800 rounded">$200-250k</span>
+        <span class="px-3 py-1 mr-2 mb-1 bg-teal-100 text-teal-800 rounded">Benefits+</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Variant 4: Bold Typography -->
+<div class="p-4 max-w-sm rounded-lg bg-white shadow-md mb-6">
+  <h3 class="text-2xl font-extrabold mb-2">Lead Product Designer</h3>
+  <p class="text-gray-600 mb-3">Facebook | Menlo Park, CA</p>
+  <div class="flex flex-wrap gap-2 text-sm">
+    <span class="px-3 py-1 bg-indigo-500 bg-opacity-20 text-indigo-800 rounded-full">$130-160k</span>
+    <span class="px-3 py-1 bg-purple-500 bg-opacity-20 text-purple-800 rounded-full">Remote</span>
+    <span class="px-3 py-1 bg-pink-500 bg-opacity-20 text-pink-800 rounded-full">Benefits+</span>
+  </div>
+</div>
+
+<!-- Variant 5: Badges & Icons -->
+<div class="p-4 max-w-sm rounded-lg bg-white mb-6">
+  <div class="flex items-center mb-3">
+    <img src="https://www.google.com/s2/favicons?domain=apple.com&sz=32" class="w-6 h-6 mr-2">
+    <h3 class="font-bold">Machine Learning Engineer</h3>
+  </div>
+  <p class="text-gray-600 mb-3">Cupertino, CA</p>
+  <div class="flex flex-wrap gap-2">
+    <span class="px-3 py-1 bg-green-500 text-white rounded-sm text-sm">$180-220k</span>
+    <span class="px-3 py-1 bg-orange-500 text-white rounded-sm text-sm">Hybrid</span>
+    <span class="px-3 py-1 bg-blue-500 text-white rounded-sm text-sm">Fast-Track</span>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,191 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        .mobile-frame {
+            width: 375px;
+            height: 667px;
+            border: 8px solid #333;
+            border-radius: 40px;
+            overflow: hidden;
+            position: relative;
+            background: #F8FAFC;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+
+<body class="bg-gray-200 p-10 flex flex-wrap justify-center gap-10">
+
+    <!-- DASHBOARD VARIATION 1: THE NEURO-SCIENTIST -->
+    <div class="flex flex-col items-center">
+        <h3 class="mb-4 font-bold text-lg">1. The Neuro-Scientist</h3>
+        <div class="mobile-frame shadow-xl bg-slate-950 text-white">
+            <div class="p-6">
+                <p class="text-[10px] text-slate-500 uppercase tracking-widest mb-1">Cognitive Load</p>
+                <div class="flex justify-between items-end">
+                    <h2 class="text-3xl font-black italic">84% READY</h2>
+                    <span class="text-xs text-emerald-400 font-mono">+1.2% / day</span>
+                </div>
+            </div>
+            <div class="flex-1 p-6 space-y-6 overflow-y-auto">
+                <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl">
+                    <p class="text-xs font-bold text-slate-400 mb-4 uppercase">Forgetting Curve Analysis</p>
+                    <div class="h-24 flex items-end gap-1">
+                        <div class="flex-1 bg-indigo-500/20 h-full relative rounded-t"><div class="absolute bottom-0 w-full bg-indigo-500 h-4/5 rounded-t"></div></div>
+                        <div class="flex-1 bg-indigo-500/20 h-full relative rounded-t"><div class="absolute bottom-0 w-full bg-indigo-500 h-3/5 rounded-t"></div></div>
+                        <div class="flex-1 bg-indigo-500/20 h-full relative rounded-t"><div class="absolute bottom-0 w-full bg-indigo-500 h-2/5 rounded-t"></div></div>
+                        <div class="flex-1 bg-indigo-500/20 h-full relative rounded-t border-t-2 border-red-500 border-dashed"></div>
+                    </div>
+                    <p class="text-[10px] mt-2 text-center text-slate-500 italic">Red dashed line marks critical decay (Recall needed)</p>
+                </div>
+                <button class="w-full bg-emerald-500 text-slate-950 font-black py-4 rounded-xl shadow-lg shadow-emerald-500/20">
+                    START RECALL SESSION (4)
+                </button>
+            </div>
+        </div>
+        <p class="mt-4 max-w-[300px] text-xs text-gray-500"><strong>UX:</strong> Focuses on data and biological feedback. Uses dark mode to evoke a technical "lab" feel.</p>
+    </div>
+
+    <!-- DASHBOARD VARIATION 2: THE MINIMALIST COACH -->
+    <div class="flex flex-col items-center">
+        <h3 class="mb-4 font-bold text-lg">2. The Minimalist Coach</h3>
+        <div class="mobile-frame shadow-xl bg-white">
+            <div class="p-8 pt-12">
+                <h2 class="text-gray-400 text-sm font-medium">Today's Focus</h2>
+                <h1 class="text-3xl font-bold text-gray-900 mt-1 leading-tight">Master Asynchronous Javascript.</h1>
+            </div>
+            <div class="px-8 space-y-8">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-full border-4 border-indigo-600 flex items-center justify-center font-bold text-xs text-indigo-600">65%</div>
+                    <div>
+                        <p class="text-sm font-bold">Overall Retention</p>
+                        <p class="text-xs text-gray-400">Target: 90% for Interview</p>
+                    </div>
+                </div>
+                <div class="p-6 bg-indigo-50 rounded-[32px]">
+                    <p class="text-gray-600 text-sm leading-relaxed mb-6">"You've been studying for 12 days straight. Your memory of <strong>Hooks</strong> is fading. Ready to refresh?"</p>
+                    <button class="bg-indigo-600 text-white px-6 py-3 rounded-2xl font-bold text-sm">Start Refresh</button>
+                </div>
+            </div>
+        </div>
+        <p class="mt-4 max-w-[300px] text-xs text-gray-500"><strong>UX:</strong> Reduces cognitive friction. Only shows the most important thing to do right now.</p>
+    </div>
+
+    <!-- DASHBOARD VARIATION 3: THE BENTO BOX -->
+    <div class="flex flex-col items-center">
+        <h3 class="mb-4 font-bold text-lg">3. The Bento Box</h3>
+        <div class="mobile-frame shadow-xl bg-gray-50 p-4">
+            <div class="grid grid-cols-2 grid-rows-4 gap-3 h-full">
+                <div class="col-span-2 bg-white p-4 rounded-3xl shadow-sm">
+                    <p class="text-xs font-bold text-gray-400">READY BY</p>
+                    <p class="text-2xl font-black text-indigo-600">Oct 24 <span class="text-xs font-normal text-gray-400">2025</span></p>
+                </div>
+                <div class="bg-indigo-600 p-4 rounded-3xl text-white">
+                    <p class="text-[10px] opacity-70">ACTIVE RECALL</p>
+                    <p class="text-xl font-bold mt-2">12</p>
+                    <p class="text-[10px]">Topics due</p>
+                </div>
+                <div class="bg-white p-4 rounded-3xl shadow-sm">
+                    <p class="text-[10px] text-gray-400">STREAK</p>
+                    <p class="text-xl font-bold mt-2">🔥 14</p>
+                </div>
+                <div class="col-span-2 bg-gray-900 rounded-3xl p-4 text-white">
+                    <p class="text-[10px] text-gray-400 mb-2">KNOWLEDGE MAP</p>
+                    <div class="flex gap-1 h-12 items-end">
+                        <div class="flex-1 bg-white/20 h-1/2 rounded-sm"></div>
+                        <div class="flex-1 bg-white/20 h-3/4 rounded-sm"></div>
+                        <div class="flex-1 bg-white/20 h-full rounded-sm"></div>
+                        <div class="flex-1 bg-white/20 h-2/3 rounded-sm"></div>
+                    </div>
+                </div>
+                <div class="col-span-2 bg-white p-4 rounded-3xl shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-bold">Resume Frontend</p>
+                        <p class="text-[10px] text-gray-400">Module 4: CSS Grid</p>
+                    </div>
+                    <div class="w-10 h-10 bg-indigo-50 rounded-full flex items-center justify-center text-indigo-600 font-bold">→</div>
+                </div>
+            </div>
+        </div>
+        <p class="mt-4 max-w-[300px] text-xs text-gray-500"><strong>UX:</strong> High visual density. Provides a quick "glanceable" overview of all key metrics.</p>
+    </div>
+
+    <!-- DASHBOARD VARIATION 4: THE DAILY RITUAL -->
+    <div class="flex flex-col items-center">
+        <h3 class="mb-4 font-bold text-lg">4. The Daily Ritual</h3>
+        <div class="mobile-frame shadow-xl bg-white">
+            <div class="p-6 border-b">
+                <h2 class="font-bold">Monday, Aug 12</h2>
+                <p class="text-xs text-gray-400">3 tasks to hit Oct 24 deadline</p>
+            </div>
+            <div class="flex-1 overflow-y-auto p-6 space-y-6 relative">
+                <div class="absolute left-9 top-10 bottom-10 w-0.5 bg-gray-100"></div>
+                <div class="flex gap-4 relative">
+                    <div class="w-6 h-6 rounded-full bg-emerald-500 border-4 border-white shadow-sm z-10"></div>
+                    <div>
+                        <p class="text-xs font-bold text-gray-400 uppercase">09:00 AM</p>
+                        <p class="text-sm font-bold">Active Recall: React Hooks</p>
+                        <p class="text-xs text-emerald-500">Completed</p>
+                    </div>
+                </div>
+                <div class="flex gap-4 relative">
+                    <div class="w-6 h-6 rounded-full bg-indigo-600 border-4 border-white shadow-sm z-10"></div>
+                    <div>
+                        <p class="text-xs font-bold text-gray-400 uppercase">11:00 AM</p>
+                        <p class="text-sm font-bold">New Topic: System Design</p>
+                        <p class="text-xs text-indigo-500">Next Up (15 mins)</p>
+                    </div>
+                </div>
+                <div class="flex gap-4 relative opacity-40">
+                    <div class="w-6 h-6 rounded-full bg-gray-200 border-4 border-white shadow-sm z-10"></div>
+                    <div>
+                        <p class="text-xs font-bold text-gray-400 uppercase">04:00 PM</p>
+                        <p class="text-sm font-bold">Evening Recall: Recap</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p class="mt-4 max-w-[300px] text-xs text-gray-500"><strong>UX:</strong> Schedule-centric. Great for users who want to know exactly *when* to study to meet their goal.</p>
+    </div>
+
+    <!-- DASHBOARD VARIATION 5: THE KNOWLEDGE TREE -->
+    <div class="flex flex-col items-center">
+        <h3 class="mb-4 font-bold text-lg">5. The Knowledge Map</h3>
+        <div class="mobile-frame shadow-xl bg-indigo-900 overflow-hidden">
+            <div class="absolute inset-0 opacity-20">
+                <div class="absolute top-20 left-10 w-20 h-20 bg-indigo-400 rounded-full blur-xl"></div>
+                <div class="absolute bottom-40 right-10 w-40 h-40 bg-pink-400 rounded-full blur-3xl"></div>
+            </div>
+            <div class="relative z-10 p-6 flex-1 flex flex-col">
+                <h2 class="text-white font-bold">Your Cognitive Map</h2>
+                <div class="flex-1 flex items-center justify-center relative">
+                    <!-- Central Node -->
+                    <div class="w-32 h-32 rounded-full border-2 border-white/20 flex items-center justify-center">
+                        <div class="w-24 h-24 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 text-white font-bold text-xs text-center p-2">
+                            FRONTEND ARCHITECT
+                        </div>
+                    </div>
+                    <!-- Orbiting Nodes -->
+                    <div class="absolute top-20 right-10 w-12 h-12 bg-emerald-400 rounded-full flex items-center justify-center text-[8px] font-bold text-emerald-950 border-2 border-white shadow-lg">REACT</div>
+                    <div class="absolute bottom-40 left-10 w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-[8px] font-bold text-white border border-white/30">CSS/HTML</div>
+                    <div class="absolute top-40 left-5 w-10 h-10 bg-orange-400 rounded-full flex items-center justify-center text-[8px] font-bold text-orange-950 border-2 border-white animate-pulse">RECALL</div>
+                </div>
+                <div class="bg-white/10 backdrop-blur-md p-4 rounded-3xl border border-white/20">
+                    <p class="text-white text-xs text-center italic">"Your React node is starting to weaken. Refresh today to maintain 100% mastery."</p>
+                </div>
+            </div>
+        </div>
+        <p class="mt-4 max-w-[300px] text-xs text-gray-500"><strong>UX:</strong> Abstract and spatial. Helps the user visualize their brain as a growing network of skills.</p>
+    </div>
+
+</body>
+</html>
