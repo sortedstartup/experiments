@@ -48,11 +48,20 @@ root_agent = Agent(
         3. Then modify the index-$timestamp.html to create 5 UX design variations of the widget.
         4. Make sure you have all the variants in the same file.
         5. For each UI widget explain the ux thinking behind that variant.
+        6. UX variant may chart and js library which are already present in index.html
+        7. Add basic interactivity using jquery to give it a more real feel
+        8. DO NOT Add any new library on your own
 
         if you need logos/ icon use this online service from google in a image tag
         <img src="https://www.google.com/s2/favicons?domain=github.com&sz=64">
 
         for general images use this service - https://picsum.photos/400/300, where 400 and 300 is width and height
+
+        about index.html, here are the preadded things available, DO NOT add anything new
+         - it has tailwind css
+         - it has jquery for interactivve js
+         - it has chart.js for charting
+         - it has plotly another library for plotting
     """,
     tools=[read_file, write_file, get_timestamp],
 )
